@@ -1,4 +1,4 @@
-package bizondemand.rest
+package scala_mash.rest
 
 import org.apache.http.HttpResponse
 import io.Source

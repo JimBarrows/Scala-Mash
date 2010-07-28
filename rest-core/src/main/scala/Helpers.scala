@@ -1,4 +1,4 @@
-package com.bizondemand.util
+package scala_mash.rest.util
 
 import xml._
 import NodeSeq._

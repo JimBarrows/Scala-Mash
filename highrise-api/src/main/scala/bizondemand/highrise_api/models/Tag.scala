@@ -1,13 +1,13 @@
-package bizondemand.highrise.models
+package bizondemand.highrise_api.models
 
 import xml.NodeSeq
-import com.nsfw.highrise.{Account, HighriseServices}
+import bizondemand.highrise_api.{Account, HighriseServices}
 
-import com.nsfw.highrise._
-import com.nsfw.highrise.Utils._
+import bizondemand.highrise_api._
+import bizondemand.highrise_api.Utils._
 
 import bizondemand.rest.{Ok, Created, RestException}
-import com.nsfw.util.Helpers.{optionalLong}
+import bizondemand.util.Helpers.{optionalLong}
 
 /**
 	*@author Jim Barrows

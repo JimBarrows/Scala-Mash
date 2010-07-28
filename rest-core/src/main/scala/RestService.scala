@@ -1,4 +1,4 @@
-package bizondemand.rest
+package scala_mash.rest
 
 import java.net.URI
 import xml.{XML, NodeSeq}
@@ -19,11 +19,8 @@ import io.Source
 import bizondemand.utils.logging.Log
 import bizondemand.utils.models.internet.Url
 
-/**
- *
- * @author jimbarrows
- * @created: Dec 19, 2009 10:58:46 AM
- * @version 1.0
+/**The trait to inherit to add rest service functionality.
+ * 
  *
  */
 

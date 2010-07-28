@@ -1,4 +1,4 @@
-package bizondemand.highrise
+package bizondemand.highrise_api
 
 import bizondemand.utils.models.internet.{Url, Https, DomainName}
 

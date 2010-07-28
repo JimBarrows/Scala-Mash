@@ -1,4 +1,4 @@
-package bizondemand.highrise.models.enumerations
+package bizondemand.highrise_api.models.enumerations
 
 object DealStatus extends Enumeration {
 	type DealStatus = Value

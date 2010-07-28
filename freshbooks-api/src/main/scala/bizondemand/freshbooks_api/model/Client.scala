@@ -2,7 +2,7 @@ package bizondemand.freshbooks_api.model
 
 import xml._
 import NodeSeq._
-import com.bizondemand.util.Helpers._
+import bizondemand.util.Helpers._
 import bizondemand.rest.{Ok,Created,RestException}
 
 

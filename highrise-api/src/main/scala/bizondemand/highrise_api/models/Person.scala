@@ -1,14 +1,14 @@
-package bizondemand.highrise.models
+package bizondemand.highrise_api.models
 
-import com.nsfw.highrise.Utils._
+import bizondemand.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
 
 import bizondemand.utils.models.internet.Parameter
 import bizondemand.rest.{Ok, Created, RestException}
-import com.nsfw.util.Helpers.{optionalLong, optionalString, optionalInt}
+import bizondemand.util.Helpers.{optionalLong, optionalString, optionalInt}
 
-import com.nsfw.highrise.models.enumerations.VisibleToValues
+import bizondemand.highrise_api.models.enumerations.VisibleToValues
 import VisibleToValues._
 
 object AddressLocationValues extends Enumeration {

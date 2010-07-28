@@ -7,7 +7,7 @@ import bizondemand.shopify_api.Utils._
 import bizondemand.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import bizondemand.rest.Ok
 import bizondemand.utils.models.internet.{Url,Parameter}
-import com.bizondemand.util.Helpers._
+import bizondemand.util.Helpers._
 
 
 /**

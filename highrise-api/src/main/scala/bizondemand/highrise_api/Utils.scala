@@ -1,4 +1,4 @@
-package bizondemand.highrise
+package bizondemand.highrise_api
 
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.joda.time._

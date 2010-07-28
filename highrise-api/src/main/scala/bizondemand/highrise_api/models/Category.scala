@@ -1,4 +1,4 @@
-package bizondemand.highrise.models
+package bizondemand.highrise_api.models
 
 import xml._
 import  xml.NodeSeq
@@ -6,11 +6,11 @@ import  xml.NodeSeq._
 
 import org.joda.time.DateTime
 
-import com.nsfw.highrise._
-import com.nsfw.highrise.Utils._
+import bizondemand.highrise_api._
+import bizondemand.highrise_api.Utils._
 
 import bizondemand.rest.{Ok, Created, RestException}
-import com.nsfw.util.Helpers.{optionalLong}
+import bizondemand.util.Helpers.{optionalLong}
 
 object CategoryTypes extends Enumeration {
 	type CategoryTypes = Value
