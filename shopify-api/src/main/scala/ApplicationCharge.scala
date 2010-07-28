@@ -1,12 +1,12 @@
-package bizondemand.shopify_api.model
+package scala_mash.shopify_api.model
 
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormatterBuilder}
 import xml.{NodeSeq, Node}
 
-import bizondemand.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
+import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import bizondemand.utils.models.internet.Url
-import bizondemand.rest.{Ok,Created,RestException}
+import scala_mash.rest.{Ok,Created,RestException}
 /**
  *
  * @author jimbarrows

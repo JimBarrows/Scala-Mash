@@ -1,13 +1,12 @@
-package bizondemand.shopify_api.model
+package scala_mash.shopify_api.model
 
-import bizondemand.shopify_api.Utils._
+import scala_mash.shopify_api.Utils._
 import xml.NodeSeq
 import org.joda.time.{LocalDate, DateTime}
 import java.net.MalformedURLException
-//import bizondemand.shopify_api.
 
 import bizondemand.utils.models.internet.Url
-import bizondemand.rest.{Created,Ok,RestException}
+import scala_mash.rest.{Created,Ok,RestException}
 
 /**
  *

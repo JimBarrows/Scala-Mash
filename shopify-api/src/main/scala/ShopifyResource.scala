@@ -1,7 +1,7 @@
-package bizondemand.shopify_api
+package scala_mash.shopify_api
 
 import bizondemand.utils.models.internet.{DomainName,Url, Http}
-import bizondemand.rest.RestService
+import scala_mash.rest.RestService
 
 /**
  *

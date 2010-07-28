@@ -1,4 +1,4 @@
-package bizondemand.shopify_api
+package scala_mash.shopify_api
 
 import model.{ShopCredentials, Shop}
 import org.apache.commons.codec.digest.DigestUtils._
