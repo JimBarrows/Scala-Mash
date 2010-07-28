@@ -4,7 +4,6 @@ import org.joda.time.format.DateTimeFormatterBuilder
 import org.joda.time.DateTime
 import xml.NodeSeq
 import bizondemand.utils.logging.Log
-import bizondemand.utils.models.internet.Url
 
 /**
  * 

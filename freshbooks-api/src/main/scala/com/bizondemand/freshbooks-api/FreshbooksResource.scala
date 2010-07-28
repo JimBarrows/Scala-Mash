@@ -1,15 +1,18 @@
 package bizondemand.freshbooks_api
 
-import _root_.com.bizondemand.rest.{URL, MetaRestResource}
+import xml.{XML, NodeSeq}
+import bizondemand.utils.models.internet.{DomainName,Url, Http}
+import bizondemand.rest.{RestService, HttpStatusCode}
 
-import xml._
+
 
 case class Account( domainName:String, authenticationToken:String)
 
-trait FreshbooksResource[T] extends MetaRestResource[T] {
-	val url = new URL( "https", None, None, "freshbooks.com", None, Some("api"::"2.1"::"xml-in"::Nil), None)
-	
-	def post( domainName:String, authenticationToken:String, request :NodeSeq, parser:NodeSeq=>List[T]):List[T] = post( url +< domainName, authenticationToken, "x", request, parser)
 
-	def post( domainName:String, authenticationToken:String, request :NodeSeq, parser:NodeSeq=>T):T = post( url +< domainName, authenticationToken, "x", request, parser)
+trait FreshbooksResource[T] extends RestService {
+	val url = new Url(Http(), None, None, DomainName("freshbooks" :: "com" :: Nil), None, Some("api"::"2.1"::"xml-in"::Nil), None)
+	
+	/** override the original because password is always "x"
+	*/	
+	def post( domainName:String, authenticationToken:String, request :NodeSeq):HttpStatusCode = post( url +< domainName, Some(authenticationToken), Some("x"), request)
 }

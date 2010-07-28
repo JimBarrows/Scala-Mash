@@ -2,7 +2,7 @@ package bizondemand.freshbooks_api
 
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.joda.time.DateTime
-import com.nsfw.rest.URL
+
 
 /**
  * 
