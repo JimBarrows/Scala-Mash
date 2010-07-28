@@ -3,9 +3,9 @@ package test
 import org.specs.Specification
 
 import bizondemand.utils.models.internet.{Url, Parameter}
-import com.nsfw.shopifyapp.shopify.Utils._
+import scala_mash.shopify_api.Utils._
 
-import com.nsfw.shopifyapp.shopify.model.Webhook
+import scala_mash.shopify_api.model.Webhook
 
 object WebhookSpecs extends Specification {
 	

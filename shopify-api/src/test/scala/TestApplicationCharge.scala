@@ -2,7 +2,7 @@ package test
 
 import org.specs.runner.JUnit4
 import org.specs.Specification
-import com.nsfw.shopifyapp.shopify.model.ApplicationCharge
+import scala_mash.shopify_api.model.ApplicationCharge
 import org.joda.time.{DateTimeZone, DateTime}
 import bizondemand.utils.models.internet.{Url,DomainName, Parameter, Http}
 /**

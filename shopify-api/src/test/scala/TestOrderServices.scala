@@ -3,8 +3,8 @@ package test
 import org.specs.runner.JUnit4
 import org.specs.Specification
 import org.joda.time.{Interval, DateTime}
-import com.nsfw.shopifyapp.shopify.ShopifyPartnerInfo
-import com.nsfw.shopifyapp.shopify.model.{ShopCredentials, Order, Shop}
+import scala_mash.shopify_api.ShopifyPartnerInfo
+import scala_mash.shopify_api.model.{ShopCredentials, Order, Shop}
 
 /**
  *

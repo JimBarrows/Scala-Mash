@@ -2,8 +2,8 @@ package test
 
 import org.specs.Specification
 import org.specs.runner.JUnit4
-import com.nsfw.shopifyapp.shopify.model._
-import com.nsfw.shopifyapp.shopify.Utils._
+import scala_mash.shopify_api.model._
+import scala_mash.shopify_api.Utils._
 
 /**
  *

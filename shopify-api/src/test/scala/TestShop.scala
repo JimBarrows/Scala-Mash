@@ -2,9 +2,9 @@ package test
 
 import org.specs.runner.JUnit4
 import org.specs.Specification
-import com.nsfw.shopifyapp.shopify.Utils._
-import com.nsfw.shopifyapp.shopify.ShopifyPartnerInfo
-import com.nsfw.shopifyapp.shopify.model.{ShopCredentials, Shop}
+import scala_mash.shopify_api.Utils._
+import scala_mash.shopify_api.ShopifyPartnerInfo
+import scala_mash.shopify_api.model.{ShopCredentials, Shop}
 
 /**
  *

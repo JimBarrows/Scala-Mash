@@ -5,7 +5,7 @@ import java.util.Date
 import org.joda.time.DateTime
 import org.specs.runner.{JUnitSuiteRunner, JUnit4}
 import org.junit.runner.RunWith
-import com.nsfw.shopifyapp.shopify.model.{ShopCredentials, ApplicationCharge, Shop}
+import scala_mash.shopify_api.model.{ShopCredentials, ApplicationCharge, Shop}
 import bizondemand.utils.models.internet.{Url,DomainName,Http}
 
 
