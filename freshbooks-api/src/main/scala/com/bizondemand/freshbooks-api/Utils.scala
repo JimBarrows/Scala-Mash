@@ -1,4 +1,4 @@
-package com.bizondemand.freshbooks_api
+package bizondemand.freshbooks_api
 
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.joda.time.DateTime

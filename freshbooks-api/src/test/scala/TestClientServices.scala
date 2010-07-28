@@ -1,3 +1,4 @@
+package test
 import org.specs.Specification
 import org.specs.runner.JUnit4
 

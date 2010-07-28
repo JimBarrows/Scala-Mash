@@ -1,4 +1,4 @@
-package com.nsfw.util
+package com.bizondemand.util
 
 import xml._
 import NodeSeq._

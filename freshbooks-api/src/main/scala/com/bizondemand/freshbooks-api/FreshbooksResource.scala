@@ -1,4 +1,4 @@
-package com.bizondemand.freshbooks_api
+package bizondemand.freshbooks_api
 
 import _root_.com.bizondemand.rest.{URL, MetaRestResource}
 

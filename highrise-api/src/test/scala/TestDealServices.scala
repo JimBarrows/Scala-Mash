@@ -1,3 +1,4 @@
+package test
 import com.nsfw.highrise.models._
 import com.nsfw.highrise.Account
 import org.joda.time.DateTime

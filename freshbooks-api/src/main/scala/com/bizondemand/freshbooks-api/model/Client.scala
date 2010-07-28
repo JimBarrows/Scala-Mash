@@ -1,4 +1,4 @@
-package com.bizondemand.freshbooks_api.model
+package bizondemand.freshbooks_api.model
 
 import xml._
 import NodeSeq._

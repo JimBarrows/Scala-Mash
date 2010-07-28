@@ -1,4 +1,4 @@
-
+package test
 import com.nsfw.highrise.{Account, HighriseServices}
 import com.nsfw.highrise.models._
 import org.specs.runner.JUnit4

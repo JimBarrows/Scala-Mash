@@ -3,7 +3,7 @@ import sbt._
 class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 {
 	 	
-	val bizOnDemand = Resolver.ssh("BizOnDemand", "nsfwenterprises.com", "/var/local/artifacts/release/")
+	val bizOnDemand = Resolver.ssh("BizOnDemand", "bizondemand", "/var/local/artifacts/release/")
 			
 	val stdLibraryDependencies = Set(
 		"junit" % "junit" % "4.5" % "test->default",

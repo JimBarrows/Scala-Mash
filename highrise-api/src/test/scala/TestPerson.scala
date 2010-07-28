@@ -1,4 +1,4 @@
-
+package test
 import com.nsfw.highrise.models.{PhoneNumber, EmailAddress, ContactData, Person}
 import org.specs.Specification
 import org.specs.runner.JUnit4
