@@ -1,16 +1,15 @@
 import sbt._
 
-class ECommerceProject(info: ProjectInfo) extends ParentProject(info)
+class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 {
- 
-	val liftVersion = "2.0"
 	 	
-	val bizOnDemand = Resolver.ssh("BizOnDemand", "nsfwenterprises.com", "/var/local/artifacts/release/") as("jimbarrows")
+	val bizOnDemand = Resolver.ssh("BizOnDemand", "nsfwenterprises.com", "/var/local/artifacts/release/")
 			
 	val stdLibraryDependencies = Set(
 		"junit" % "junit" % "4.5" % "test->default",
 		"org.scala-tools.testing" % "specs" % "1.6.1" % "test->default"	,
 		"org.slf4j" % "slf4j-log4j12" % "1.4.1",
+		"org.mockito" % "mockito-all" % "1.8.1" % "test->default",
 		"joda-time" % "joda-time" % "1.6",		
 		"bizondemand" %% "utils" % "20100716.1"
 	) ++ super.libraryDependencies	
@@ -30,12 +29,12 @@ class ECommerceProject(info: ProjectInfo) extends ParentProject(info)
 		
 		override def libraryDependencies = stdLibraryDependencies
 		
-		lazy val embededCore = project("core", "Core", rest)
+		lazy val embededCore = project("rest-core", "Rest Core", rest)
 		
 	}
 	
 	class CoreProject(info: ProjectInfo) extends DefaultWebProject(info) {
-		override def libraryDependencies = stdLibraryDependencies
+		override def libraryDependencies = stdLibraryDependencies ++ Set("org.apache.httpcomponents" % "httpclient" % "4.1-alpha2")
 		
 		
 	}
