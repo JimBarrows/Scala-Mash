@@ -2,6 +2,7 @@
 *.bak
 *.class
 *.ear
+*.eprj
 *.iml
 *.ipr
 *.iws
