@@ -1,14 +1,14 @@
-package bizondemand.highrise_api.models
+package scala_mash.highrise_api.models
 
-import bizondemand.highrise_api.Utils._
+import scala_mash.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
 
 import bizondemand.utils.models.internet.Parameter
-import bizondemand.rest.{Ok, Created, RestException}
-import bizondemand.util.Helpers.{optionalLong, optionalString, optionalInt}
+import scala_mash.rest.{Ok, Created, RestException}
+import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt}
 
-import bizondemand.highrise_api.models.enumerations.VisibleToValues
+import scala_mash.highrise_api.models.enumerations.VisibleToValues
 import VisibleToValues._
 
 object AddressLocationValues extends Enumeration {

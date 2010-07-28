@@ -6,9 +6,9 @@ import org.joda.time._
 
 import scala.{List, Nil}
 
-import com.nsfw.highrise.models._
+import scala_mash.highrise_api.models._
 import CategoryTypes._
-import com.nsfw.highrise.Utils._
+import scala_mash.highrise_api.Utils._
 /**
  *
  * @author jimbarrows

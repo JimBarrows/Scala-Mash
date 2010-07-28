@@ -5,7 +5,7 @@ import org.specs.mock.Mockito
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
-import bizondemand.rest.{ RestService, Ok,Found}
+import scala_mash.rest.{ RestService, Ok,Found}
 
 import org.apache.http.HttpVersion
 import org.apache.http.message.{BasicStatusLine, BasicHttpResponse}

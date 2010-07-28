@@ -1,10 +1,10 @@
 package test
-import com.nsfw.highrise.models.{PhoneNumber, EmailAddress, ContactData, Person}
+import scala_mash.highrise_api.models.{PhoneNumber, EmailAddress, ContactData, Person}
 import org.specs.Specification
 import org.specs.runner.JUnit4
-import com.nsfw.highrise.Utils._
+import scala_mash.highrise_api.Utils._
 
-import com.nsfw.highrise.models.enumerations._
+import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
 
 import scala.{List, Nil}
@@ -107,8 +107,8 @@ object PersonSpec extends Specification {
         None,
         Some(2),
         ContactData(
-          Some(EmailAddress(Some(1), "john.doe@example.com", com.nsfw.highrise.models.AddressLocationValues.Work) :: Nil),
-          Some(PhoneNumber(Some(2), "555-555-5555", com.nsfw.highrise.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", com.nsfw.highrise.models.PhoneLocationValues.Home) :: Nil),
+          Some(EmailAddress(Some(1), "john.doe@example.com", scala_mash.highrise_api.models.AddressLocationValues.Work) :: Nil),
+          Some(PhoneNumber(Some(2), "555-555-5555", scala_mash.highrise_api.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", scala_mash.highrise_api.models.PhoneLocationValues.Home) :: Nil),
           None,
           None,
           None
@@ -125,8 +125,8 @@ object PersonSpec extends Specification {
         None,
         Some(2),
         ContactData(
-          Some(EmailAddress(Some(1), "john.doe@example.com", com.nsfw.highrise.models.AddressLocationValues.Work) :: Nil),
-          Some(PhoneNumber(Some(2), "555-555-5555", com.nsfw.highrise.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", com.nsfw.highrise.models.PhoneLocationValues.Home) :: Nil),
+          Some(EmailAddress(Some(1), "john.doe@example.com", scala_mash.highrise_api.models.AddressLocationValues.Work) :: Nil),
+          Some(PhoneNumber(Some(2), "555-555-5555", scala_mash.highrise_api.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", scala_mash.highrise_api.models.PhoneLocationValues.Home) :: Nil),
           None,
           None,
           None
@@ -187,8 +187,8 @@ object PersonSpec extends Specification {
         None,
         Some(2),
         ContactData(
-          Some(EmailAddress(Some(1), "john.doe@example.com", com.nsfw.highrise.models.AddressLocationValues.Work) :: Nil),
-          Some(PhoneNumber(Some(2), "555-555-5555", com.nsfw.highrise.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", com.nsfw.highrise.models.PhoneLocationValues.Home) :: Nil),
+          Some(EmailAddress(Some(1), "john.doe@example.com", scala_mash.highrise_api.models.AddressLocationValues.Work) :: Nil),
+          Some(PhoneNumber(Some(2), "555-555-5555", scala_mash.highrise_api.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", scala_mash.highrise_api.models.PhoneLocationValues.Home) :: Nil),
           None,
           None,
           None

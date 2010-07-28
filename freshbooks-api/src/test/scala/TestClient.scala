@@ -6,8 +6,8 @@ import org.joda.time.DateTime
 
 import scala.{List, Nil}
 
-import com.bizondemand.freshbooks_api.model._
-import com.bizondemand.freshbooks_api.Utils._
+import scala_mash.freshbooks_api.model._
+import scala_mash.freshbooks_api.Utils._
 /**
  *
  * @author jimbarrows
@@ -111,7 +111,7 @@ object ClientSpec extends Specification {
 
 		"be able to parse a response from a create request" in {
 				val parsed = Client.parseCreateResponse(<response xmlns="http://www.freshbooks.com/api/" status="ok"><client_id>13</client_id></response>)
-				parsed.clientId must beSome[Long]
+				parsed must beSome[Long]
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package bizondemand.freshbooks_api
+package scala_mash.freshbooks_api
 
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.joda.time.DateTime

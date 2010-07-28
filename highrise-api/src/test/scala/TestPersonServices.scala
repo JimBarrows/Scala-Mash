@@ -1,10 +1,10 @@
 package test
-import com.nsfw.highrise.models._
-import com.nsfw.highrise.Account
+import scala_mash.highrise_api.models._
+import scala_mash.highrise_api.Account
 import org.joda.time.DateTime
 import org.specs.runner.JUnit4
 import org.specs.Specification
-import com.nsfw.highrise.models.enumerations._
+import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
 
 /**
@@ -87,7 +87,7 @@ object PersonServicesSpec extends Specification {
     	}
 
 	    "be able to create a person with one phone number" in {
-		    val expectedContactData = ContactData(None, Some(PhoneNumber(None, "555-555-12345", com.nsfw.highrise.models.PhoneLocationValues.Home) :: Nil), None, None, None)
+		    val expectedContactData = ContactData(None, Some(PhoneNumber(None, "555-555-12345", scala_mash.highrise_api.models.PhoneLocationValues.Home) :: Nil), None, None, None)
 		    val expectedPerson = Person(None,
 		    	"Joe", //first name
 		        "Tester", //last name
@@ -116,7 +116,7 @@ object PersonServicesSpec extends Specification {
 		    actualPerson.authorId must beSome[Int].which(_ > 0)
 		    actualPerson.contactData.phoneNumbers must beSome[List[PhoneNumber]]
 		    actualPerson.contactData.phoneNumbers.get.first.number must be_==("555-555-12345")
-		    actualPerson.contactData.phoneNumbers.get.first.location must be_==(com.nsfw.highrise.models.PhoneLocationValues.Home)
+		    actualPerson.contactData.phoneNumbers.get.first.location must be_==(scala_mash.highrise_api.models.PhoneLocationValues.Home)
 	    }
 	
 	 	"be able to create a person with one address" in {
@@ -131,7 +131,7 @@ object PersonServicesSpec extends Specification {
 			        "az",
 			        "111 N somewhere",
 			        "12345",
-			        com.nsfw.highrise.models.AddressLocationValues.Home
+			        scala_mash.highrise_api.models.AddressLocationValues.Home
 		        ) :: 
 		        Nil
 		    ),
@@ -168,7 +168,7 @@ object PersonServicesSpec extends Specification {
 		    actualPerson.contactData.addresses.get.first.state must be_==("az")
 		    actualPerson.contactData.addresses.get.first.street must be_==("111 N somewhere")
 		    actualPerson.contactData.addresses.get.first.zip must be_==("12345")
-		    actualPerson.contactData.addresses.get.first.location must be_==(com.nsfw.highrise.models.AddressLocationValues.Home)
+		    actualPerson.contactData.addresses.get.first.location must be_==(scala_mash.highrise_api.models.AddressLocationValues.Home)
 		}
 
 		"be able to create a person with one instant messenger" in {

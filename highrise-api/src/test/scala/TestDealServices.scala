@@ -1,14 +1,14 @@
 package test
-import com.nsfw.highrise.models._
-import com.nsfw.highrise.Account
+import scala_mash.highrise_api.models._
+import scala_mash.highrise_api.Account
 import org.joda.time.DateTime
 import org.specs.runner.JUnit4
 import org.specs.Specification
-import com.nsfw.highrise.models.enumerations._
+import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
 import DealStatus._
-import bizondemand.rest.OtherServerError
-import bizondemand.rest.RestException
+import scala_mash.rest.OtherServerError
+import scala_mash.rest.RestException
 
 object DealServicesSpec extends Specification {
 	

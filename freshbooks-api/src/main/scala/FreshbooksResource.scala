@@ -1,8 +1,8 @@
-package bizondemand.freshbooks_api
+package scala_mash.freshbooks_api
 
 import xml.{XML, NodeSeq}
 import bizondemand.utils.models.internet.{DomainName,Url, Http}
-import bizondemand.rest.{RestService, HttpStatusCode}
+import scala_mash.rest.{RestService, HttpStatusCode}
 
 
 

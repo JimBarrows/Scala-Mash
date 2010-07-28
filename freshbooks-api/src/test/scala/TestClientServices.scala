@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 
 import scala.{List, Nil}
 
-import com.bizondemand.freshbooks_api._
+import scala_mash.freshbooks_api._
 import model._
 import Utils._
 /**

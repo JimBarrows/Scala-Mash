@@ -1,12 +1,12 @@
-package bizondemand.highrise_api
+package scala_mash.highrise_api
 
 import bizondemand.utils.models.internet.{Url, Https, DomainName}
 
-import bizondemand.rest.{Ok, Created, RestException}
+import scala_mash.rest.{Ok, Created, RestException}
 
 import  xml.NodeSeq
 
-import bizondemand.rest.RestService
+import scala_mash.rest.RestService
 
 /**
  *

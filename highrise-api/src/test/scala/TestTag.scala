@@ -6,8 +6,8 @@ import org.joda.time.DateTime
 
 import scala.{List, Nil}
 
-import com.nsfw.highrise.models._
-import com.nsfw.highrise.Utils._
+import scala_mash.highrise_api.models._
+import scala_mash.highrise_api.Utils._
 
 /**
 	* @author Jim Barrows

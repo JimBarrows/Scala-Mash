@@ -1,8 +1,8 @@
 package test
-import com.nsfw.highrise._
-import com.nsfw.highrise.models._
-import com.nsfw.highrise.models.CategoryTypes._
-import com.nsfw.highrise.Account
+import scala_mash.highrise_api._
+import scala_mash.highrise_api.models._
+import scala_mash.highrise_api.models.CategoryTypes._
+import scala_mash.highrise_api.Account
 import org.joda.time._
 import org.specs.runner.JUnit4
 import org.specs.Specification

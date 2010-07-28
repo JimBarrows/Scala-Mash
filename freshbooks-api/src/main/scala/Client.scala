@@ -1,9 +1,9 @@
-package bizondemand.freshbooks_api.model
+package scala_mash.freshbooks_api.model
 
 import xml._
 import NodeSeq._
-import bizondemand.util.Helpers._
-import bizondemand.rest.{Ok,Created,RestException}
+import scala_mash.rest.util.Helpers._
+import scala_mash.rest.{Ok,Created,RestException}
 
 
 /** While freshbooks has the address xml inline, and differentiated by a p_ or s_, this blows up the case class for 

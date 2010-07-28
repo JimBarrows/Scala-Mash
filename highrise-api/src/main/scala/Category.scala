@@ -1,4 +1,4 @@
-package bizondemand.highrise_api.models
+package scala_mash.highrise_api.models
 
 import xml._
 import  xml.NodeSeq
@@ -6,11 +6,11 @@ import  xml.NodeSeq._
 
 import org.joda.time.DateTime
 
-import bizondemand.highrise_api._
-import bizondemand.highrise_api.Utils._
+import scala_mash.highrise_api._
+import scala_mash.highrise_api.Utils._
 
-import bizondemand.rest.{Ok, Created, RestException}
-import bizondemand.util.Helpers.{optionalLong}
+import scala_mash.rest.{Ok, Created, RestException}
+import scala_mash.rest.util.Helpers.{optionalLong}
 
 object CategoryTypes extends Enumeration {
 	type CategoryTypes = Value

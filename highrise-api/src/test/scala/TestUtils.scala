@@ -1,7 +1,7 @@
 package test
 import org.specs.Specification
 import org.specs.runner.JUnit4
-import com.nsfw.highrise.Utils._
+import scala_mash.highrise_api.Utils._
 import _root_.org.joda.time._
 
 class TestUtils extends JUnit4(UtilsSpec)

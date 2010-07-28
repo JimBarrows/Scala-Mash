@@ -6,13 +6,13 @@ import org.joda.time.DateTime
 
 import scala.{List, Nil}
 
-import com.nsfw.highrise.models._
-import com.nsfw.highrise.Account
-import com.nsfw.highrise.Utils._
+import scala_mash.highrise_api.models._
+import scala_mash.highrise_api.Account
+import scala_mash.highrise_api.Utils._
 
-import com.nsfw.highrise.models._
+import scala_mash.highrise_api.models._
 import SubjectType.{Person => PersonSubject}
-import com.nsfw.highrise.models.enumerations.VisibleToValues._
+import scala_mash.highrise_api.models.enumerations.VisibleToValues._
 /**
  *
  * @author jimbarrows

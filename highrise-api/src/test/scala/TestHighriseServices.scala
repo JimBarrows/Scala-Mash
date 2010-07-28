@@ -1,6 +1,6 @@
 package test
-import com.nsfw.highrise.{Account, HighriseServices}
-import com.nsfw.highrise.models._
+import scala_mash.highrise_api.{Account, HighriseServices}
+import scala_mash.highrise_api.models._
 import org.specs.runner.JUnit4
 import org.specs.Specification
 

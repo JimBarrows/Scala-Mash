@@ -6,10 +6,10 @@ import org.joda.time._
 
 import scala.{List, Nil}
 
-import com.nsfw.highrise.models._
-import com.nsfw.highrise.Utils._
-import com.nsfw.highrise.models.enumerations.VisibleToValues._
-import com.nsfw.highrise.models.enumerations.DealStatus._
+import scala_mash.highrise_api.models._
+import scala_mash.highrise_api.Utils._
+import scala_mash.highrise_api.models.enumerations.VisibleToValues._
+import scala_mash.highrise_api.models.enumerations.DealStatus._
 
 class TestDeal extends JUnit4(DealSpec)
 object DealSpec extends Specification {
