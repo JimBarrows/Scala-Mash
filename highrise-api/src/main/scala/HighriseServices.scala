@@ -2,7 +2,7 @@ package scala_mash.highrise_api
 
 import bizondemand.utils.models.internet.{Url, Https, DomainName}
 
-import scala_mash.rest.{Ok, Created, RestException}
+import scala_mash.rest.{HttpStatusCode, Ok, Found, RestException}
 
 import  xml.NodeSeq
 
@@ -20,7 +20,9 @@ case class Account(siteName:String, apiKey:String)
 
 trait HighriseServices[T] extends RestService{
 
-	val url = new Url(Https(), None, None, DomainName("highrisehq"  :: "com" ::Nil), None, None, None)
+	val highrisehqCom = DomainName("highrisehq"  :: "com" ::Nil)
+	
+	val url = new Url(Https(), None, None, highrisehqCom, None, None, None)
   
 	def siteName: String = System.getProperty("com.nsfw.highrisehq.siteName", "some_account")
 
@@ -39,6 +41,17 @@ trait HighriseServices[T] extends RestService{
 		}
 			
 	}
+	
+	protected def defaultStatusHandler(httpStatus:HttpStatusCode) = {
+		httpStatus match {
+			//An error was thrown, and if it ends in login, it's probably the sitename, but without going back to the URL provided, we don't know.
+			case n:Found if n.url.path == Some("login" :: Nil) => throw new LoginFailed()			
+			case n => throw new RestException(n)
+		} 
+	}
 }
+
+class LoginFailed extends Exception {}
+
 
 

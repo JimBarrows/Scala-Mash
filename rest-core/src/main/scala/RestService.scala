@@ -59,6 +59,7 @@ trait RestService extends Log{
 	
   	
   	protected def makeRequest( method: HttpRequestBase, username: Option[String], password: Option[String]) : HttpStatusCode = {
+  		debug("RestService.makeRequest: method: {}, username:{}, password:{}", method, username, password)
 		val client = createConnectionManager
 		username.map( loginId => 
 			client.getCredentialsProvider().setCredentials(new AuthScope(AuthScope.ANY), new UsernamePasswordCredentials(loginId, password.getOrElse("")))
@@ -88,6 +89,7 @@ trait RestService extends Log{
 
 class RestException( httpStatusCode:HttpStatusCode) extends Exception {
 	def httpStatus = httpStatusCode
+	override def toString = "RestException %s".format(httpStatus)
 }
 
 

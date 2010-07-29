@@ -108,10 +108,7 @@ object Deal extends HighriseServices[Deal] {
 		println("statusCode: " + statusCode)
 		statusCode match {
 			case n:Created => getByUrl( n.location, account, parse _)
-			case n => {
-				println("n: " + n)
-				throw new RestException(n)
-			}
+			case n => defaultStatusHandler(n)
 		} 
 	}	
 	
@@ -121,7 +118,7 @@ object Deal extends HighriseServices[Deal] {
 			Some("x")
 		)match {
 			case n:Ok => 
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 	
@@ -131,7 +128,7 @@ object Deal extends HighriseServices[Deal] {
 			Some("x")
 		)match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 	
@@ -141,7 +138,7 @@ object Deal extends HighriseServices[Deal] {
 			Some("x")
 		)match {
 			case n:Ok => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 		
@@ -152,7 +149,7 @@ object Deal extends HighriseServices[Deal] {
 			<status><name>{status}</name></status>
 		)match {
 			case n:Ok => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 	}
 	
@@ -162,7 +159,7 @@ object Deal extends HighriseServices[Deal] {
 			Some("x"), deal.toXml
 		)match {
 			case n:Ok => 
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 		
 	}	

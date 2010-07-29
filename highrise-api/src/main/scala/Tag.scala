@@ -56,7 +56,7 @@ object Tag extends HighriseServices[Tag] {
 			Some("x")
 		)match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 		
 	}
@@ -68,7 +68,7 @@ object Tag extends HighriseServices[Tag] {
 			Some("x")
 		) match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}		
 	}
 	
@@ -80,7 +80,7 @@ object Tag extends HighriseServices[Tag] {
 			<name>{tag.name}</name>
 		)match {
 			case n:Created => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}		
 	}
 		
@@ -91,7 +91,7 @@ object Tag extends HighriseServices[Tag] {
 			Some("x")
 		)match {
 			case n:Ok => 
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 		
 	}

@@ -1,14 +1,12 @@
 package test
-import scala_mash.highrise_api.{Account, HighriseServices}
+import scala_mash.highrise_api.{Account, HighriseServices, LoginFailed}
 import scala_mash.highrise_api.models._
 import org.specs.runner.JUnit4
 import org.specs.Specification
+import scala_mash.highrise_api.models.enumerations.VisibleToValues._
 
 /**
- *
- * @author jimbarrows
- * @created: Dec 31, 2009 3:38:35 PM
- * @version 1.0
+ * 
  *
  */
 
@@ -34,6 +32,26 @@ object HighriseServicesSpec extends Specification {
       System.setProperty("com.nsfw.highrisehq.apiKey", "123456")
       System.setProperty("com.nsfw.highrisehq.siteName", "TestAccountName")
       HRS.account must beLike{ case Account("TestAccountName", "123456") => true}
+    }
+    "Bug #248 - Highrise redirects unkown Domain Names to front page, service should throw an error." in {
+    	val expectedContactData = ContactData(None, None, None, None, None)
+      	val person = Person(None,
+	        "Joe", //first name
+	        "Tester", //last name
+	        "JoeTester Title", //title
+	        "Background", //backgroun
+	        None, //companyId
+	        None, //createAt
+	        None, //updatedAt
+	        Some(Everyone), //visibleTo
+	        None, //ownerId
+	        None, //groupId
+	        None, //authorId
+	        expectedContactData
+	    )
+	    val account = new Account("DoesntExistAnywhere", "12345")
+	    
+    	Person.create(person, account) must throwA[LoginFailed]
     }
   }
 }

@@ -12,7 +12,8 @@ class HttpStatusCode( code:Int, description:String)
 object HttpStatusCode extends Log {
 	
 	def apply( response : HttpResponse):HttpStatusCode = {
-		debug("HttpStatusCode.apply response.getStatusLine.getStatusCode: {}", response.getStatusLine().getStatusCode)
+		
+		debug("HttpStatusCode.apply response: {}", response)
 		response.getStatusLine().getStatusCode match {
 			case 100 => Continue()
 			case 101 => SwitchingProtocols()
@@ -119,7 +120,9 @@ case class MultipleChoices() extends Redirection(300, "Multiple Choices") {}
 
 case class MovedPermanently(newLocation:Url) extends Redirection(301, "Moved Permanently"){}
 
-case class Found(location:Url) extends Redirection(302,"Found"){}
+case class Found(location:Url) extends Redirection(302,"Found"){
+	def url = location
+}
 
 case class SeeOther(location:Url) extends Redirection(303,"See Other"){}
 

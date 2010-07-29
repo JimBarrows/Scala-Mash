@@ -9,11 +9,11 @@
         </layout>
     </appender>
 
-	<logger name="bizondemand.rest">
+	<logger name="scala_mash.rest">
         <level value="debug"/>
     </logger>
     
-    <logger name="com.nsfw">
+    <logger name="scala_mash">
         <level value="debug"/>
     </logger>
 

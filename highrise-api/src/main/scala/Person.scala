@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 import xml.NodeSeq
 
 import bizondemand.utils.models.internet.Parameter
-import scala_mash.rest.{Ok, Created, RestException}
+import scala_mash.rest.{Ok, Created, RestException, HttpStatusCode}
 import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt}
 
 import scala_mash.highrise_api.models.enumerations.VisibleToValues
@@ -303,7 +303,7 @@ object Person extends HighriseServices[Person] {
 			person.toXml
 		) match {
 			case n:Created => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
 
@@ -313,7 +313,7 @@ object Person extends HighriseServices[Person] {
  			Some("x")
  		) match {
 			case n:Ok => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
 
@@ -323,7 +323,7 @@ object Person extends HighriseServices[Person] {
  			Some("x")
  		) match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
 
@@ -333,7 +333,7 @@ object Person extends HighriseServices[Person] {
 			Some("x")
 		)match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
 
@@ -344,7 +344,7 @@ object Person extends HighriseServices[Person] {
     		person.toXml
     	)match {
 			case n:Ok => 
-			case n => throw new RestException(n)
+			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
 }

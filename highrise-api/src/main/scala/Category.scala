@@ -80,14 +80,14 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 	def show( id :Long, account:Account) : TaskCategory = {
 		get( url +< (account.siteName) +/ ("task_categories") +/ (id.toString + ".xml"), Some(account.apiKey), Some("x")) match {
 			case n:Ok => parse(convertResponseToXml(n.response))
-			case n => throw new RestException( n)
+			case n => defaultStatusHandler(n)
 		}
 	}
 
 	def list( account:Account) : List[TaskCategory] = {
 		get( url +< (account.siteName) +/ ("task_categories.xml"), Some(account.apiKey), Some("x") )match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 	}
 	
@@ -98,7 +98,7 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 			<task-category><name>{name}</name></task-category> 
 		)match {
 			case n:Created => getByUrl(n.location, account, parse _)
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 	}
 
@@ -109,7 +109,7 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 			<task-category><name>{taskCategory.name}</name></task-category> 
 		)match {
 			case n:Ok => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 
@@ -119,7 +119,7 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 			Some("x")
 		) match {
 			case n:Ok => 
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		}
 	}
 
@@ -149,7 +149,7 @@ object DealCategory extends HighriseServices[DealCategory] {
 			Some("x")
 		)match {
 			case n:Ok => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 
@@ -159,7 +159,7 @@ object DealCategory extends HighriseServices[DealCategory] {
 			Some("x")
 		)match {
 			case n:Ok => parseList( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 	
@@ -170,7 +170,7 @@ object DealCategory extends HighriseServices[DealCategory] {
 			<deal-category><name>{name}</name></deal-category>
 		)match {
 			case n:Created => getByUrl(n.location, account, parse _)
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 
@@ -181,7 +181,7 @@ object DealCategory extends HighriseServices[DealCategory] {
 			<deal-category><name>{dealCategory.name}</name></deal-category> 
 		)match {
 			case n:Ok => parse( convertResponseToXml(n.response))
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 
@@ -191,7 +191,7 @@ object DealCategory extends HighriseServices[DealCategory] {
 			Some("x")
 		)match {
 			case n:Ok => 
-			case n => throw new RestException(n)
+			case n => defaultStatusHandler(n)
 		} 
 	}
 }
