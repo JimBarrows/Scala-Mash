@@ -2,9 +2,12 @@ import sbt._
 
 class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 {
-	 	
-	def url = new java.net.URL("http://bizondemand.biz/artifacts")
-	val bizOnDemand = Resolver.url("BizOnDemand", url)
+	 		
+	val maven = DefaultMavenRepository
+	val scalaToolsRelease = ScalaToolsReleases
+	val scalaToolsSnapshots = ScalaToolsSnapshots
+	val javaNet = JavaNet1Repository	
+	val bizOnDemandRelease = "BizOnDemand-release" at "http://bizondemand.biz/artifacts/release"
 			
 	val stdLibraryDependencies = Set(
 		"junit" % "junit" % "4.5" % "test->default",
@@ -23,8 +26,7 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 	lazy val rest = project("rest-core", "Rest Core", new CoreProject(_))	
 	
 	lazy val shopify = project("shopify-api", "Shopify", new ApiProject(_))
-	
-  	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/") 
+	  	
 
 	class ApiProject(info:ProjectInfo) extends DefaultProject(info) {
 		
@@ -39,4 +41,7 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 		
 		
 	}
+	
+	override def managedStyle = ManagedStyle.Maven
+  	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/")  	
 }
