@@ -84,7 +84,13 @@ trait RestService extends Log{
 	}
 }
 
-class RestException( httpStatus:HttpStatusCode) extends Exception {}
+
+
+class RestException( httpStatusCode:HttpStatusCode) extends Exception {
+	def httpStatus = httpStatusCode
+}
+
+
 
 /** Provides a thin wrapper around the apache http utils package.
  *  You will probably want to set the maxTotalConnection, and defaultMaxConnectionPerRoute values for production.
