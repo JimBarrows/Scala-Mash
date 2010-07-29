@@ -3,7 +3,8 @@ import sbt._
 class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 {
 	 	
-	val bizOnDemand = Resolver.ssh("BizOnDemand", "bizondemand", "/var/local/artifacts/release/")
+	def url = new java.net.URL("http://bizondemand.biz/artifacts")
+	val bizOnDemand = Resolver.url("BizOnDemand", url)
 			
 	val stdLibraryDependencies = Set(
 		"junit" % "junit" % "4.5" % "test->default",
@@ -23,7 +24,7 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 	
 	lazy val shopify = project("shopify-api", "Shopify", new ApiProject(_))
 	
-  	val publishTo = Resolver.ssh("BizOnDemand", "nsfwenterprises.com", "/var/local/artifacts/release/") 
+  	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/") 
 
 	class ApiProject(info:ProjectInfo) extends DefaultProject(info) {
 		
