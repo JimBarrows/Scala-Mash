@@ -73,6 +73,7 @@ case class Deal( accountId : Option[Long],
 object Deal extends HighriseServices[Deal] {
 	
 	def parse(node: NodeSeq) = {
+		debug("Deal.parse: node: {}", node)
 		Deal(
 			optionalLong(node, "account-id" ),
 			optionalLong(node, "author-id" ),
@@ -93,26 +94,28 @@ object Deal extends HighriseServices[Deal] {
 			optionalParseYmd( node, "status-changed-on"),
 			optionalParseDateTimeWithTimeZone(node, "updated-at"),
 			VisibleToValues.valueOf( node \ "visible-to" text),
-			Some(DealCategory.parse( node \ "category"))			
+			if( ( node \ "category" text).isEmpty )None else Some(DealCategory.parse( node \ "category"))			
 		)
 	}
 	
 	def parseList(node: NodeSeq) = (node \\ "deal").map( parse(_)).toList
 	
 	def create( deal:Deal, account:Account) : Deal = {
+		debug("Deal.create deal: {}, account: {}", deal, account)
 		var statusCode = post( url +< (account.siteName) +/ "deals.xml", 
-			Some(account.apiKey), 
-			Some("x"), 
-			deal.toXml
-		)
-		println("statusCode: " + statusCode)
+				Some(account.apiKey), 
+				Some("x"), 
+				deal.toXml
+			)
+		println("Deal.create statusCode: " + statusCode)
 		statusCode match {
-			case n:Created => getByUrl( n.location, account, parse _)
+			case n:Created => parse(convertResponseToXml(n.response))
 			case n => defaultStatusHandler(n)
 		} 
 	}	
 	
 	def destroy(id:Long, account:Account) = {
+		debug("Deal.destroy id: {}, account: {}", id, account)
 		delete( url +< (account.siteName) +/ "deals" +/ (id.toString + ".xml"), 
 			Some(account.apiKey), 
 			Some("x")
@@ -123,6 +126,7 @@ object Deal extends HighriseServices[Deal] {
 	}
 	
 	def listAll(account :Account) : List[Deal] = {
+		debug("Deal.listAll account: {}", account)
 		get(url +< (account.siteName) +/ "deals.xml", 
 			Some(account.apiKey), 
 			Some("x")
@@ -133,6 +137,7 @@ object Deal extends HighriseServices[Deal] {
 	}
 	
 	def show( id:Long, account :Account) :Deal = {
+		debug("Deal.destroy id: {}, account: {}", id, account)
 		get(url +< (account.siteName) +/ ("deals") +/ ( id.toString + ".xml"), 
 			Some(account.apiKey), 
 			Some("x")
@@ -143,6 +148,7 @@ object Deal extends HighriseServices[Deal] {
 	}
 		
 	def statusUpdate(id:Long, status:DealStatus, account :Account) = {
+		debug("Deal.statusUpdate id: {}, status: {} account: {}", id, status, account)
 		put( url +< (account.siteName) +/ "deals" +/ id.toString +/ "status.xml", 
 			Some(account.apiKey), 
 			Some("x"), 
@@ -154,6 +160,7 @@ object Deal extends HighriseServices[Deal] {
 	}
 	
 	def update( deal: Deal, account :Account) = {
+		debug("Deal.update deal: {}, account: {}", deal, account)
 		put(url +< (account.siteName) +/ "deals" +/ (deal.id.getOrElse(0).toString() + ".xml"), 
 			Some(account.apiKey), 
 			Some("x"), deal.toXml

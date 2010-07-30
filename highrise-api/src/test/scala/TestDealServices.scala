@@ -7,8 +7,7 @@ import org.specs.Specification
 import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
 import DealStatus._
-import scala_mash.rest.OtherServerError
-import scala_mash.rest.RestException
+import scala_mash.rest.{OtherServerError, RestException}
 
 object DealServicesSpec extends Specification {
 	
@@ -54,17 +53,17 @@ object DealServicesSpec extends Specification {
 		}
 		
 		"get all deals" in {
-			
+									
 			val response = Deal.create( newDeal, account)
-			
+									
 			val list = Deal.listAll( account)
-			list must haveSize( 1 )
-			
+					list must haveSize( 1 )
+									
 			val first = list.head
 			first.name must equalTo( "Create Test Deal")
 			first.createdAt must beSomething
 			first.id must beSomething
-			
+									
 			Deal.destroy( response.id.get, account)
 		}		
 		
@@ -75,7 +74,7 @@ object DealServicesSpec extends Specification {
 				Deal.destroy( response.id.get, account)
 			} catch {
 				case e : RestException => {
-					//e.httpStatus must be_==(OtherServerException(507, _))
+					e.httpStatus must beLike { case OtherServerError(507, _) => true}
 				}
 				case e =>{
 					e.printStackTrace

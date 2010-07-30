@@ -7,15 +7,7 @@ import org.joda.time._
 import org.specs.runner.JUnit4
 import org.specs.Specification
 
-/**
- *
- * @author jimbarrows
- * @created: Dec 31, 2009 3:38:35 PM
- * @version 1.0
- *
- */
 
-class TestCategoryServices extends JUnit4(CategoryServicesSpec)
 object CategoryServicesSpec extends Specification {
 	
 	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")

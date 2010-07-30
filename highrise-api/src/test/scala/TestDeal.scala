@@ -11,7 +11,6 @@ import scala_mash.highrise_api.Utils._
 import scala_mash.highrise_api.models.enumerations.VisibleToValues._
 import scala_mash.highrise_api.models.enumerations.DealStatus._
 
-class TestDeal extends JUnit4(DealSpec)
 object DealSpec extends Specification {
 
 	"The deal class " should {

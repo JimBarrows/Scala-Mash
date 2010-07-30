@@ -9,12 +9,15 @@
         </layout>
     </appender>
 
+	<logger name="scala_mash">
+        <level value="warn"/>
+    </logger>
 	<logger name="scala_mash.rest">
         <level value="debug"/>
-    </logger>
+    </logger>    
     
-    <logger name="scala_mash">
-        <level value="debug"/>
+    <logger name="scala_mash.highrise_api">
+    	<level value="debug"/>
     </logger>
 
     <root>

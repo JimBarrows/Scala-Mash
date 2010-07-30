@@ -12,6 +12,8 @@ import scala_mash.highrise_api.Utils._
 import scala_mash.rest.{Ok, Created, RestException}
 import scala_mash.rest.util.Helpers.{optionalLong}
 
+import bizondemand.utils.models.internet.Url
+
 object CategoryTypes extends Enumeration {
 	type CategoryTypes = Value
 	val Task = Value("task")
@@ -97,7 +99,7 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 			Some("x"), 
 			<task-category><name>{name}</name></task-category> 
 		)match {
-			case n:Created => getByUrl(n.location, account, parse _)
+			case n:Created => getByUrl(Url(n.location.toString +".xml"), account, parse _)
 			case n => defaultStatusHandler(n)
 		}
 	}
@@ -128,7 +130,7 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 object DealCategory extends HighriseServices[DealCategory] {
 	
 	def parse(node: NodeSeq) = {
-		debug("DealCategory.parse({})", node.toString)
+		debug("DealCategory.parse({})", node)
 		DealCategory( 
 			optionalLong( node, "id"),
 			node \ "name" text,
@@ -169,7 +171,7 @@ object DealCategory extends HighriseServices[DealCategory] {
 			Some("x"), 
 			<deal-category><name>{name}</name></deal-category>
 		)match {
-			case n:Created => getByUrl(n.location, account, parse _)
+			case n:Created => getByUrl(Url(n.location.toString + ".xml"), account, parse _)
 			case n => defaultStatusHandler(n)
 		} 
 	}
