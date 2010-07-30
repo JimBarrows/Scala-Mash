@@ -4,6 +4,7 @@ import org.specs.Specification
 import org.specs.runner.JUnit4
 import scala_mash.shopify_api.model._
 import scala_mash.shopify_api.Utils._
+import scala_mash.rest.util.Helpers._
 
 /**
  *

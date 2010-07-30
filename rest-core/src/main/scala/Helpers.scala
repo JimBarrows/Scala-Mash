@@ -12,7 +12,7 @@ import org.joda.time.format.DateTimeFormatterBuilder
 object Helpers {
 	
 	protected val dateFormatterWithTimeZone = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH:mm:ssZZ").toFormatter.withOffsetParsed
-  	def parseDateTimeWithTimeZone(dateTime:String) = dateFormatterWithTimeZone.parseDateTime(dateTime)
+  	def parseDateTimeWithTimeZone(dateTime:String) = dateFormatterWithTimeZone.parseDateTime(dateTime.replace("Z","+00:00"))  	
   	def optionalDateTimeWithTimeZone( node:NodeSeq, tag:String) = 
   		if( ( node \ tag text).isEmpty )None else Some(parseDateTimeWithTimeZone( node \ tag text))
   	def printWithTimeZone(dateTime: DateTime) = dateFormatterWithTimeZone.print(dateTime).replace("+00:00","Z")

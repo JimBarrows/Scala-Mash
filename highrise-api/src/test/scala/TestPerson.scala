@@ -9,6 +9,8 @@ import VisibleToValues._
 
 import scala.{List, Nil}
 
+import scala_mash.rest.util.Helpers._
+
 /**
  *
  * @author jimbarrows

@@ -7,14 +7,6 @@ import org.specs.Specification
 import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
 
-/**
- *
- * @author jimbarrows
- * @created: Dec 31, 2009 3:38:35 PM
- * @version 1.0
- *
- */
-
 object PersonServicesSpec extends Specification {
 
  	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
