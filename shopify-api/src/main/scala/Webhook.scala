@@ -5,9 +5,12 @@ import org.joda.time.format.{DateTimeFormatterBuilder}
 import xml.{NodeSeq, Node}
 
 import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
-import scala_mash.shopify_api.Utils._
-import bizondemand.utils.models.internet.{Url, Parameter}
+import scala_mash.rest.util.Helpers._
 import scala_mash.rest.{Ok,Created,RestException}
+
+import bizondemand.utils.models.internet.{Url, Parameter}
+
+
 
 case class Webhook (address:Url, 
 					createdAt:DateTime, 
@@ -38,8 +41,11 @@ object Webhook extends ShopifyResource[Webhook] {
 			updatedAtMax:Option[DateTime],
 			topic:Option[String],
 			address:Option[Url]) : List[Webhook]= {
+				
 		debug("Webhook.listAll({},{},{},{},{},{},{},{})", limit,page,createdAtMin, createdAtMax, updatedAtMin, updatedAtMax, topic, address)
+		
 		val p = Parameter("foo","foo")
+		
 		val parameterList:List[Parameter] = 
 			limit.map( Parameter("limit", _)).toList ::: 
 			page.map(Parameter("page", _)).toList :::
@@ -50,9 +56,11 @@ object Webhook extends ShopifyResource[Webhook] {
 			topic.map( Parameter("topic", _)).toList :::
 			address.map( n => {Parameter("address", n.toString)}).toList :::
 			Nil
+			
 		get( url +< shop.name +/ ("webhooks.xml") ++& parameterList, 
 			Some(ShopifyPartnerInfo.apiKey), 
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
+			
 		) match {
 			case n:Ok => parseList( convertResponseToXml(n.response))	
 			case n => throw new RestException(n)

@@ -9,9 +9,10 @@ import org.joda.time.{DateTime, LocalDate}
 import scala_mash.highrise_api._
 import scala_mash.highrise_api.Utils._
 
+import scala_mash.rest.util.Helpers.{optionalDateTimeWithTimeZone, printWithTimeZone, printYmd, optionalParseYmd, optionalLong,optionalString, optionalYmd}
+
 import bizondemand.utils.models.internet.Url
 import scala_mash.rest.{Ok, Created, RestException}
-import scala_mash.rest.util.Helpers.{optionalLong,optionalString}
 
 import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
@@ -79,7 +80,7 @@ object Deal extends HighriseServices[Deal] {
 			optionalLong(node, "author-id" ),
 			optionalString(node, "background" ),
 			optionalLong(node, "category-id"),
-			optionalParseDateTimeWithTimeZone(node, "created-at"),
+			optionalDateTimeWithTimeZone(node, "created-at"),
 			optionalString(node, "currency"),
 			optionalLong( node, "duration"),
 			optionalLong( node, "group-id"),
@@ -91,8 +92,8 @@ object Deal extends HighriseServices[Deal] {
 			optionalString(node, "price-type"),
 			optionalLong(node, "responsible-party-id"),
 			DealStatus.valueOf(node \ "status" text),
-			optionalParseYmd( node, "status-changed-on"),
-			optionalParseDateTimeWithTimeZone(node, "updated-at"),
+			optionalYmd( node, "status-changed-on"),
+			optionalDateTimeWithTimeZone(node, "updated-at"),
 			VisibleToValues.valueOf( node \ "visible-to" text),
 			if( ( node \ "category" text).isEmpty )None else Some(DealCategory.parse( node \ "category"))			
 		)

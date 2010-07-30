@@ -10,7 +10,7 @@ import scala_mash.highrise_api._
 import scala_mash.highrise_api.Utils._
 
 import scala_mash.rest.{Ok, Created, RestException}
-import scala_mash.rest.util.Helpers.{optionalLong}
+import scala_mash.rest.util.Helpers.{optionalLong, optionalDateTimeWithTimeZone, printWithTimeZone}
 
 import bizondemand.utils.models.internet.Url
 
@@ -68,8 +68,8 @@ object TaskCategory extends HighriseServices[TaskCategory] {
 			optionalLong( node, "id"),
 			node \ "name" text,
 			optionalLong(node,"account-id"),
-			optionalParseDateTimeWithTimeZone(node, "created-at"),
-			optionalParseDateTimeWithTimeZone(node, "updated-at"),
+			optionalDateTimeWithTimeZone(node, "created-at"),
+			optionalDateTimeWithTimeZone(node, "updated-at"),
 			optionalLong(node, "elements-count")
 		)
 	}
@@ -135,8 +135,8 @@ object DealCategory extends HighriseServices[DealCategory] {
 			optionalLong( node, "id"),
 			node \ "name" text,
 			optionalLong(node,"account-id"),
-			optionalParseDateTimeWithTimeZone(node, "created-at"),
-			optionalParseDateTimeWithTimeZone(node, "updated-at"),
+			optionalDateTimeWithTimeZone(node, "created-at"),
+			optionalDateTimeWithTimeZone(node, "updated-at"),
 			optionalLong(node, "elements-count")
 		)
 	}

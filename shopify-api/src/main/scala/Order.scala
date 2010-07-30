@@ -3,11 +3,11 @@ package scala_mash.shopify_api.model
 import org.joda.time.DateTime
 import xml.{Node, NodeSeq}
 
-import scala_mash.shopify_api.Utils._
 import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import scala_mash.rest.Ok
 import bizondemand.utils.models.internet.{Url,Parameter}
-import scala_mash.rest.util.Helpers._
+import bizondemand.utils.logging.Log
+import scala_mash.rest.util.Helpers.{printWithTimeZone, optionalDateTimeWithTimeZone, optionalInt, parseDateTimeWithTimeZone, optionalString}
 
 
 /**
@@ -54,7 +54,7 @@ case class Address(val address1: String,
   }
 }
 
-object Address {
+object Address extends Log{
 	def parse(node: NodeSeq) = {
 		debug("Address.parse( {} )", node.toString)
 		Address(
@@ -106,7 +106,7 @@ case class LineItem(val fulfillmentService: String,
     </line-item>
 }
 
-object LineItem {
+object LineItem extends Log{
  	def parse(node: NodeSeq) = {
  		debug("LineItem.parse( {} )", node.toString)
     	LineItem(
@@ -214,7 +214,7 @@ object Order extends ShopifyResource[Order] {
 		debug("Order.parse( {} )", node.toString)
 		Order(
     		(node \ "buyer-accepts-marketing" text).toBoolean,
-    		(if ((node \ "closed-at" text).isEmpty) None else Some(parseDateTimeWithTimeZone(node \ "closed-at" text))),
+    		optionalDateTimeWithTimeZone(node, "closed-at"),
     		parseDateTimeWithTimeZone(node \ "created-at" text),
     		node \ "currency" text,
     		node \ "email" text,

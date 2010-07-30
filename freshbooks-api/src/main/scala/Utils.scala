@@ -11,14 +11,11 @@ import org.joda.time.DateTime
  */
 
 object Utils {
-  val dateFormatterWithTimeZone = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH:mm:ssZZ").toFormatter.withOffsetParsed
-  def parseDateTimeWithTimeZone(dateTime:String) = dateFormatterWithTimeZone.parseDateTime(dateTime)
+  
 
   val dateFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss").toFormatter
 
-  def parseDateTime(dateTime:String) = dateFormatter.parseDateTime(dateTime)
-
-  def printWithTimeZone(dateTime:DateTime) = dateFormatterWithTimeZone.print(dateTime)
+  def parseDateTime(dateTime:String) = dateFormatter.parseDateTime(dateTime)  
 
   def print(dateTime:DateTime) = dateFormatter.print(dateTime)
 

@@ -7,6 +7,7 @@ import java.net.MalformedURLException
 
 import bizondemand.utils.models.internet.Url
 import scala_mash.rest.{Created,Ok,RestException}
+import scala_mash.rest.util.Helpers.{ optionalYmd, optionalDateTimeWithTimeZone, optionalLong, optionalString, parseDateTimeWithTimeZone}
 
 /**
  *
@@ -96,11 +97,11 @@ object RecurringApplicationCharge extends ShopifyResource[RecurringApplicationCh
 			node \ "name" text,
 			{ try {Url(node \ "return-url" text)} catch { case mfue:MalformedURLException=>Url("http://localhost")}},
 			testOnly,
-			parseOptionalYearMonthDay(node \ "billing-on" text),
-			Some(parseDateTimeWithTimeZone(node \ "created-at" text)),
-			Some((node \ "id" text).toLong),
-			Some(node \ "status" text),
-			Some(parseDateTimeWithTimeZone(node \ "updated-at" text)),
+			optionalYmd(node, "billing-on"),
+			optionalDateTimeWithTimeZone(node, "created-at"),
+			optionalLong(node, "id"),
+			optionalString(node, "status" ),
+			optionalDateTimeWithTimeZone(node, "updated-at"),
 			{ try {Some(Url(node \ "confirmation-url" text))} catch { case mfue:MalformedURLException=>Some(Url("http://localhost"))}}
 		)
 	}

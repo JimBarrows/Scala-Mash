@@ -6,7 +6,7 @@ import xml.NodeSeq
 
 import bizondemand.utils.models.internet.Parameter
 import scala_mash.rest.{Ok, Created, RestException, HttpStatusCode}
-import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt}
+import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt, optionalDateTimeWithTimeZone, printWithTimeZone}
 
 import scala_mash.highrise_api.models.enumerations.VisibleToValues
 import VisibleToValues._
@@ -284,8 +284,8 @@ object Person extends HighriseServices[Person] {
         	node \ "title" text,
         	node \ "background" text,
         	optionalInt( node, "company-id"),
-         	optionalParseDateTimeWithTimeZone( node, "created-at" ),
-        	optionalParseDateTimeWithTimeZone( node, "updated-at" ),
+         	optionalDateTimeWithTimeZone( node, "created-at" ),
+        	optionalDateTimeWithTimeZone( node, "updated-at" ),
 			VisibleToValues.valueOf(node \ "visible-to" text),
         	optionalInt(node, "owner-id"),
         	optionalInt(node, "group-id"),
