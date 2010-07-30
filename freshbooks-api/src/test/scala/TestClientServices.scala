@@ -15,7 +15,6 @@ import Utils._
  *
  */
 
-class TestClientServices extends JUnit4(ClientServicesSpec)
 object ClientServicesSpec extends Specification {
 
   "Client services"  should {

@@ -111,7 +111,7 @@ object Client extends FreshbooksResource[Client] {
 
 
 	def parse(xml:NodeSeq) : Client = {
-		debug("Client:parse xml {}", xml)
+		debug("Client.parse xml {}", xml)
 		val node:NodeSeq = xml \ ("client")			
 		debug("Client:parse node {}", node)
 		Client(
@@ -154,13 +154,13 @@ object Client extends FreshbooksResource[Client] {
 
 
 	def create( client:Client, account:Account) : Client = {
-		debug("Client:create")
+		debug("Client.create client: {} account: {}", client, account)
 		val request = <request method="client.create">{client.toXml}</request>
 
 		val response = post( account.domainName, account.authenticationToken, request)
-		debug("Client.create - returned : {}", response)
+		debug("Client.create response : {}", response)
 		response match {
-			case n:Created => {
+			case n:Ok => {
 				Client(
 					parseCreateResponse(convertResponseToXml(n.response)),
 					client.firstName,
@@ -183,26 +183,26 @@ object Client extends FreshbooksResource[Client] {
 	}
 
 	def update( client:Client, account:Account) : Unit = {
-		debug("Client:update")
+		debug("Client.update client: {}, account: {}", client, account)
 		val request = <request method="client.update">{client.toXml}</request>
 
 		post( account.domainName, account.authenticationToken, request)
 	}
 
 	def get( clientId:Long, account:Account) : Client = {
-		debug("Client:get")
+		debug("Client.get clientId: {}, account: {}", clientId, account)
 		val request = <request method="client.get"><client_id>{clientId.toString}</client_id></request>
 
 		val status = post( account.domainName, account.authenticationToken, request)
 		debug("Client.get - returned: {}", status)
 		status match {
-			case n:Created => ( parse( convertResponseToXml(n.response)))
+			case n:Ok => ( parse( convertResponseToXml(n.response)))
 			case n => throw new RestException(n)
 		}
 	}
 
 	def delete( clientId:Long, account:Account) = {
-		debug("Client:delete")
+		debug("Client.delete clientId: {}, account: {}", clientId, account)
 		val request = <request method="client.delete"><client_id>{clientId.toString}</client_id></request>
 
 		val status = post( account.domainName, account.authenticationToken, request)
@@ -215,11 +215,11 @@ object Client extends FreshbooksResource[Client] {
 
 
 	def list( account:Account) : List[Client] = {
-		debug("Client:list")
+		debug("Client.list account: {}", account)
 		val request = <request method="client.list"></request>
 
 		val status = post( account.domainName, account.authenticationToken, request)
-		debug("Client.list - returned: {}", status)
+		debug("Client.list status: {}", status)
 		status match {
 			case n:Created => ( parseList( convertResponseToXml(n.response)))
 			case n => throw new RestException(n)

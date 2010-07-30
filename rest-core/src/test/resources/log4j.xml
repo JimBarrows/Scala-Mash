@@ -9,12 +9,19 @@
         </layout>
     </appender>
 
-    <logger name="bizondemand.rest">
+	<logger name="scala_mash">
+        <level value="warn"/>
+    </logger>
+	<logger name="scala_mash.rest">
         <level value="debug"/>
+    </logger>    
+    
+    <logger name="scala_mash.highrise_api">
+    	<level value="debug"/>
     </logger>
 
     <root>
-        <priority value="debug"/>
+        <priority value="warn"/>
         <appender-ref ref="console"/>
     </root>
 
