@@ -7,6 +7,8 @@ import scala_mash.shopify_api.Utils._
 
 import scala_mash.shopify_api.model.Webhook
 
+import scala_mash.rest.util.Helpers.{parseDateTimeWithTimeZone}
+
 object WebhookSpecs extends Specification {
 	
 	"The Webhook class and object" should {

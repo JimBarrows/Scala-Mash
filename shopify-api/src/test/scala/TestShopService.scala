@@ -5,6 +5,7 @@ import org.specs.runner.JUnit4
 import scala_mash.shopify_api.model.{ShopCredentials, Shop}
 import scala_mash.shopify_api.ShopifyPartnerInfo
 import scala_mash.shopify_api.Utils._
+import scala_mash.rest.util.Helpers._
 
 /**
  *
