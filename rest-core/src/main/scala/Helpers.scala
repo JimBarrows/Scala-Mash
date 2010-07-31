@@ -42,7 +42,17 @@ object Helpers {
 	def optionalInt( node:NodeSeq, tag:String, parser:(String)=>DateTime) : Option[DateTime] = 
 		if( ( node \ tag text).isEmpty) None else Some(parser(node \ tag text))
 
-	def optionalBoolean( node:NodeSeq, tag:String ) : Option[Boolean] = 
-		if( ( node \ tag text).isEmpty) None else Some((node \ tag text).toBoolean)
-
+	def optionalBoolean( node:NodeSeq, tag:String ) : Option[Boolean] = {
+		(node \ tag text) match {
+			case n:String if n.isEmpty => None
+			case "0" => Some(false)
+			case "1" => Some(true)
+			case "f" => Some(false)
+			case "t" => Some(true)
+			case "F" => Some(false)
+			case "T" => Some(true)
+			case "true" => Some(true)
+			case "false" => Some(false)	
+		}
+	}
 }
