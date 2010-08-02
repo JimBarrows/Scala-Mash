@@ -50,4 +50,6 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 		
 	}
 	
+	override def managedStyle = ManagedStyle.Maven
+ 	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/")  	
 }

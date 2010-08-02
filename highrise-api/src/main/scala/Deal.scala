@@ -9,7 +9,7 @@ import org.joda.time.{DateTime, LocalDate}
 import scala_mash.highrise_api._
 import scala_mash.highrise_api.Utils._
 
-import scala_mash.rest.util.Helpers.{optionalDateTimeWithTimeZone, printWithTimeZone, printYmd, optionalParseYmd, optionalLong,optionalString, optionalYmd}
+import scala_mash.rest.util.Helpers.{optionalDateTimeWithTimeZone, printWithTimeZone, printYmd, optionalLong,optionalString, optionalYmd}
 
 import bizondemand.utils.models.internet.Url
 import scala_mash.rest.{Ok, Created, RestException}

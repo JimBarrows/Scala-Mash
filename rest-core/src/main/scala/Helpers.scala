@@ -4,6 +4,7 @@ import xml._
 import NodeSeq._
 import org.joda.time.{DateTime, LocalDate}
 import org.joda.time.format.DateTimeFormatterBuilder
+import bizondemand.utils.models.internet.Url
 
 
 
@@ -52,4 +53,11 @@ object Helpers {
 				case "false" => Some(false)
 			}
 	}
+
+
+	def optionalUrl( node:NodeSeq, tag:String) : Option[Url] =
+			if( ( node \ tag text).isEmpty) None else Some( Url((node \ tag text)))
+
+	def optionalBigDecimal( node:NodeSeq, tag:String) : Option[BigDecimal] =
+			if( ( node \ tag text).isEmpty) None else Some( BigDecimal((node \ tag text)))
 }

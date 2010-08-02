@@ -9,13 +9,7 @@ import com.nsfw.rest.URL
 import com.bizondemand.freshbooks_api.model._
 import InvoiceStatus._
 import com.bizondemand.freshbooks_api.Utils._
-/**
- *
- * @author jimbarrows
- *
- */
 
-class TestInvoice extends JUnit4(InvoiceSpec)
 object InvoiceSpec extends Specification {
 
   "The Invoice class"  should {
