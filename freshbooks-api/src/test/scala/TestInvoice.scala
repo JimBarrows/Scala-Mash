@@ -5,17 +5,18 @@ import org.joda.time.DateTime
 
 import scala.{List, Nil}
 
-import com.nsfw.rest.URL
-import com.bizondemand.freshbooks_api.model._
+import bizondemand.utils.models.internet.Url
+import scala_mash.freshbooks_api.model._
 import InvoiceStatus._
-import com.bizondemand.freshbooks_api.Utils._
+import scala_mash.freshbooks_api.Utils._
+import scala_mash.rest.util.Helpers._
 
 object InvoiceSpec extends Specification {
 
   "The Invoice class"  should {
 
-		val expectedXml = <invoice>
-	<invoice_id>13</invoice_id>
+		val expectedCreateXml = <invoice>
+			<invoice_id>13</invoice_id>
 			<client_id>13</client_id>
 			<number>FB00004</number>
 			<status>draft</status>
@@ -43,23 +44,30 @@ object InvoiceSpec extends Specification {
 			</lines>
 		</invoice>
 
-		val expectedInvoice = Invoice(
+		val expectedCreateInvoice = Invoice(
 				Some("13"), // invoiceId:Option[String],
 				"13", // clientId:String,
 				Some("FB00004"), // number:Option[String],
+				None, //amount
+				//None, //amountOustanding
 				Some(Draft), // status:InvoiceStatus,
-				Some(parseLocalDate("2007-06-23")), // date:Option[LocalDate],
+				Some(parseYmd("2007-06-23").toLocalDate), // date:Option[LocalDate],
 				Some("2314"), // poNumber:Option[String],
 				Some(10), // discount:Option[Int],
 				Some("Due upon receipt."), // notes:Option[String],
 				Some("Payment due in 30 days."), // terms:Option[String],
 				Some("CAD"), // currencyCode:Option[String],
-				Some(URL("http://example.com/account")), // returnUri:Option[URL],
+				None,
+				None,
+				Some(Url("http://example.com/account")), // returnUri:Option[URL],
+				None,
 				Some("John"), // firstName:Option[String],
 				Some("Smith"), // lastName:Option[String],
 				Some("ABC Corp"), // organization:Option[String],
 				None, // address:Option[PrimaryAddress],
 				Line(  // lines:Option[List[Line]]
+						None,
+						None,
 						Some("Yard Work"), // name:Option[String],
 						Some("Mowed the lawn."), // description:Option[String],
 						"10", // unitCost:String,
@@ -72,8 +80,8 @@ object InvoiceSpec extends Specification {
 			)
 
 		"be able to generate an invoice XML " in {
-			println(expectedInvoice)
-			expectedInvoice.toXml must equalIgnoreSpace( expectedXml)
+			println(expectedCreateInvoice)
+			expectedCreateInvoice.toXml must equalIgnoreSpace( expectedCreateXml)
 		}
 
 	}

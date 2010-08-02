@@ -63,7 +63,6 @@ case class Invoice(
 			{lastName.map( n => <last_name>{n}</last_name>).getOrElse(Empty)}
 			{organization.map( n => <organization>{n}</organization>).getOrElse(Empty)}
 			{address.map( n => n.toXml).getOrElse(Empty)}
-			<!--{vatInfo.toXml} -->
 			<lines>
 				{lines.map( _.toXml)}
 			</lines>
