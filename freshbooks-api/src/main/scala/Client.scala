@@ -186,7 +186,12 @@ object Client extends FreshbooksResource[Client] {
 		debug("Client.update client: {}, account: {}", client, account)
 		val request = <request method="client.update">{client.toXml}</request>
 
-		post( account.domainName, account.authenticationToken, request)
+		val response = post( account.domainName, account.authenticationToken, request)
+		debug("Client.update response: {}", response)
+		response match {
+			case n:Ok =>
+			case n => throw new RestException(n)
+		}
 	}
 
 	def get( clientId:Long, account:Account) : Client = {
