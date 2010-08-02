@@ -19,14 +19,13 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 	) ++ super.libraryDependencies	
 		
 			
+	lazy val rest = project("rest-core", "Rest Core", new CoreProject(_))	
+	
 	lazy val freshbooks = project("freshbooks-api", "Freshbooks", new ApiProject(_))	
 	
 	lazy val highrise = project("highrise-api", "Highrise", new ApiProject(_))	
 	
-	lazy val rest = project("rest-core", "Rest Core", new CoreProject(_))	
-	
 	lazy val shopify = project("shopify-api", "Shopify", new ApiProject(_))
-	  	
 
 	class ApiProject(info:ProjectInfo) extends DefaultProject(info) {
 		
@@ -36,12 +35,12 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 		
 	}
 	
-	class CoreProject(info: ProjectInfo) extends DefaultWebProject(info) {
+	class CoreProject(info: ProjectInfo) extends DefaultProject(info) {
 		override def libraryDependencies = stdLibraryDependencies ++ Set("org.apache.httpcomponents" % "httpclient" % "4.1-alpha2")
 		
 		
 	}
 	
-	override def managedStyle = ManagedStyle.Maven
-  	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/")  	
+//	override def managedStyle = ManagedStyle.Maven
+ 	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/")  	
 }
