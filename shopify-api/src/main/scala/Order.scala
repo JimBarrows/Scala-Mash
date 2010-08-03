@@ -30,7 +30,22 @@ case class Address(val address1: String,
                    val name: String,
                    val countryCode: String,
                    val provinceCode: String) {
-  def toXml = {
+	def toXml = {<address1>{address1}</address1>
+		<address2>{address2}</address2>
+		<city>{city}</city>
+		<company>{company}</company>
+		<country>{country}</country>
+		<first-name>{firstName}</first-name>
+		<last-name>{lastName}</last-name>
+		<phone-number>{phoneNumber}</phone-number>
+		<province>{province}</province>
+		<zip>{zip}</zip>
+		<name>{name}</name>
+		<country-code>{countryCode}</country-code>
+		<province-code>{provinceCode}</province-code>
+	}
+
+  def toAdr = 
     <div class="adr">
       <div class="street-address">
         {address1}
@@ -51,7 +66,6 @@ case class Address(val address1: String,
         {country}
       </div>
     </div>
-  }
 }
 
 object Address extends Log{
