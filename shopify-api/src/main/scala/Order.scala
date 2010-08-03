@@ -208,33 +208,33 @@ case class Order(val buyerAcceptsMarketing: Boolean,
 
 object Order extends ShopifyResource[Order] {
 
-  val url: Url = shopifyUrl +/ ("admin")
+	val url: Url = shopifyUrl +/ ("admin")
 
 	def parse(node: NodeSeq) = {
 		debug("Order.parse( {} )", node.toString)
 		Order(
-    		(node \ "buyer-accepts-marketing" text).toBoolean,
-    		optionalDateTimeWithTimeZone(node, "closed-at"),
-    		parseDateTimeWithTimeZone(node \ "created-at" text),
-    		node \ "currency" text,
-    		node \ "email" text,
-    		(node \ "id" text).toInt,
-    		node \ "name" text,
-    		(node \ "number" text).toInt,
-    		BigDecimal(node \ "subtotal-price" text),
-    		BigDecimal(node \ "total-discounts" text),
-    		BigDecimal(node \ "total-line-items-price" text),
-    		BigDecimal(node \ "total-price" text),
-    		BigDecimal(node \ "total-tax" text),
-    		(node \ "total-weight" text).toInt,
-    		parseDateTimeWithTimeZone(node \ "updated-at" text),
-    		(node \ "order-number" text).toInt,
-    		Address.parse(node \ "billing-address"),
-    		Address.parse(node \ "shipping-address"),
-    		LineItem.parseList(node),
-    		ShippingLine.parseList( node),
-    		PaymentDetail.parse(node \ "payment-details").get
-    	)
+			(node \ "buyer-accepts-marketing" text).toBoolean,
+			optionalDateTimeWithTimeZone(node, "closed-at"),
+			parseDateTimeWithTimeZone(node \ "created-at" text),
+			node \ "currency" text,
+			node \ "email" text,
+			(node \ "id" text).toInt,
+			node \ "name" text,
+			(node \ "number" text).toInt,
+			BigDecimal(node \ "subtotal-price" text),
+			BigDecimal(node \ "total-discounts" text),
+			BigDecimal(node \ "total-line-items-price" text),
+			BigDecimal(node \ "total-price" text),
+			BigDecimal(node \ "total-tax" text),
+			(node \ "total-weight" text).toInt,
+			parseDateTimeWithTimeZone(node \ "updated-at" text),
+			(node \ "order-number" text).toInt,
+			Address.parse(node \ "billing-address"),
+			Address.parse(node \ "shipping-address"),
+			LineItem.parseList(node),
+			ShippingLine.parseList( node),
+			PaymentDetail.parse(node \ "payment-details").get
+		)
 	}
 
 	def parseList(node: NodeSeq): List[Order] = (node \\ "order").map( parse(_)).toList
@@ -245,6 +245,7 @@ object Order extends ShopifyResource[Order] {
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
 		) match {
 			case n:Ok => parseList(convertResponseToXml(n.response)).sort(_.orderNumber < _.orderNumber) 
+			case n => defaultStatusHandler(n)
 		}
 	}
 
@@ -261,6 +262,7 @@ object Order extends ShopifyResource[Order] {
     		Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
     	) match {
     		case n:Ok => parseList(convertResponseToXml(n.response)).sort(_.orderNumber < _.orderNumber)
+				case n => defaultStatusHandler(n)
 		}
 	}
 
@@ -271,6 +273,7 @@ object Order extends ShopifyResource[Order] {
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
 		) match {
 			case n:Ok => parseList(convertResponseToXml(n.response)).sort(_.orderNumber < _.orderNumber)
+			case n => defaultStatusHandler(n)
 		}
 	}
 }
