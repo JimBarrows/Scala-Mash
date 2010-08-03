@@ -81,7 +81,7 @@ object DealServicesSpec extends Specification {
 //					fail("Exception was thrown")
 //				}
 //			}
-//		}
+		}
 	}
 	
 	val newDeal = Deal( None, //accountId : Option[Long], 
