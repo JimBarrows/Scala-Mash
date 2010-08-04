@@ -1,6 +1,7 @@
 package scala_mash.shopify_api
 
 import bizondemand.utils.models.internet.{DomainName,Url, Http}
+import scala_mash.rest.{HttpStatusCode, RestException}
 import scala_mash.rest.RestService
 
 /**
@@ -17,4 +18,10 @@ trait ShopifyResource[T] extends RestService {
   def testOnly: Boolean = System.getProperty("com.nsfw.rest.shopify_resource.test", "true").toBoolean
 
   
+	protected def defaultStatusHandler(httpStatus:HttpStatusCode) = {
+		httpStatus match {
+			case n => throw new RestException(n)
+		} 
+	}
+
 }
