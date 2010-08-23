@@ -3,11 +3,22 @@ import sbt._
 class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 {
 	 		
-	val maven = DefaultMavenRepository
-	val scalaToolsRelease = ScalaToolsReleases
-	val scalaToolsSnapshots = ScalaToolsSnapshots
-	val javaNet = JavaNet1Repository	
-	val bizOnDemandRelease = "BizOnDemand-release" at "http://bizondemand.biz/artifacts/release"
+	val bizOnDemand_libs_Releases     =  "libs-releases-local"   at 
+			"http://bizondemand.biz:8081/artifactory/libs-releases-local"
+  val bizOnDemand_libs_Snapshots    = "libs-snapshots-local"   at 
+			"http://bizondemand.biz:8081/artifactory/libs-snapshots-local"
+  val bizOnDemand_plugins_Releases  = "plugins-releases-local" at 
+			"http://bizondemand.biz:8081/artifactory/plugins-releases-local"
+  val bizOnDemand_plugins_Snapshots = "plugins-snaphots-local" at 
+			"http://bizondemand.biz:8081/artifactory/plugins-snapshots-local"
+  
+	val scalatoolsSnapshot = 
+    "Scala Tools Snapshot" at "http://scala-tools.org/repo-snapshots/"
+
+	override def managedStyle=ManagedStyle.Maven
+	Credentials(Path.userHome / ".ivy2" / ".credentials", log)
+  val publishTo = "Biz On Demand Artifacts" at "http://bizondemand.biz:8081/artifactory/libs-releases-local"
+
 			
 	val stdLibraryDependencies = Set(
 		"junit" % "junit" % "4.5" % "test->default",
@@ -39,6 +50,4 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 		
 	}
 	
-	override def managedStyle = ManagedStyle.Maven
- 	val publishTo = Resolver.ssh("BizOnDemand", "bizondemand.biz", "/var/local/artifacts/release/")  	
 }
