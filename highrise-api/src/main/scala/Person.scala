@@ -297,6 +297,7 @@ object Person extends HighriseServices[Person] {
 	def parseList(node: NodeSeq) = (node \\ "person").map( parse(_)).toList
 
 	def create(person: Person, account: Account): Person = {
+		debug("Person.create: {}, {}", person, account)
 		post(url +< (account.siteName) +/ "people.xml", 
 			Some(account.apiKey), 
 			Some("x"), 
@@ -308,6 +309,7 @@ object Person extends HighriseServices[Person] {
 	}
 
  	def show(id: Long, account: Account): Person = {
+		debug("Person.show: {}, {}", id, account)
  		get(url +< (account.siteName) +/ ("people") +/ ( id.toString + ".xml"), 
  			Some(account.apiKey), 
  			Some("x")
@@ -318,6 +320,7 @@ object Person extends HighriseServices[Person] {
 	}
 
  	def listAll(account: Account): List[Person] = {
+		debug("Person.listAll: {}", account)
  		get(url +< (account.siteName) +/ "people.xml", 
  			Some(account.apiKey), 
  			Some("x")
@@ -328,6 +331,7 @@ object Person extends HighriseServices[Person] {
 	}
 
 	def findPeopleByEmail(email: String, account: Account) : List[Person] = {
+		debug("Person.findPeopleByEmail: {}, {}", email, account)
 		get(url +< (account.siteName) +/ ("people") +/( "search.xml") +& Parameter("criteria[email]", email), 
 			Some(account.apiKey), 
 			Some("x")
@@ -338,11 +342,12 @@ object Person extends HighriseServices[Person] {
 	}
 
 	def update(person: Person, account: Account) = {
-    	put(url +< (account.siteName) +/ "people" +/ (person.id.getOrElse(0).toString() + ".xml"), 
-    		Some(account.apiKey), 
-    		Some("x"),
-    		person.toXml
-    	)match {
+		debug("Person.update: {}, {}", person, account)
+		put(url +< (account.siteName) +/ "people" +/ (person.id.getOrElse(0).toString() + ".xml"), 
+			Some(account.apiKey), 
+			Some("x"),
+			person.toXml
+		)match {
 			case n:Ok => 
 			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 

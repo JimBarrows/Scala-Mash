@@ -43,6 +43,7 @@ trait HighriseServices[T] extends RestService{
 	}
 	
 	protected def defaultStatusHandler(httpStatus:HttpStatusCode) = {
+		debug( "HighriseServices[T].defaultStatusHandler( {})", httpStatus )
 		httpStatus match {
 			//An error was thrown, and if it ends in login, it's probably the sitename, but without going back to the URL provided, we don't know.
 			case n:Found if n.url.path == Some("login" :: Nil) => throw new LoginFailed()			
