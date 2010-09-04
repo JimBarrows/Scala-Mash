@@ -29,6 +29,18 @@ trait HighriseServices[T] extends RestService{
 	def apiKey: String = System.getProperty("com.nsfw.highrisehq.apiKey", "some_apiKey")
 
 	def account = Account(siteName, apiKey)
+
+	val htmlHeader = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">""" 
+
+	override 	def convertResponseToXml( response :String):NodeSeq = {
+		debug("HighriseServices[T].convertResponseToXml: {}", response)
+		if( response.contains( htmlHeader))
+			throw new LoginFailed()
+		else 
+			super.convertResponseToXml( response)
+
+	}
+
   
 	protected def getByUrl( url:Url, account:Account, parse: NodeSeq => T) : T = {
 		debug( "HighriseServices[T].getByUrl( {}, {})", url, account)

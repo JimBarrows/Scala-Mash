@@ -10,14 +10,14 @@
     </appender>
 
 	<logger name="scala_mash">
-        <level value="debug"/>
+        <level value="warn"/>
     </logger>
 	<logger name="scala_mash.rest">
-        <level value="debug"/>
+        <level value="warn"/>
     </logger>    
     
     <logger name="scala_mash.freshbooks_api">
-    	<level value="debug"/>
+    	<level value="warn"/>
     </logger>
 
     <root>

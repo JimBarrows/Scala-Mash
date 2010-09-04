@@ -1,6 +1,6 @@
 package test
 import scala_mash.highrise_api.models._
-import scala_mash.highrise_api.Account
+import scala_mash.highrise_api.{Account, LoginFailed}
 import org.joda.time.DateTime
 import org.specs.runner.JUnit4
 import org.specs.Specification
@@ -9,7 +9,7 @@ import VisibleToValues._
 
 object PersonServicesSpec extends Specification {
 
- 	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
+ 	val account = Account("testaccountforme", "1ad2fc1adf9e7fc1f342d0e431069af0")
 
 	"Person Services" should {
     	"be able to create a person with no contact data" in {
@@ -313,8 +313,48 @@ object PersonServicesSpec extends Specification {
 		    actualPerson.contactData.webAddresses.get.first.location must be_==(InstantMessengerLocationValues.Other)
 		}
 
+		"A LoginFailed exception should be thrown when a bad highrise sitename is used to find by email" in {
+			val expectedPerson = Person(None,
+				"Joe", //first name
+				"Tester", //last name
+				"JoeTester Title", //title
+				"Background", //backgroun
+				None, //companyId
+				None, //createAt
+				None, //updatedAt
+				Some(Everyone), //visibleTo
+				None, //ownerId
+				None, //groupId
+				None, //authorId
+				ContactData(
+					Some(
+						EmailAddress(
+							None, //id
+							"Joe.Test@testEmail.com", //address
+							AddressLocationValues.Other //location
+						)::
+						Nil
+					),
+					None,
+					None,
+					None,
+					Some(
+						WebAddress(
+							None,
+							"http://somewhere.com",
+							InstantMessengerLocationValues.Other
+						) :: 
+						Nil
+					)
+				)
+				)
+	    	val actualPerson: Person = Person.create(expectedPerson, account)
+ 				val badAccount = Account("badSiteNamexxx", "1ad2fc1adf9e7fc1f342d0e431069af0")
+				Person.findPeopleByEmail(expectedPerson.contactData.emailAddresses.get.first.address, badAccount) must throwA[LoginFailed]
+		}
+
   
-	    "be able to update a person with no contact data" in {
+//	    "be able to update a person with no contact data" in {
 	    	// val startingData = ContactData(None, None, None, None, None)
 	    	// 	    	var startingPerson = Person(None,
 	    	// 				"Joe", //first name
@@ -361,6 +401,6 @@ object PersonServicesSpec extends Specification {
 	    	// 	      	actualPerson.groupId must beNone
 	    	// 	      	actualPerson.authorId must beSome[Int].which(_ > 0)
 	    	// 	      	actualPerson.contactData must be_==(expectedPerson.contactData)
-	    }
+//	    }
     }
 }

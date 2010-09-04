@@ -71,7 +71,8 @@ trait RestService extends Log{
 		}
 	}
 	
-	def createConnectionManager = new DefaultHttpClient(RestService.clientConnectionManager)
+	def createConnectionManager = new DefaultHttpClient(RestService.clientConnectionManager )
+
 
 	protected def makeEntity(request: NodeSeq): StringEntity = {
     	val entity = new StringEntity(request.toString);

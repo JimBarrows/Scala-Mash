@@ -10,7 +10,7 @@
     </appender>
 
     <logger name="com.nsfw">
-        <level value="debug"/>
+        <level value="warn"/>
     </logger>
 
     <root>

@@ -294,7 +294,9 @@ object Person extends HighriseServices[Person] {
         )
 	}
 
-	def parseList(node: NodeSeq) = (node \\ "person").map( parse(_)).toList
+	def parseList(node: NodeSeq) = {
+		(node \\ "person").map( parse(_)).toList
+	}
 
 	def create(person: Person, account: Account): Person = {
 		debug("Person.create: {}, {}", person, account)
