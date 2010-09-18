@@ -52,7 +52,7 @@ object TagServicesSpec extends Specification {
 			"Test", 					//firstName: String,
             "Contact",			      	//lastName: String,
 			"",							//title: String,
-			"TestTagServices",							//background: String,
+			Some("TestTagServices"),							//background: String,
 			None,						//companyId: Option[Int],
 			None,	//createdAt: Option[DateTime],
         	None, 	//updatedAt: Option[DateTime],

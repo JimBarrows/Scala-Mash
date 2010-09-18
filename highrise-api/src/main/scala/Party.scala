@@ -11,6 +11,31 @@ import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt, 
 import scala_mash.highrise_api.models.enumerations.VisibleToValues
 import VisibleToValues._
 
+case class Party(id: Option[Long],
+                background: Option[String],
+                createdAt: Option[DateTime],
+                updatedAt: Option[DateTime],
+                visibleTo: Option[VisibleToValues],
+                ownerId: Option[Int],
+                groupId: Option[Int],
+                authorId: Option[Int],
+                contactData: ContactData) {
+
+}
+
+object Party extends HighriseServices[Party] {
+	
+	def parse(node: NodeSeq) = {
+		debug("Party.parse: {}", node)
+	}
+
+	def parseList(node: NodeSeq) = {
+		(node \\ "person").map( parse(_)).toList
+	}
+
+}
+
+
 object AddressLocationValues extends Enumeration {
 	type AddressLocationValues = Value
 	val Work = Value("Work")
@@ -230,26 +255,3 @@ object ContactData {
 
 
 
-case class Party(id: Option[Long],
-                background: String,
-                createdAt: Option[DateTime],
-                updatedAt: Option[DateTime],
-                visibleTo: Option[VisibleToValues],
-                ownerId: Option[Int],
-                groupId: Option[Int],
-                authorId: Option[Int],
-                contactData: ContactData) {
-
-}
-
-object Party extends HighriseServices[Party] {
-	
-	def parse(node: NodeSeq) = {
-		debug("Party.parse: {}", node)
-	}
-
-	def parseList(node: NodeSeq) = {
-		(node \\ "person").map( parse(_)).toList
-	}
-
-}

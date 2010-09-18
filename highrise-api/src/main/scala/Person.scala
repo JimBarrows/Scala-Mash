@@ -3,6 +3,7 @@ package scala_mash.highrise_api.models
 import scala_mash.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
+import xml.NodeSeq.Empty
 
 import bizondemand.utils.models.internet.Parameter
 import scala_mash.rest.{Ok, Created, RestException, HttpStatusCode}
@@ -16,7 +17,7 @@ case class Person(override val id: Option[Long],
                 firstName: String,
                 lastName: String,
                 title: String,
-                override val background: String,
+                override val background: Option[String],
                 companyId: Option[Int],
                 override val createdAt: Option[DateTime],
                 override val updatedAt: Option[DateTime],
@@ -33,7 +34,7 @@ case class Person(override val id: Option[Long],
     	<first-name>{firstName}</first-name>
     	<last-name>{lastName}</last-name>
     	<title>{title}</title>
-    	<background>{background}</background>
+    	{background.map( back=> {<background>{back}</background>}).getOrElse(Empty)}
     	<company-id type="integer">{companyId.getOrElse("")}</company-id>
     	<created-at type="datetime"> {
     		createdAt match {
@@ -64,7 +65,7 @@ object Person extends HighriseServices[Person] {
         	node \ "first-name" text,
         	node \ "last-name" text,
         	node \ "title" text,
-        	node \ "background" text,
+        	optionalString(node, "background") ,
         	optionalInt( node, "company-id"),
          	optionalDateTimeWithTimeZone( node, "created-at" ),
         	optionalDateTimeWithTimeZone( node, "updated-at" ),

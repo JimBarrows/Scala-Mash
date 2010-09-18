@@ -18,7 +18,7 @@ object PersonServicesSpec extends Specification {
 		        "Joe", //first name
 		        "Tester", //last name
 		        "JoeTester Title", //title
-		        "Background", //backgroun
+		        Some("Background"), //backgroun
 		        None, //companyId
 		        None, //createAt
 		        None, //updatedAt
@@ -51,7 +51,7 @@ object PersonServicesSpec extends Specification {
     			"Joe", //first name
     			"Tester", //last name
         		"JoeTester Title", //title
-        		"Background", //backgroun
+        		Some("Background"), //backgroun
         		None, //companyId
         		None, //createAt
         		None, //updatedAt
@@ -84,7 +84,7 @@ object PersonServicesSpec extends Specification {
 		    	"Joe", //first name
 		        "Tester", //last name
 		        "JoeTester Title", //title
-		        "Background", //backgroun
+		        Some("Background"), //backgroun
 		        None, //companyId
 		        None, //createAt
 		        None, //updatedAt
@@ -133,7 +133,7 @@ object PersonServicesSpec extends Specification {
 			    "Joe", //first name
 			    "Tester", //last name
 			    "JoeTester Title", //title
-			    "Background", //backgroun
+			    Some("Background"), //backgroun
 			    None, //companyId
 			    None, //createAt
 			    None, //updatedAt
@@ -183,7 +183,7 @@ object PersonServicesSpec extends Specification {
 	    		"Joe", //first name
 			    "Tester", //last name
 			    "JoeTester Title", //title
-			    "Background", //backgroun
+			    Some("Background"), //backgroun
 			    None, //companyId
 			    None, //createAt
 			    None, //updatedAt
@@ -232,7 +232,7 @@ object PersonServicesSpec extends Specification {
 	    		"Joe", //first name
 	    		"Tester", //last name
 	    		"JoeTester Title", //title
-	    		"Background", //backgroun
+	    		Some("Background"), //backgroun
 	    		None, //companyId
 	    		None, //createAt
 	    		None, //updatedAt
@@ -264,7 +264,7 @@ object PersonServicesSpec extends Specification {
 		    	"Joe", //first name
 		    	"Tester", //last name
 		    	"JoeTester Title", //title
-		    	"Background", //backgroun
+		    	Some("Background"), //backgroun
 		    	None, //companyId
 		    	None, //createAt
 		    	None, //updatedAt
@@ -318,7 +318,7 @@ object PersonServicesSpec extends Specification {
 				"Joe", //first name
 				"Tester", //last name
 				"JoeTester Title", //title
-				"Background", //backgroun
+				Some("Background"), //backgroun
 				None, //companyId
 				None, //createAt
 				None, //updatedAt
