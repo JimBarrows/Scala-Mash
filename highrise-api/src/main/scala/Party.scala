@@ -30,12 +30,14 @@ object Party extends HighriseServices[Party] {
 		debug("Party.parse: {}", node)
 		node match {
 			case party @ <party>{ _*}</party> if party \ "@type" == "Person"=> Person.parse( node)
+			case party @ <party>{ _ *}</party> if party \ "type" == "Person" => Person.parse( node)
 			case party @ <party>{ _*}</party> if party \ "@type" == "Company"=> Company.parse( node)
+			case party @ <party>{ _ *}</party> if party \ "type" == "Company" => Company.parse( node)
 			case unknown => throw new UnknownParty( unknown)
 		}
 	}
 
-	def parseList(node: NodeSeq) = {
+	def parseList(node: NodeSeq) : List[Party] = {
 		debug("Party.parseList: {}", node)
 		(node \\ "party").map( parse(_)).toList
 	}

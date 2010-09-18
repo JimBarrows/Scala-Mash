@@ -103,6 +103,7 @@ object DealServicesSpec extends Specification {
 				None, //statusChangedOn: Option[LocalDate],
 				None, //updatedAt:Option[DateTime],
 				None, //visibleTo:Option[VisibleToValues],
-				None //dealCategory:Option[DealCategory]
+				None, //dealCategory:Option[DealCategory]
+				None
 				)	
 }

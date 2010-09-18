@@ -17,12 +17,20 @@ import scala_mash.rest.util.Helpers._
 object PartySpec extends Specification {
 
 	"A Party class" should {
-		"be able to parse a person from the parties services" in {
+		"be able to parse a person from the parties services with the type as an attribute in the party tag" in {
 			Party.parse( person1Xml) must be_== (person1)
 		}
 
-		"be able to parse a company from the parties services" in {
+		"be able to parse a person from the parties services with the type as an element in the party node" in {
+			Party.parse( person1aXml) must be_== (person1)
+		}
+
+		"be able to parse a company from the parties services, with the type as an attribute in the party tag" in {
 			Party.parse( company1Xml) must be_== (company1)
+		}
+
+		"be able to parse a company from the parties services with the type as an element in the party node" in {
+			Party.parse( company1aXml) must be_== (company1)
 		}
 
 		"be able to parse a list of companies and people from the parties services" in {
@@ -151,6 +159,40 @@ object PartySpec extends Specification {
 						</contact-data>
 						</party>
 
+	val company1aXml = 	<party >
+						<type>Company</type>
+						<id type="integer">1</id>
+						<name>John</name>
+						<background>A popular guy for random data</background>
+						<created-at type="datetime">2007-02-27T03:11:52Z</created-at>
+						<updated-at type="datetime">2007-03-10T15:11:52Z</updated-at>
+						<visible-to>Everyone</visible-to>
+						<owner-id type="integer"></owner-id>
+						<group-id type="integer"></group-id>
+						<author-id type="integer">2</author-id>
+						<contact-data>
+							<email-addresses>
+								<email-address>
+									<id type="integer">1</id>
+									<address>john.doe@example.com</address>
+									<location>Work</location>
+								</email-address>
+							</email-addresses>
+							<phone-numbers>
+								<phone-number>
+									<id type="integer">2</id>
+										<number>555-555-5555</number>
+										<location>Work</location>
+								</phone-number>
+								<phone-number>
+									<id type="integer">3</id>
+									<number>555-666-6666</number>
+									<location>Home</location>
+ 								</phone-number>
+							</phone-numbers>
+						</contact-data>
+						</party>
+
 	val person1 = Person(Some(1l),
         "John",
         "Doe",
@@ -170,7 +212,45 @@ object PartySpec extends Specification {
           None,
           None
           )) 
+
 	val person1Xml = <party type="Person">
+          <id type="integer">1</id>
+          <first-name>John</first-name>
+          <last-name>Doe</last-name>
+          <title>Stand-in</title>
+          <background>A popular guy for random data</background>
+          <company-id type="integer">5</company-id>
+          <created-at type="datetime">2007-02-27T03:11:52Z</created-at>
+          <updated-at type="datetime">2007-03-10T15:11:52Z</updated-at>
+          <visible-to>Everyone</visible-to>
+          <owner-id type="integer"></owner-id>
+          <group-id type="integer"></group-id>
+          <author-id type="integer">2</author-id>
+          <contact-data>
+            <email-addresses>
+              <email-address>
+                <id type="integer">1</id>
+                <address>john.doe@example.com</address>
+                <location>Work</location>
+              </email-address>
+            </email-addresses>
+            <phone-numbers>
+              <phone-number>
+                <id type="integer">2</id>
+                <number>555-555-5555</number>
+                <location>Work</location>
+              </phone-number>
+              <phone-number>
+                <id type="integer">3</id>
+                <number>555-666-6666</number>
+                <location>Home</location>
+              </phone-number>
+            </phone-numbers>
+          </contact-data>
+        </party>
+
+	val person1aXml = <party>
+					<type>Person</type>
           <id type="integer">1</id>
           <first-name>John</first-name>
           <last-name>Doe</last-name>
