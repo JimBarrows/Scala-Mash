@@ -20,6 +20,10 @@
     	<level value="warn"/>
     </logger>
 
+    <logger name="scala_mash.highrise_api.models">
+    	<level value="debug"/>
+    </logger>
+
     <root>
         <priority value="warn"/>
         <appender-ref ref="console"/>

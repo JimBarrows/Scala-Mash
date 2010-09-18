@@ -3,6 +3,7 @@ package scala_mash.highrise_api.models
 import scala_mash.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
+import xml.NodeSeq.Empty
 
 import bizondemand.utils.models.internet.Parameter
 import scala_mash.rest.{Ok, Created, RestException, HttpStatusCode}
@@ -25,15 +26,23 @@ case class Party(id: Option[Long],
 
 object Party extends HighriseServices[Party] {
 	
-	def parse(node: NodeSeq) = {
+	def parse(node: NodeSeq) :  Party = {
 		debug("Party.parse: {}", node)
+		node match {
+			case party @ <party>{ _*}</party> if party \ "@type" == "Person"=> Person.parse( node)
+			case party @ <party>{ _*}</party> if party \ "@type" == "Company"=> Company.parse( node)
+			case unknown => throw new UnknownParty( unknown)
+		}
 	}
 
 	def parseList(node: NodeSeq) = {
-		(node \\ "person").map( parse(_)).toList
+		debug("Party.parseList: {}", node)
+		(node \\ "party").map( parse(_)).toList
 	}
 
 }
+
+class UnknownParty(xml : NodeSeq) extends Exception
 
 
 object AddressLocationValues extends Enumeration {
