@@ -27,24 +27,24 @@ case class Party(id: Option[Long],
 object Party extends HighriseServices[Party] {
 	
 	def parse(node: NodeSeq) :  Party = {
-		debug("Party.parse: {}", node)
+		debug("Party.parse({})", node.toString)
 		node match {
-			case party @ <party>{ _*}</party> if party \ "@type" == "Person"=> Person.parse( node)
+			case party @ <party>{ _ *}</party> if party \ "@type" == "Person"=> Person.parse( node)
 			case party @ <party>{ _ *}</party> if party \ "type" == "Person" => Person.parse( node)
-			case party @ <party>{ _*}</party> if party \ "@type" == "Company"=> Company.parse( node)
-			case party @ <party>{ _ *}</party> if party \ "type" == "Company" => Company.parse( node)
+			case party @ <party>{ _ *}</party> if party \ "@type" == "Company"=> Company.parse( node)
+			case party @ <party>{_*}</party> if ((party \ "type" text) == "Company") => Company.parse( node)
 			case unknown => throw new UnknownParty( unknown)
 		}
 	}
 
 	def parseList(node: NodeSeq) : List[Party] = {
-		debug("Party.parseList: {}", node)
+		debug("Party.parseList({})", node)
 		(node \\ "party").map( parse(_)).toList
 	}
 
 }
 
-class UnknownParty(xml : NodeSeq) extends Exception
+class UnknownParty(xml : NodeSeq) extends Exception( xml.toString)
 
 
 object AddressLocationValues extends Enumeration {

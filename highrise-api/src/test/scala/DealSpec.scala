@@ -11,19 +11,21 @@ import scala_mash.highrise_api.Utils._
 import scala_mash.highrise_api.models.enumerations.VisibleToValues._
 import scala_mash.highrise_api.models.enumerations.DealStatus._
 
+import scala_mash.rest.util.Helpers._
+
 object DealSpec extends Specification {
 
 	"The deal class " should {
 		"generate a correct xml for pending and fixed deals" in {	
-			pendingFixedDeal.toXml must equalIgnoreSpace(pendingFixedDealXml)
+			pendingFixedDeal.toXml must ==/(pendingFixedDealXml)
 		}
 		
 		"generate a correct xml for won and per hour deal" in {
-			wonPerHourDeal.toXml must equalIgnoreSpace(wonPerHourDealXml)
+			wonPerHourDeal.toXml must ==/(wonPerHourDealXml)
 		}
 		
 		"generate a correct xml for lost per month deal" in {
-			lostPerMonth.toXml must equalIgnoreSpace(lostPerMonthXml)
+			lostPerMonth.toXml must ==/(lostPerMonthXml)
 		}
 		
 		"parse an xml correctly for pending and fixed deals" in {
@@ -187,33 +189,33 @@ val lostPerMonth = Deal(Some(109504l),		//acountId
     <id type="integer">1660938</id>
     <name>Copywriting</name>
   </category>
-</deal>
+	</deal>
 
 	val withCompany = Deal(Some(109504l),		//acountId
 		Some(214479l),						//authorId
-		None,								//background
-		Some(1660938l),						//categoryId
-		Some(new DateTime(2010,5,9,20,58,49,0, DateTimeZone.forID("+00:00"))),  //createdAt
+		Some("Another test account"),								//background
+		Some(1660937l),						//categoryId
+		Some(new DateTime(2010,5,9,21,01,21,0, DateTimeZone.forID("+00:00"))),  //createdAt
 		Some("USD"), 							//currency
 		Some(10l), 						//duration
 		None,							//groupId
-		Some(412073l),						//id
-		"Lost Per Month",					//name
+		Some(412079l),						//id
+		"Pending Per Year",					//name
 		Some(214479),							//ownerId
 		Some(37932948),						//partyId
 		Some(100l),							//price
-		Some("month"),							//priceType
+		Some("year"),							//priceType
 		Some(214479l),						//responsiblePartyId
-		Some(Lost),							//status
-		Some( new LocalDate(2010,5,9)),		//statusChangedOn
-		Some(new DateTime(2010,5,9,20,59,0,0, DateTimeZone.forID("+00:00"))),  //updatedAt
+		Some(Pending),							//status
+		None,		//statusChangedOn
+		Some(new DateTime(2010,5,9,21,01,21,0, DateTimeZone.forID("+00:00"))),  //updatedAt
 		Some( Owner),							//visibleTo
-		Some( DealCategory(Some(1660938l), "Copywriting", None, None, None, None)),  //dealCategory
-		Some(Company(Some(1l),
+		Some( DealCategory(Some(1660937l), "Strategy Consulting", None, None, None, None)),  //dealCategory
+		Some( Company(Some(1l),
         "John",
         Some("A popular guy for random data"),
-        None,
-        None,
+        Some(parseDateTimeWithTimeZone("2007-02-27T03:11:52Z")),
+        Some(parseDateTimeWithTimeZone("2007-03-10T15:11:52Z")),
         Some(Everyone),
         None,
         None,
@@ -224,8 +226,10 @@ val lostPerMonth = Deal(Some(109504l),		//acountId
           None,
           None,
           None
+
           )))
 		)
+
 	val withCompanyXml = <deal>
   <account-id type="integer">109504</account-id>
   <author-id type="integer">214479</author-id>
@@ -413,7 +417,7 @@ val lostPerMonth = Deal(Some(109504l),		//acountId
       <name>Print Project</name>
     </category>
   </deal>
-</deals>
+	</deals>
 
 
 }

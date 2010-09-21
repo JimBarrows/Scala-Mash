@@ -126,7 +126,8 @@ object PartySpec extends Specification {
           )
   ) 
 
-	val company1Xml = 	<party type="Company">
+	val company1Xml = 	
+			<party type="Company">
 						<id type="integer">1</id>
 						<name>John</name>
 						<background>A popular guy for random data</background>

@@ -69,12 +69,13 @@ case class Deal( accountId : Option[Long],
   				</category>
   			).getOrElse(Empty)
 
-				party.map( p => 
+/*				party.map( p => 
 					p match {
 						case person : Person => person.toXml
 						case company : Company => company.toXml
 					}
 				)
+				*/
 		}
 	</deal>
 }
@@ -104,12 +105,13 @@ object Deal extends HighriseServices[Deal] {
 			optionalDateTimeWithTimeZone(node, "updated-at"),
 			VisibleToValues.valueOf( node \ "visible-to" text),
 			(if( ( node \ "category" text).isEmpty )None else Some(DealCategory.parse( node \ "category"))),
-			optionalParty(node)//,
+			(if( ( node \ "party" text).isEmpty )None else Some(Party.parseList( node \ "party").first))
 //			optionalParties(node)
 		)
 	}
 
-	def optionalParty( node:NodeSeq ):Option[Party] = if( (node \ "party" text).isEmpty) None else Some( Party.parse( node \ "party"))
+	def optionalParty( node:NodeSeq ):Option[Party] = 
+		if( (node \ "party" text).isEmpty) None else Some( Party.parse( node \ "party" ))
 
 	def optionalParties( node:NodeSeq ):Option[List[Party]] = None //if( (node \ "parties" text).isEmpty) None else Some( Party.parseList( node \ "parties"))
 	
