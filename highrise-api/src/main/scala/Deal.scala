@@ -38,8 +38,8 @@ case class Deal( accountId : Option[Long],
 				updatedAt:Option[DateTime],
 				visibleTo:Option[VisibleToValues],
 				dealCategory:Option[DealCategory],
-				party : Option[Party]  //customer involved
-//				parties : Option[List[Party]]  //all parties involved
+				party : Option[Party],   //customer involved
+				parties : Option[List[Party]]  //all parties involved
 				) {
 	def toXml:NodeSeq =	<deal>
   		<account-id type="integer">{accountId.getOrElse(Empty)}</account-id>
@@ -62,20 +62,34 @@ case class Deal( accountId : Option[Long],
   		<updated-at type="datetime">{updatedAt.map(printWithTimeZone(_)).getOrElse(Empty)}</updated-at>
   		<visible-to>{visibleTo.getOrElse(Empty)}</visible-to>
   		{
-  			dealCategory.map( cat =>
+  			dealCategory.map( cat => {
   				<category>
   					<id type="integer">{cat.id.getOrElse(Empty)}</id>
   					<name>{cat.name}</name>
   				</category>
+  			}
   			).getOrElse(Empty)
-
-/*				party.map( p => 
+			} {
+				party.map( p =>  {
 					p match {
 						case person : Person => person.toXml
 						case company : Company => company.toXml
+						case _  => Empty
 					}
-				)
-				*/
+					}
+				).getOrElse(Empty)
+			} {
+				parties.map( partyList =>  
+					<parties>{
+						partyList.map( p=>
+								p match {
+									case person : Person => person.toXml
+									case company : Company => company.toXml
+									case _  => Empty
+								}
+						)
+					}</parties>
+				).getOrElse(Empty) 
 		}
 	</deal>
 }
@@ -105,8 +119,8 @@ object Deal extends HighriseServices[Deal] {
 			optionalDateTimeWithTimeZone(node, "updated-at"),
 			VisibleToValues.valueOf( node \ "visible-to" text),
 			(if( ( node \ "category" text).isEmpty )None else Some(DealCategory.parse( node \ "category"))),
-			(if( ( node \ "party" text).isEmpty )None else Some(Party.parseList( node \ "party").first))
-//			optionalParties(node)
+			(if( ( node \ "party" text).isEmpty )None else Some(Party.parseList( node \ "party").first)),
+			optionalParties(node)
 		)
 	}
 

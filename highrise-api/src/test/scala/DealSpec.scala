@@ -23,11 +23,11 @@ object DealSpec extends Specification {
 		"generate a correct xml for won and per hour deal" in {
 			wonPerHourDeal.toXml must ==/(wonPerHourDealXml)
 		}
-		
+
 		"generate a correct xml for lost per month deal" in {
 			lostPerMonth.toXml must ==/(lostPerMonthXml)
 		}
-		
+
 		"parse an xml correctly for pending and fixed deals" in {
 			Deal.parse(pendingFixedDealXml) must equalTo ( pendingFixedDeal)
 		}
@@ -65,6 +65,7 @@ object DealSpec extends Specification {
 		Some(new DateTime(2010,5,9,20,45,6,0, DateTimeZone.forID("+00:00"))),	//updatedAt
 		Some(Owner),															//visibleTo
 		Some(DealCategory(Some(1660935l), "Print Project", None, None, None, None))	//dealCategory
+		,None
 		,None
 		)
 	
@@ -116,6 +117,7 @@ object DealSpec extends Specification {
 		Some(Owner),															//visibleTo
 		Some(DealCategory(Some(1660935l), "Print Project", None, None, None, None))  //dealCategory
 		,None
+		,None
 		)
 	val wonPerHourDealXml = <deal>
   <account-id type="integer">109504</account-id>
@@ -163,6 +165,7 @@ val lostPerMonth = Deal(Some(109504l),		//acountId
 		Some(new DateTime(2010,5,9,20,59,0,0, DateTimeZone.forID("+00:00"))),  //updatedAt
 		Some( Owner),							//visibleTo
 		Some( DealCategory(Some(1660938l), "Copywriting", None, None, None, None))  //dealCategory
+		,None
 		,None
 		)
 	val lostPerMonthXml = <deal>
@@ -228,6 +231,7 @@ val lostPerMonth = Deal(Some(109504l),		//acountId
           None
 
           )))
+		,None
 		)
 
 	val withCompanyXml = <deal>

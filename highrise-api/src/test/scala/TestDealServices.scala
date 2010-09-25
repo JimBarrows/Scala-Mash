@@ -105,5 +105,6 @@ object DealServicesSpec extends Specification {
 				None, //visibleTo:Option[VisibleToValues],
 				None, //dealCategory:Option[DealCategory]
 				None
+				,None
 				)	
 }

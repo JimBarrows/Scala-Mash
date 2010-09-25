@@ -22,6 +22,18 @@ case class Party(id: Option[Long],
                 authorId: Option[Int],
                 contactData: ContactData) {
 
+
+	def fieldsAsXml = {
+		id.map( i => {<id type="integer">{i}</id>}).getOrElse(Empty) ++
+		background.map( back=> {<background>{back}</background>}).getOrElse(Empty) ++
+		createdAt.map( atTime =>{<created-at type="datetime">{printWithTimeZone(atTime)}</created-at>}).getOrElse(Empty) ++
+		updatedAt.map( datetime =>{<updated-at type="datetime">{printWithTimeZone(datetime)}</updated-at>}).getOrElse(Empty) ++ 
+		visibleTo.map( vt => <visible-to>{vt}</visible-to>).getOrElse(Empty) ++
+		ownerId.map( id =>{<owner-id type="integer">{id}</owner-id>}).getOrElse(Empty)  ++
+		groupId.map( id =>{<group-id type="integer">{id}</group-id>}).getOrElse(Empty)  ++
+		authorId.map( id =>{<author-id type="integer">{id}</author-id>}).getOrElse(Empty)  ++
+		contactData.toXml
+	}
 }
 
 object Party extends HighriseServices[Party] {
