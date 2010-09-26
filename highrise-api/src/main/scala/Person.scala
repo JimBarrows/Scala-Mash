@@ -29,12 +29,20 @@ case class Person(override val id: Option[Long],
 
 	val apiId = (id.getOrElse(0) + "-" + firstName + "-" + lastName).toLowerCase
 
-	def toXml = <person>
-    	<first-name>{firstName}</first-name>
-    	<last-name>{lastName}</last-name>
-    	<title>{title}</title>
-    	<company-id type="integer">{companyId.getOrElse("")}</company-id>
-    	{super.fieldsAsXml}
+	def toPartyXml = <party>
+		<first-name>{firstName}</first-name> 
+		<last-name>{lastName}</last-name> 
+		<title>{title}</title> 
+		<company-id type="integer">{companyId.getOrElse("")}</company-id> 
+   	{parentFieldsAsXml}
+	</party>
+
+	override def toXml = <person>
+		<first-name>{firstName}</first-name> 
+		<last-name>{lastName}</last-name> 
+		<title>{title}</title> 
+		<company-id type="integer">{companyId.getOrElse("")}</company-id> 
+   	{parentFieldsAsXml}
  	</person>
 
 }

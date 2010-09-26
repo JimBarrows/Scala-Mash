@@ -41,6 +41,8 @@ case class Deal( accountId : Option[Long],
 				party : Option[Party],   //customer involved
 				parties : Option[List[Party]]  //all parties involved
 				) {
+
+
 	def toXml:NodeSeq =	<deal>
   		<account-id type="integer">{accountId.getOrElse(Empty)}</account-id>
   		<author-id type="integer">{authorId.getOrElse(Empty)}</author-id>
@@ -127,7 +129,7 @@ object Deal extends HighriseServices[Deal] {
 	def optionalParty( node:NodeSeq ):Option[Party] = 
 		if( (node \ "party" text).isEmpty) None else Some( Party.parse( node \ "party" ))
 
-	def optionalParties( node:NodeSeq ):Option[List[Party]] = None //if( (node \ "parties" text).isEmpty) None else Some( Party.parseList( node \ "parties"))
+	def optionalParties( node:NodeSeq ):Option[List[Party]] = if( (node \ "parties" text).isEmpty) None else Some( Party.parseList( node \ "parties"))
 	
 	
 	def parseList(node: NodeSeq) = (node \\ "deal").map( parse(_)).toList

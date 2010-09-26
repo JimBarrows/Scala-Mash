@@ -1,4 +1,4 @@
-package specs
+package test
 import scala_mash.highrise_api.models.{PhoneNumber, EmailAddress, ContactData, Company}
 import org.specs.Specification
 import org.specs.runner.JUnit4
@@ -137,14 +137,12 @@ object CompanySpec extends Specification {
     }
     "be able to display itself as XML" in {
       val expectedXml = <company>
-        <id type="integer">1</id>
         <name>John</name>
+        <id type="integer">1</id>
         <background>A popular guy for random data</background>
         <created-at type="datetime">2007-02-27T03:11:52Z</created-at>
         <updated-at type="datetime">2007-03-10T15:11:52Z</updated-at>
         <visible-to>Everyone</visible-to>
-        <owner-id type="integer"></owner-id>
-        <group-id type="integer"></group-id>
         <author-id type="integer">2</author-id>
         <contact-data>
           <email-addresses>

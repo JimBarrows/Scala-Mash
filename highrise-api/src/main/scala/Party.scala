@@ -23,7 +23,7 @@ case class Party(id: Option[Long],
                 contactData: ContactData) {
 
 
-	def fieldsAsXml = {
+	def parentFieldsAsXml = {
 		id.map( i => {<id type="integer">{i}</id>}).getOrElse(Empty) ++
 		background.map( back=> {<background>{back}</background>}).getOrElse(Empty) ++
 		createdAt.map( atTime =>{<created-at type="datetime">{printWithTimeZone(atTime)}</created-at>}).getOrElse(Empty) ++
@@ -34,6 +34,11 @@ case class Party(id: Option[Long],
 		authorId.map( id =>{<author-id type="integer">{id}</author-id>}).getOrElse(Empty)  ++
 		contactData.toXml
 	}
+
+
+	def toXml = <party>
+		{parentFieldsAsXml}
+	</party>
 }
 
 object Party extends HighriseServices[Party] {

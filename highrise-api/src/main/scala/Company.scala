@@ -26,27 +26,14 @@ case class Company(override val id: Option[Long],
 
 	val apiId = (id.getOrElse(0) + "-" + name.replaceAll("[ \t]","-").toLowerCase)
 
-	def toXml = <company>
-    	<id type="integer">{id.getOrElse("")}</id>
+	def toPartyXml = <company>
     	<name>{name}</name>
-    	{background.map( back=> {<background>{back}</background>}).getOrElse(Empty)}
-    	<created-at type="datetime"> {
-    		createdAt match {
-      			case Some(datetime) => printWithTimeZone(datetime)
-      			case _ => ""
-    		}
-    	}</created-at>
-		<updated-at type="datetime"> {
-			updatedAt match {
-      			case Some(datetime) => printWithTimeZone(datetime)
-      			case _ => ""
-    		}
-    	}</updated-at>
-    	<visible-to>{visibleTo.getOrElse(Everyone)}</visible-to>
-    	<owner-id type="integer">{ownerId.getOrElse("")}</owner-id>
-    	<group-id type="integer">{groupId.getOrElse("")}</group-id>
-    	<author-id type="integer">{authorId.getOrElse("")}</author-id>
-		{contactData.toXml}
+    	{parentFieldsAsXml}
+ 	</company>
+
+	override def toXml = <company>
+    	<name>{name}</name>
+    	{parentFieldsAsXml}
  	</company>
 
 }
