@@ -1,4 +1,4 @@
-package test
+package specs
 import scala_mash.highrise_api.{Account, HighriseServices, LoginFailed}
 import scala_mash.highrise_api.models._
 import org.specs.runner.JUnit4
@@ -10,7 +10,6 @@ import scala_mash.highrise_api.models.enumerations.VisibleToValues._
  *
  */
 
-class TestHighriseServices extends JUnit4(HighriseServicesSpec)
 object HighriseServicesSpec extends Specification {
 				
 	object HRS extends HighriseServices[Person]

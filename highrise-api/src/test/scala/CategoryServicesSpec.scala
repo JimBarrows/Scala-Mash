@@ -1,4 +1,4 @@
-package test
+package specs
 import scala_mash.highrise_api._
 import scala_mash.highrise_api.models._
 import scala_mash.highrise_api.models.CategoryTypes._

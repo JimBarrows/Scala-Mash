@@ -1,4 +1,4 @@
-package test
+package specs
 import scala_mash.highrise_api.models.{PhoneNumber, EmailAddress, ContactData, Company}
 import org.specs.Specification
 import org.specs.runner.JUnit4
