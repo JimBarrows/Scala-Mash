@@ -5,7 +5,6 @@ import NodeSeq._
 import org.joda.time.{LocalDate, DateTime}
 
 import bizondemand.utils.models.internet.Url
-//import scala_mash.freshbooks_api.Utils.parseDateTime
 import scala_mash.rest.util.Helpers._
 import scala_mash.rest.{Ok,RestException}
 
@@ -18,33 +17,67 @@ object InvoiceStatus extends Enumeration {
 
 }
 
-import InvoiceStatus._
+object LineType extends Enumeration {
+	type LineType = Value
+	val Item = Value("Item")
+	val Time = Value("Time")
 
-case class Invoice(
-		invoiceId:Option[String],
-		clientId:String,
-		number:Option[String],
-		amount:Option[BigDecimal], //Read-only
-//		amountOutstanding:Option[BigDecimal], //Read-only
-		status:Option[InvoiceStatus],
-		date:Option[LocalDate],
-		poNumber:Option[String],
-		discount:Option[Int],
-		notes:Option[String],
-		terms:Option[String],
-		currencyCode:Option[String],
-		language:Option[String],
-		links:Option[Links], //Read-only
-		returnUri:Option[Url],
-//		updated:Option[DateTime], //Read-only
-		recurringId:Option[Long], //Read-only
-		firstName:Option[String],
-		lastName:Option[String],
-		organization:Option[String],
-		address:Option[PrimaryAddress],
-//		vatInfo:VatInfo,
-		lines:List[Line]
+}
+
+import InvoiceStatus._
+import LineType._
+
+class Invoice(
+		_invoiceId:Option[String],
+		_clientId:String,
+		_number:Option[String],
+		_amount:Option[BigDecimal], //Read-only
+		_amountOutstanding:Option[BigDecimal], //Read-only
+		_status:Option[InvoiceStatus],
+		_date:Option[LocalDate],
+		_poNumber:Option[String],
+		_discount:Option[Int],
+		_notes:Option[String],
+		_terms:Option[String],
+		_currencyCode:Option[String],
+		_language:Option[String],
+		_links:Option[Links], //Read-only
+		_returnUri:Option[Url],
+		_updated:Option[DateTime], //Read-only
+		_recurringId:Option[Long], //Read-only
+		_firstName:Option[String],
+		_lastName:Option[String],
+		_organization:Option[String],
+		_address:Option[PrimaryAddress],
+		_vatName:Option[String],
+		_vatNumber:Option[Long], 
+		_lines:List[Line]
 	) {
+
+	def invoiceId  = _invoiceId
+	def clientId  = _clientId
+	def amount  = _amount
+	def amountOutstanding  = _amountOutstanding
+	def number = _number
+	def status  = _status
+	def date  = _date
+	def poNumber  = _poNumber
+	def discount  = _discount
+	def notes  = _notes
+	def terms  = _terms
+	def currencyCode  = _currencyCode
+	def language  = _language
+	def links  = _links
+	def returnUri  = _returnUri
+	def updated  = _updated
+	def recurringId  = _recurringId
+	def firstName  = _firstName
+	def lastName  = _lastName
+	def organization= _organization
+	def address = _address
+	def vatNumber = _vatNumber
+	def vatName = _vatName
+	def lines = _lines 
 
 	def toXml : NodeSeq = {
 		<invoice>
@@ -57,12 +90,15 @@ case class Invoice(
 			{discount.map( n => <discount>{n}</discount>).getOrElse(Empty)}
 			{notes.map( n => <notes>{n}</notes>).getOrElse(Empty)}
 			{currencyCode.map( n => <currency_code>{n}</currency_code>).getOrElse(Empty)}
+			{language.map( n => <language>{n}</language>).getOrElse(Empty)}
 			{terms.map( n => <terms>{n}</terms>).getOrElse(Empty)}
 			{returnUri.map( n => <return_uri>{n}</return_uri>).getOrElse(Empty)}
 			{firstName.map( n => <first_name>{n}</first_name>).getOrElse(Empty)}
 			{lastName.map( n => <last_name>{n}</last_name>).getOrElse(Empty)}
 			{organization.map( n => <organization>{n}</organization>).getOrElse(Empty)}
 			{address.map( n => n.toXml).getOrElse(Empty)}
+			{vatName.map( n => <vat_name>{n}</vat_name>).getOrElse(Empty)}
+			{vatNumber.map( n => <vat_number>{n}</vat_number>).getOrElse(Empty)}
 			<lines>
 				{lines.map( _.toXml)}
 			</lines>
@@ -80,12 +116,12 @@ object Invoice extends FreshbooksResource[Invoice] {
 	def parse( xml:NodeSeq) : Invoice = {
 		debug("Invoice:parse xml {}", xml)
 		val node : NodeSeq = xml \ ("invoice")
-		Invoice(
+		new Invoice(
 			Some(xml \ "invoice_id" text), 																								//invoiceId:Option[String],
 			(xml \ "client_id" text), 																										//clientId:String,
-			(if( ( node \ "number" text).isEmpty) None else Some(node \ "number" text)), 	//number:Option[String],
+			optionalString( node, "number"),																						 //number:Option[String],
 			optionalBigDecimal(node, "amount"),  																					//amount:Option[BigDecimal]
-//			optionalBigDecimal(node, "amount_outstanding"),  															//amountOutstanding:Option[BigDecimal]
+			optionalBigDecimal(node, "amount_outstanding"),  															//amountOutstanding:Option[BigDecimal]
 			InvoiceStatus.valueOf(node \ "status" text), 																	//status:InvoiceStatus,
 			optionalYmd(node,"date"), 																										//date:Option[LocalDate],
 			(if( ( node \ "po_number" text).isEmpty) None else Some(node \ "po_number" text)), //poNumber:Option[String],
@@ -96,7 +132,7 @@ object Invoice extends FreshbooksResource[Invoice] {
 			optionalString( node, "language"), //language:Option[String]
 			Links.optionalParse( node),  //links:Option[Links]
 			(if( ( node \ "return_uri" text).isEmpty) None else Some(Url(node \ "return_uri" text))), //returnUri:Option[URL],
-//			optionalDateTimeWithTimeZone(node,"updated"), //updated:Option[DateTime],
+			optionalDateTimeWithTimeZone(node,"updated"), //updated:Option[DateTime],
 			optionalLong(node,"recurringId"), //recurringId:Option[Long],
 			(if( ( node \ "first_name" text).isEmpty) None else Some(node \ "first_name" text)), //firstName:Option[String],
 			(if( ( node \ "last_name" text).isEmpty) None else Some(node \ "last_name" text)), //lastName:Option[String],
@@ -109,7 +145,8 @@ object Invoice extends FreshbooksResource[Invoice] {
 				(if (( node \ "p_country" text).isEmpty) None else Some((node \ "p_country" text).toString)),
 				(if (( node \ "p_code" text).isEmpty) None else Some((node \ "p_code" text).toString))
 			)),
-//			VatInfo.parse( node),
+			optionalString(xml,"vat_name"),
+			optionalLong(xml,"vat_number"),
 			Line.parseList( node \\ "line") //lines:List[Line]
 		)
 
@@ -122,29 +159,32 @@ object Invoice extends FreshbooksResource[Invoice] {
 		debug("Invoice.create response: {}", response)
 		response match {
 			case n:Ok => {
-				Invoice( parseCreateResponse(convertResponseToXml(n.response)), //invoiceId:Option[String],
-				invoice.clientId, //clientId:String,
-				invoice.number, //number:Option[String],
-				invoice.amount,
-//				invoice.amountOutstanding,
-				invoice.status, //status:InvoiceStatus,
-				invoice.date, //date:Option[LocalDate],
-				invoice.poNumber, //poNumber:Option[String],
-				invoice.discount, //discount:Option[Int],
-				invoice.notes, //notes:Option[String],
-				invoice.terms, //terms:Option[String],
-				invoice.currencyCode, //currencyCode:Option[String],
-				invoice.language,
-				invoice.links,
-				invoice.returnUri, //returnUri:Option[Url],
-//				invoice.updated,
-				invoice.recurringId,
-				invoice.firstName, //firstName:Option[String],
-				invoice.lastName, //lastName:Option[String],
-				invoice.organization, //organization:Option[String],
-				invoice.address, //address:Option[PrimaryAddress],
-//				invoice.vatInfo,
-				invoice.lines) //lines:List[Line])
+				val invoiceId: Option[String] = parseCreateResponse(convertResponseToXml(n.response)) 
+				new Invoice( 
+					invoiceId,								//invoiceId:Option[String],
+					invoice.clientId, 				//clientId:String,
+					invoice.number, 					//number:Option[String],
+					invoice.amount,
+					invoice.amountOutstanding,
+					invoice.status, //status:InvoiceStatus,
+					invoice.date, //date:Option[LocalDate],
+					invoice.poNumber, //poNumber:Option[String],
+					invoice.discount, //discount:Option[Int],
+					invoice.notes, //notes:Option[String],
+					invoice.terms, //terms:Option[String],
+					invoice.currencyCode, //currencyCode:Option[String],
+					invoice.language,
+					invoice.links,
+					invoice.returnUri, //returnUri:Option[Url],
+					invoice.updated,
+					invoice.recurringId,
+					invoice.firstName, //firstName:Option[String],
+					invoice.lastName, //lastName:Option[String],
+					invoice.organization, //organization:Option[String],
+					invoice.address, //address:Option[PrimaryAddress],
+					invoice.vatName,
+					invoice.vatNumber,
+					invoice.lines) //lines:List[Line])
 			}
 			case n => throw new RestException(n)
 		}
@@ -173,20 +213,18 @@ object Invoice extends FreshbooksResource[Invoice] {
 	}
 }
 
-
-
-
 case class Line(
 	id:Option[Long], //read-only
 	amount:Option[BigDecimal], //read-only
 	name:Option[String],
 	description:Option[String],
-	unitCost:String,
+	unitCost:BigDecimal,
 	quantity:Int,
 	tax1Name:Option[String],
 	tax2Name:Option[String],
 	tax1Percent:Option[Int],
-	tax2Percent:Option[Int]){
+	tax2Percent:Option[Int],
+	lineType:LineType){
 
 	def toXml : NodeSeq = <line>
 			{name.map( n => <name>{n}</name>).getOrElse(Empty)}
@@ -197,6 +235,7 @@ case class Line(
 			{tax2Name.map( n => <tax2_name>{n}</tax2_name>).getOrElse(Empty)}
 			{tax1Percent.map( n => <tax1_percent>{n}</tax1_percent>).getOrElse(Empty)}
 			{tax2Percent.map( n => <tax2_percent>{n}</tax2_percent>).getOrElse(Empty)}
+			<type>{lineType}</type>
 		</line>
 }
 
@@ -206,14 +245,15 @@ object Line {
 		Line(
 			optionalLong(xml,"id"),
 			optionalBigDecimal(xml,"amount"),
-			( if ((xml \ "name" text).isEmpty) None else Some(xml \ "name" text)), 							//name:Option[String],
-			( if ((xml \ "description" text).isEmpty) None else Some(xml \ "description" text)), //description:Option[String],
-			xml \ "unit_cost" text, 				//unitCost:String,
-			( xml\ "quantity" text).toInt, 						//quantity:Int,
-			( if ((xml \ "tax1_name" text).isEmpty) None else Some( xml \ "tax1_name" text)), 				//tax1Name:Option[String],
-			( if ((xml \ "tax2_name" text).isEmpty) None else Some( xml \ "tax2_name" text)), 				//tax2Name:Option[String],
-			( if ((xml \ "tax1_percent" text).isEmpty) None else Some( (xml \ "tax1_percent" text).toInt)), 	//tax1Percent:Option[Int],
-			( if ((xml \ "tax1_percent" text).isEmpty) None else Some( (xml \ "tax1_percent" text).toInt)) 		//tax2Percent:Option[Int]){
+			optionalString(xml, "name"),
+			optionalString(xml, "description"),
+			BigDecimal( xml \ "unit_cost" text),
+			(xml \ "quantity" text).toInt,
+			optionalString(xml, "tax1_name"),
+			optionalString(xml, "tax2_name"),
+			optionalInt(xml, "tax1_percent"),
+			optionalInt(xml, "tax2_percent"),
+			LineType.valueOf( xml \ "type" text).getOrElse(Item)
 		)
 	}
 
@@ -250,15 +290,3 @@ object Links {
 	}
 }
 
-
-case class VatInfo( vatNumber:Option[Long], vatName:Option[String]) {
-		def toXml:NodeSeq =
-			{vatNumber.map( n => <vat_number>{n}</vat_number>).getOrElse(Empty)}
-			{vatName.map( n => <vat_name>{n}</vat_name>).getOrElse(Empty)}
-}
-
-object VatInfo {
-	def parse(xml:NodeSeq) =
-			VatInfo(optionalLong(xml,"vat_number"),
-			optionalString(xml,"vat_name"))
-}
