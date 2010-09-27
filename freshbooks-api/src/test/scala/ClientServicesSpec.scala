@@ -1,4 +1,4 @@
-package test
+package spec
 import org.specs.Specification
 import org.specs.runner.JUnit4
 
@@ -9,6 +9,9 @@ import scala.{List, Nil}
 import scala_mash.freshbooks_api._
 import model._
 import Utils._
+
+import _root_.specs.Utils._
+
 /**
  *
  * @author jimbarrows
@@ -18,7 +21,6 @@ import Utils._
 object ClientServicesSpec extends Specification {
 
   "Client services"  should {
-		val account = Account( "testbod","579c616ed18fc5bdd5bea0eca10cf7c8")
 		val expectedClient = new Client(None, //clientId
 			"Jane",  //firstName
 			"Doe", //lastName

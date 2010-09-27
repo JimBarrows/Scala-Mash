@@ -17,11 +17,13 @@ object InvoiceSpec extends Specification {
 
   "The Invoice class"  should {
 
-
 		"be able to generate an invoice XML " in {
 			actualInvoice.toXml must ==/ ( expectedXml)
 		}
 
+		"be able to parse an invoice XML " in {
+			Invoice.parse( <request>{expectedXml}</request>) must be_==( actualInvoice)
+		}
 	}
 		val expectedXml = <invoice>
 		<invoice_id>13</invoice_id>
@@ -64,8 +66,8 @@ object InvoiceSpec extends Specification {
 
 
 		val actualInvoice = new Invoice(
-				Some("13"), 		// invoiceId:Option[String],
-				"13", 					// clientId:String,
+				Some(13), 		// invoiceId:Option[String],
+				13, 					// clientId:String,
 				Some("FB00004"), // number:Option[String],
 				None, //amount
 				None, //amountOustanding

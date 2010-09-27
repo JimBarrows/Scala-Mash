@@ -1,4 +1,4 @@
-package test
+package specs
 import org.specs.Specification
 import org.specs.runner.JUnit4
 
@@ -13,8 +13,6 @@ import scala_mash.freshbooks_api.Utils._
  * @author jimbarrows
  *
  */
-
-class TestClient extends JUnit4(ClientSpec)
 object ClientSpec extends Specification {
 
   "The Client class"  should {

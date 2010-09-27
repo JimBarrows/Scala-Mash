@@ -7,6 +7,7 @@ import org.joda.time.{LocalDate, DateTime}
 import bizondemand.utils.models.internet.Url
 import scala_mash.rest.util.Helpers._
 import scala_mash.rest.{Ok,RestException}
+import Utils._
 
 object InvoiceStatus extends Enumeration {
 	type InvoiceStatus = Value
@@ -28,8 +29,8 @@ import InvoiceStatus._
 import LineType._
 
 class Invoice(
-		_invoiceId:Option[String],
-		_clientId:String,
+		_invoiceId:Option[Int],
+		_clientId:Int,
 		_number:Option[String],
 		_amount:Option[BigDecimal], //Read-only
 		_amountOutstanding:Option[BigDecimal], //Read-only
@@ -79,6 +80,69 @@ class Invoice(
 	def vatName = _vatName
 	def lines = _lines 
 
+	override def equals( that:Any):Boolean = that match {
+			case dat:Invoice => dat.invoiceId == invoiceId && 
+					dat.clientId == clientId && 
+					dat.number == number &&
+					dat.amount == amount &&
+					dat.amountOutstanding == amountOutstanding// &&
+//					dat.status == status &&
+//					dat.date == date &&
+//					dat.poNumber == poNumber &&
+//					dat.discount == discount &&
+//					dat.notes == notes &&
+//					dat.terms == terms &&
+//					dat.currencyCode == currencyCode &&
+//					dat.language == language &&
+//					dat.links == links &&
+//					dat.returnUri == returnUri &&
+//					dat.updated == updated &&
+//					dat.recurringId == recurringId &&
+//					dat.firstName == firstName &&
+//					dat.lastName == lastName &&
+//					dat.organization == organization &&
+//					dat.address == address &&
+//					dat.vatName == vatName &&
+//					dat.lines == lines 
+			case _ => false
+		}
+
+	override def toString = "Invoice(invoiceId: %s, clientId: %d, number: %s, amount: %s, amountOutstanding: %s)".format(invoiceId, 
+			clientId,
+			number,amount, amountOutstanding)
+
+	def invoiceId_=  (id :Int) : Invoice = {
+		invoiceId match {
+			case Some(x) => this
+			case None => new Invoice( 
+					Some(id),
+					this.clientId,
+					this.number,
+					this.amount,
+					this.amountOutstanding,
+					this.status,
+					this.date,
+					this.poNumber,
+					this.discount,
+					this.notes,
+					this.terms,
+					this.currencyCode,
+					this.language,
+					this.links,
+					this.returnUri,
+					this.updated,
+					this.recurringId,
+					this.firstName,
+					this.lastName,
+					this.organization,
+					this.address,
+					this.vatName,
+					this.vatNumber,
+					this.lines)
+		}
+
+	}
+
 	def toXml : NodeSeq = {
 		<invoice>
 			{invoiceId.map( id => <invoice_id>{ id }</invoice_id>).getOrElse(Empty)}
@@ -93,6 +157,7 @@ class Invoice(
 			{language.map( n => <language>{n}</language>).getOrElse(Empty)}
 			{terms.map( n => <terms>{n}</terms>).getOrElse(Empty)}
 			{returnUri.map( n => <return_uri>{n}</return_uri>).getOrElse(Empty)}
+			{updated.map( n => <updated>{printDateTime( n)}</updated>).getOrElse(Empty)}
 			{firstName.map( n => <first_name>{n}</first_name>).getOrElse(Empty)}
 			{lastName.map( n => <last_name>{n}</last_name>).getOrElse(Empty)}
 			{organization.map( n => <organization>{n}</organization>).getOrElse(Empty)}
@@ -113,41 +178,41 @@ object Invoice extends FreshbooksResource[Invoice] {
 		optionalString(xml, "invoice_id")
 	}
 
-	def parse( xml:NodeSeq) : Invoice = {
-		debug("Invoice:parse xml {}", xml)
-		val node : NodeSeq = xml \ ("invoice")
+	def parse( node:NodeSeq) : Invoice = {
+		debug("Invoice:parse xml {}", node)
+		val xml = node \"invoice"
 		new Invoice(
-			Some(xml \ "invoice_id" text), 																								//invoiceId:Option[String],
-			(xml \ "client_id" text), 																										//clientId:String,
-			optionalString( node, "number"),																						 //number:Option[String],
-			optionalBigDecimal(node, "amount"),  																					//amount:Option[BigDecimal]
-			optionalBigDecimal(node, "amount_outstanding"),  															//amountOutstanding:Option[BigDecimal]
-			InvoiceStatus.valueOf(node \ "status" text), 																	//status:InvoiceStatus,
-			optionalYmd(node,"date"), 																										//date:Option[LocalDate],
-			(if( ( node \ "po_number" text).isEmpty) None else Some(node \ "po_number" text)), //poNumber:Option[String],
-			(if( ( node \ "discount" text).isEmpty) None else Some((node \ "discount" text).toInt)), //discount:Option[Int],
-			(if( ( node \ "notes" text).isEmpty) None else Some(node \ "notes" text)), //notes:Option[String],
-			(if( ( node \ "terms" text).isEmpty) None else Some(node \ "terms" text)), //terms:Option[String],
-			(if( ( node \ "currency_code" text).isEmpty) None else Some(node \ "currency_code" text)), //currencyCode:Option[String],
-			optionalString( node, "language"), //language:Option[String]
-			Links.optionalParse( node),  //links:Option[Links]
-			(if( ( node \ "return_uri" text).isEmpty) None else Some(Url(node \ "return_uri" text))), //returnUri:Option[URL],
-			optionalDateTimeWithTimeZone(node,"updated"), //updated:Option[DateTime],
-			optionalLong(node,"recurringId"), //recurringId:Option[Long],
-			(if( ( node \ "first_name" text).isEmpty) None else Some(node \ "first_name" text)), //firstName:Option[String],
-			(if( ( node \ "last_name" text).isEmpty) None else Some(node \ "last_name" text)), //lastName:Option[String],
-			(if( ( node \ "organization" text).isEmpty) None else Some(node \ "organization" text)), //organization:Option[String],
+			optionalInt(xml , "invoice_id"),
+			(xml \ "client_id" text).toInt,
+			optionalString( xml, "number"),
+			optionalBigDecimal(xml, "amount"),
+			optionalBigDecimal(xml, "amount_outstanding"),
+			InvoiceStatus.valueOf(xml \ "status" text),
+			optionalYmd(xml,"date"),
+			optionalString(xml, "po_number"),
+			optionalInt(xml, "discount"),
+			optionalString(xml, "notes"),
+			optionalString(xml, "terms"),
+			optionalString(xml, "currency_code"),
+			optionalString( xml, "language"), //language:Option[String]
+			Links.optionalParse( xml),  //links:Option[Links]
+			optionalUrl(xml, "return_uri"),
+			optionalDateTime(xml,"updated"), //updated:Option[DateTime],
+			optionalLong(xml,"recurringId"), //recurringId:Option[Long],
+			optionalString(xml, "first_name"),
+			optionalString(xml, "last_name"),
+			optionalString(xml, "organization"),
 			Some(PrimaryAddress(		//address:Option[PrimaryAddress],
-				(if (( node \ "p_street1" text).isEmpty) None else Some((node \ "p_street1" text).toString)),
-				(if (( node \ "p_street2" text).isEmpty) None else Some((node \ "p_street2" text).toString)),
-				(if (( node \ "p_city" text).isEmpty) None else Some((node \ "p_city" text).toString)),
-				(if (( node \ "p_state" text).isEmpty) None else Some((node \ "p_state" text).toString)),
-				(if (( node \ "p_country" text).isEmpty) None else Some((node \ "p_country" text).toString)),
-				(if (( node \ "p_code" text).isEmpty) None else Some((node \ "p_code" text).toString))
+				optionalString(xml, "p_street1"),
+				optionalString(xml, "p_street2"),
+				optionalString(xml, "p_city"),
+				optionalString(xml, "p_state"),
+				optionalString(xml, "p_country"),
+				optionalString(xml, "p_code")
 			)),
 			optionalString(xml,"vat_name"),
 			optionalLong(xml,"vat_number"),
-			Line.parseList( node \\ "line") //lines:List[Line]
+			Line.parseList( xml \\ "line") //lines:List[Line]
 		)
 
 	}
@@ -159,51 +224,34 @@ object Invoice extends FreshbooksResource[Invoice] {
 		debug("Invoice.create response: {}", response)
 		response match {
 			case n:Ok => {
-				val invoiceId: Option[String] = parseCreateResponse(convertResponseToXml(n.response)) 
-				new Invoice( 
-					invoiceId,								//invoiceId:Option[String],
-					invoice.clientId, 				//clientId:String,
-					invoice.number, 					//number:Option[String],
-					invoice.amount,
-					invoice.amountOutstanding,
-					invoice.status, //status:InvoiceStatus,
-					invoice.date, //date:Option[LocalDate],
-					invoice.poNumber, //poNumber:Option[String],
-					invoice.discount, //discount:Option[Int],
-					invoice.notes, //notes:Option[String],
-					invoice.terms, //terms:Option[String],
-					invoice.currencyCode, //currencyCode:Option[String],
-					invoice.language,
-					invoice.links,
-					invoice.returnUri, //returnUri:Option[Url],
-					invoice.updated,
-					invoice.recurringId,
-					invoice.firstName, //firstName:Option[String],
-					invoice.lastName, //lastName:Option[String],
-					invoice.organization, //organization:Option[String],
-					invoice.address, //address:Option[PrimaryAddress],
-					invoice.vatName,
-					invoice.vatNumber,
-					invoice.lines) //lines:List[Line])
+				convertResponseToXml(n.response) match {
+					case resp if (resp \ "@status" text) == "ok" => invoice.invoiceId = (resp \ "invoice_id" text).toInt
+					case resp if( resp \ "error" text) =="This invoice number is already in use. Please choose another." => 
+						throw new ExistingInvoiceNumberException
+					case resp if( resp \ "error" text) =="Client does not exist." => 
+						throw new NoClientExistsException
+					case resp if( resp \ "@status" text) == "fail" => throw new FreshbooksApiException( resp \ "error" text)
+				}
 			}
 			case n => throw new RestException(n)
 		}
 	}
 
-	def update( invoice: Invoice, account:Account) : Unit = {
+	def update( invoice: Invoice, account:Account) : Invoice = {
 		debug("Invoice.update invoice: {}, account {}", invoice, account)
 		val request = <request method="invoice.update">{invoice.toXml}</request>
 		val response = post(account.domainName, account.authenticationToken, request)
 		debug("Invoice.update response: {}", response)
 		response match {
-			case n:Ok =>
+			case n:Ok => invoice
 			case n => throw new RestException(n)
 		}
 	}
 
-	def get( invoiceId: Invoice, account:Account) :Invoice = {
+	def get( invoiceId: Int, account:Account) :Invoice = {
 		debug("Invoice.get invoiceId: {}, account {}", invoiceId, account)
 		val request = <request method="invoice.get"><invoice_id>{invoiceId}</invoice_id></request>
+		println("request: " + request)
 		val status = post( account.domainName, account.authenticationToken, request)
 		debug("Invoice.get status: {}", status)
 		status match {
@@ -290,3 +338,9 @@ object Links {
 	}
 }
 
+class FreshbooksApiException(msg:String) extends Exception(msg) {
+}
+
+class ExistingInvoiceNumberException extends FreshbooksApiException( "This invoice number is already in use. Please choose another.")  
+
+class NoClientExistsException extends FreshbooksApiException( "Client does not exist.")

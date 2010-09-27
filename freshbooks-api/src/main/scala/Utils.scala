@@ -1,5 +1,7 @@
 package scala_mash.freshbooks_api
 
+import xml._
+
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.joda.time.DateTime
 
@@ -13,10 +15,12 @@ import org.joda.time.DateTime
 object Utils {
   
 
-  val dateFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss").toFormatter
+  protected val dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss").toFormatter
+	def parseDateTime(dateTime:String) = dateTimeFormatter.parseDateTime(dateTime)  
+	def printDateTime(dateTime:DateTime) = dateTimeFormatter.print(dateTime)
 
-  def parseDateTime(dateTime:String) = dateFormatter.parseDateTime(dateTime)  
+	def optionalDateTime( node:NodeSeq, tag:String) = 
+		if( (node \ tag text).isEmpty) None else Some( parseDateTime( node \ tag text))
 
-  def print(dateTime:DateTime) = dateFormatter.print(dateTime)
 
 }
