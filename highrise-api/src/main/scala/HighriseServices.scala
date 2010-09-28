@@ -2,7 +2,7 @@ package scala_mash.highrise_api
 
 import bizondemand.utils.models.internet.{Url, Https, DomainName}
 
-import scala_mash.rest.{HttpStatusCode, Ok, Found, RestException}
+import scala_mash.rest.{HttpStatusCode, Ok, Found, RestException, NotFound}
 
 import  xml.NodeSeq
 
@@ -59,6 +59,7 @@ trait HighriseServices[T] extends RestService{
 		httpStatus match {
 			//An error was thrown, and if it ends in login, it's probably the sitename, but without going back to the URL provided, we don't know.
 			case n:Found if n.url.path == Some("login" :: Nil) => throw new LoginFailed()			
+			case n:NotFound => throw new LoginFailed()			
 			case n => throw new RestException(n)
 		} 
 	}
