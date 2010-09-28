@@ -22,7 +22,7 @@ object InvoiceSpec extends Specification {
 		}
 
 		"be able to parse an invoice XML " in {
-			Invoice.parse( <request>{expectedXml}</request>) must be_==( actualInvoice)
+			Invoice.parse( expectedXml) must be_==( actualInvoice)
 		}
 	}
 		val expectedXml = <invoice>

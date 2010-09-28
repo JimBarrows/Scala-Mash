@@ -11,10 +11,15 @@ import Utils._
 
 object InvoiceStatus extends Enumeration {
 	type InvoiceStatus = Value
+	val Disputed = Value("disputed")
+	val Draft = Value("draft")
 	val Sent = Value("sent")
 	val Viewed = Value("viewed")
 	val Paid = Value("paid")
-	val Draft = Value("draft")
+	val AutoPaid = Value("auto-paid")
+	val Retry = Value("retry")
+	val Failed = Value("failed")
+	val Unpaid = Value("unpaid")  //This will return all invoices in disputed, sent, viewed, retry or failed
 
 }
 
@@ -25,8 +30,16 @@ object LineType extends Enumeration {
 
 }
 
+object Folder extends Enumeration {
+	type Folder = Value
+	val Active = Value("active")
+	val Archived = Value("archived")
+	val Deleted = Value("deleted")
+}
+
 import InvoiceStatus._
 import LineType._
+import Folder._
 
 class Invoice(
 		_invoiceId:Option[Int],
@@ -178,9 +191,8 @@ object Invoice extends FreshbooksResource[Invoice] {
 		optionalString(xml, "invoice_id")
 	}
 
-	def parse( node:NodeSeq) : Invoice = {
-		debug("Invoice:parse xml {}", node)
-		val xml = node \"invoice"
+	def parse( xml:NodeSeq) : Invoice = {
+		debug("Invoice:parse xml {}", xml)
 		new Invoice(
 			optionalInt(xml , "invoice_id"),
 			(xml \ "client_id" text).toInt,
@@ -217,6 +229,11 @@ object Invoice extends FreshbooksResource[Invoice] {
 
 	}
 
+	def parseList( node:NodeSeq) : List[Invoice] = {
+		debug("Invoice.parseList {}", node)
+		( node \\ "invoice").map( parse(_)).toList
+	}
+
 	def create( invoice:Invoice, account:Account) : Invoice = {
 		debug("Invoice.create invoice: {}, account: {}",invoice, account)
 		val request = <request method="invoice.create">{invoice.toXml}</request>
@@ -251,11 +268,52 @@ object Invoice extends FreshbooksResource[Invoice] {
 	def get( invoiceId: Int, account:Account) :Invoice = {
 		debug("Invoice.get invoiceId: {}, account {}", invoiceId, account)
 		val request = <request method="invoice.get"><invoice_id>{invoiceId}</invoice_id></request>
-		println("request: " + request)
 		val status = post( account.domainName, account.authenticationToken, request)
-		debug("Invoice.get status: {}", status)
 		status match {
-			case n:Ok => parse( convertResponseToXml(n.response))
+			case n:Ok => parse( convertResponseToXml(n.response) \ "invoice")
+			case n => throw new RestException(n)
+		}
+	}
+
+	def list( clientId: Option[Int], 
+			recurringId: Option[Int], 
+			status: Option[InvoiceStatus], 
+			dateFrom: Option[LocalDate], 
+			dateTo: Option[LocalDate], 
+			updatedFrom: Option[LocalDate], 
+			updatedTo: Option[LocalDate], 
+			page: Option[Int],
+			perPage: Option[Int],
+			folder: Option[Folder], account:Account): InvoiceList = {
+
+		val request= <request method="invoice.list">
+			{clientId.map( n => <client_id>{n}</client_id>).getOrElse(Empty)}
+			{recurringId.map( n => <recurring_id>{n}</recurring_id>).getOrElse(Empty)}
+			{status.map( n => <status>{n}</status>).getOrElse(Empty)}
+			{dateFrom.map( n => <date_from>{printYmd(n)}</date_from>).getOrElse(Empty)}
+			{dateTo.map( n => <date_to>{printYmd(n)}</date_to>).getOrElse(Empty)}
+			{updatedFrom.map( n => <updated_from>{printYmd(n)}</updated_from>).getOrElse(Empty)}
+			{updatedTo.map( n => <updated_to>{printYmd(n)}</updated_to>).getOrElse(Empty)}
+			{page.map( n => <page>{n}</page>).getOrElse(Empty)}
+			{perPage.map( n => <per_page>{n}</per_page>).getOrElse(Empty)}
+			{folder.map( n => <folder>{n}</folder>).getOrElse(Empty)}
+		</request>
+
+		val returnStatus = post( account.domainName, account.authenticationToken, request)
+
+		returnStatus match {
+			case n:Ok => InvoiceList.parse( convertResponseToXml(n.response))
+			case n => throw new RestException(n)
+		}
+	}
+
+	def delete( invoiceId: Int, account: Account) = {
+		val request = <request method="invoice.delete"><invoice_id>{invoiceId}</invoice_id></request>
+
+		val returnStatus = post( account.domainName, account.authenticationToken, request)
+
+		returnStatus match {
+			case n:Ok => 
 			case n => throw new RestException(n)
 		}
 	}
@@ -335,6 +393,37 @@ object Links {
 		val node = xml \ "links"
 		if( node.isEmpty) None
 		else Some(parse( node))
+	}
+}
+
+class InvoiceList( _page: Int, _perPage: Int, _pages: Int, _total: Int, _invoices: List[Invoice]) {
+
+	def page = _page
+	def perPage = _perPage
+	def pages = _pages
+	def total = _total
+	def invoices = _invoices
+
+	override def equals( that:Any):Boolean = that match {
+			case dat:InvoiceList => dat.page == page && 
+					dat.perPage == perPage && 
+					dat.pages == pages && 
+					dat.total == total && 
+					dat.invoices == invoices  
+			case _ => false
+			}
+}
+
+object InvoiceList {
+
+	def parse( xml: NodeSeq) = {
+		new InvoiceList(
+			(xml \ "invoices" \ "@page" text).toInt,
+			(xml \ "invoices" \ "@per_page" text).toInt,
+			(xml \ "invoices" \ "@pages" text).toInt,
+			(xml \ "invoices" \ "@total" text).toInt,
+			Invoice.parseList(xml \"invoices")
+		)
 	}
 }
 

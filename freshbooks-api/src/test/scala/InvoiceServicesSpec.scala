@@ -10,7 +10,7 @@ import InvoiceStatus._
 
 import scala_mash.freshbooks_api.Utils._
 import scala_mash.rest.util.Helpers._
-
+import scala_mash.rest.RestException
 
 import _root_.specs.Utils._
 
@@ -43,15 +43,19 @@ object InvoiceServicesSpec extends Specification {
 		"get invoices" in {
 			val gotten = Invoice.get( currentInvoice.invoiceId.getOrElse(0), account);
 			gotten.invoiceId must beEqualTo( currentInvoice.invoiceId)
-		}
-		
-/*		
-		"delete invoices" in {
+			currentInvoice = gotten
 		}
 
 		"list invoices" in {
+			val gotten = Invoice.list( None, None, None, None, None, None,None,None,None,None, account)
+			gotten.invoices must contain( currentInvoice)
 		}
-*/
+		
+		"delete invoices" in {
+			Invoice.delete( currentInvoice.invoiceId.getOrElse(0), account) 
+			currentInvoice.invoiceId must beSome[Int]
+		}
+
 	}
 
 
