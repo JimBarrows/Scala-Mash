@@ -43,18 +43,23 @@ object Helpers {
 		def optionalBoolean( node:NodeSeq, tag:String ) : Option[Boolean] = {
 			(node \ tag text) match {
 				case n:String if n.isEmpty => None
-				case "0" => Some(false)
-				case "1" => Some(true)
-				case "f" => Some(false)
-				case "t" => Some(true)
-				case "F" => Some(false)
-				case "T" => Some(true)
-				case "true" => Some(true)
-				case "false" => Some(false)
+				case t => Some( boolean(node, tag))
 			}
-	}
+		}
 
-
+		def boolean( node:NodeSeq, tag:String ): Boolean = {
+			(node \ tag text) match {
+				case n:String if n.isEmpty => false
+				case "0" => false
+				case "1" => true
+				case "f" => false
+				case "t" => true
+				case "F" => false
+				case "T" => true
+				case "true" => true
+				case "false" => false
+			}
+		}
 	def optionalUrl( node:NodeSeq, tag:String) : Option[Url] =
 			if( ( node \ tag text).isEmpty) None else Some( Url((node \ tag text)))
 

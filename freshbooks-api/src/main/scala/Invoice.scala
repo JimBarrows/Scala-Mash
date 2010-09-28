@@ -98,25 +98,25 @@ class Invoice(
 					dat.clientId == clientId && 
 					dat.number == number &&
 					dat.amount == amount &&
-					dat.amountOutstanding == amountOutstanding// &&
-//					dat.status == status &&
-//					dat.date == date &&
-//					dat.poNumber == poNumber &&
-//					dat.discount == discount &&
-//					dat.notes == notes &&
-//					dat.terms == terms &&
-//					dat.currencyCode == currencyCode &&
-//					dat.language == language &&
-//					dat.links == links &&
-//					dat.returnUri == returnUri &&
-//					dat.updated == updated &&
-//					dat.recurringId == recurringId &&
-//					dat.firstName == firstName &&
-//					dat.lastName == lastName &&
-//					dat.organization == organization &&
-//					dat.address == address &&
-//					dat.vatName == vatName &&
-//					dat.lines == lines 
+					dat.amountOutstanding == amountOutstanding &&
+					dat.status == status &&
+					dat.date == date &&
+					dat.poNumber == poNumber &&
+					dat.discount == discount &&
+					dat.notes == notes &&
+					dat.terms == terms &&
+					dat.currencyCode == currencyCode &&
+					dat.language == language &&
+					dat.links == links &&
+					dat.returnUri == returnUri &&
+					dat.updated == updated &&
+					dat.recurringId == recurringId &&
+					dat.firstName == firstName &&
+					dat.lastName == lastName &&
+					dat.organization == organization &&
+					dat.address == address &&
+					dat.vatName == vatName &&
+					dat.lines == lines 
 			case _ => false
 		}
 
