@@ -5,6 +5,7 @@ import NodeSeq._
 import org.joda.time.{LocalDate, DateTime}
 
 import bizondemand.utils.models.internet.Url
+import bizondemand.utils.logging.Log
 import scala_mash.rest.util.Helpers._
 import scala_mash.rest.{Ok,RestException}
 import Utils._
@@ -57,7 +58,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_stopped: Boolean,
 		_sendEmail: Boolean,
 		_sendSnailMail: Boolean,
-		_autobill: Option[Autobill]
+		_autobill: Autobill
 	) extends Invoice (	_invoiceId:Option[Int],
 		_clientId:Int,
 		_number:Option[String],
@@ -102,6 +103,8 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 			case _ => false
 	}
 
+	override def toString = "RecurringInvoice(  %s, occurences: %B, frequency: %s, stopped: %B, sendEmail: %B, sendSnailMail: %B, %s".format(super.toString, occurences, frequency, stopped, sendEmail, sendSnailMail, autobill.toString)
+
 	override def invoiceId_=( id:Int) : RecurringInvoice = {
 		invoiceId match {
 			case Some(x) => this
@@ -139,7 +142,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		}
 	}
 
-	override def toXml : NodeSeq = {
+	override def toXml : NodeSeq = 
 		<recurring>
 			{invoiceId.map( id => <invoice_id>{ id }</invoice_id>).getOrElse(Empty)}
 			<client_id>{clientId}</client_id>
@@ -165,12 +168,12 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 			<stopped>{if (stopped) 1 else 0}</stopped>
 			<send_email>{if (sendEmail) 1 else 0}</send_email>
 			<send_snail_mail>{if (sendSnailMail) 1 else 0}</send_snail_mail>
-			{autobill.map( n=>n.toXml).getOrElse(Empty) }
+			{autobill.toXml}
 			<lines>
 				{lines.map( _.toXml)}
 			</lines>
 		</recurring>
-	}
+	
 
 }
 
@@ -217,12 +220,12 @@ def parseCreateResponse(xml:NodeSeq) = {
 			optionalString(xml,"vat_name"),
 			optionalLong(xml,"vat_number"),
 			Line.parseList( xml \\ "line"),
-			(xml \ "occurences" text).toInt,
+			(xml\"occurences" text).toInt,
 			Frequency.valueOf(xml \ "frequency" text).getOrElse(Monthly),
 			boolean( xml, "stopped"),
 			boolean( xml, "send_email"),
 			boolean( xml, "send_snail_mail"),
-			Autobill.optionalParse( xml)
+			Autobill.parse( xml \ "autobill" )
 		)
 
 	}
@@ -250,20 +253,21 @@ class Autobill( _gatewayName: String, _card: CreditCard) {
 					dat.card == card
 			case _ => false
 	}
+
+	override def toString="Autobill( gatewayName: %s, %s)".format( gatewayName, card)
 }
 
 
-object Autobill {
+object Autobill extends Log{
 
-	def parse( xml: NodeSeq) = new Autobill (
-		xml \ "gateway_name" text,
-		CreditCard.parse(xml \ "card")
-	)
-
-	def optionalParse(xml: NodeSeq) = xml match {
-		case <autobill>_*</autobill> => Some( Autobill.parse( xml))
-		case _ => None
+	def parse( xml: NodeSeq) = {
+		debug("Autobill.parse( xml: %s".format(xml))
+		new Autobill (
+			xml \ "gateway_name" text,
+			CreditCard.parse(xml \ "card")
+		)
 	}
+
 }
 
 
@@ -281,6 +285,8 @@ class CreditCard( _number:String, _name: String, _month: Int, _year: Int) {
 					dat.year == year 
 			case _ => false
 	}
+
+	override def toString="CreditCard( number: %s, name: %s, month: %d, year: %d)".format( number, name, month, year)
 
 	def toXml = <card>
 		<number>{number}</number>

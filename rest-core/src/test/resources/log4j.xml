@@ -10,7 +10,7 @@
     </appender>
 
 	<logger name="scala_mash">
-        <level value="warn"/>
+        <level value="debug"/>
     </logger>
 	<logger name="scala_mash.rest">
         <level value="warn"/>
