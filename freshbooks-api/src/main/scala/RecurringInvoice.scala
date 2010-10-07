@@ -45,7 +45,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_links:Option[Links], //Read-only
 		_returnUri:Option[Url],
 		_updated:Option[DateTime], //Read-only
-		_recurringId:Option[Long], //Read-only
+		_recurringId:Option[Int], //Read-only
 		_firstName:Option[String],
 		_lastName:Option[String],
 		_organization:Option[String],
@@ -53,12 +53,12 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_vatName:Option[String],
 		_vatNumber:Option[Long], 
 		_lines:List[Line],
-		_occurences: Int,
+		_occurrences: Int,
 		_frequency: Frequency,
 		_stopped: Boolean,
 		_sendEmail: Boolean,
 		_sendSnailMail: Boolean,
-		_autobill: Autobill
+		_autobill: Option[Autobill]
 	) extends Invoice (	_invoiceId:Option[Int],
 		_clientId:Int,
 		_number:Option[String],
@@ -75,7 +75,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_links:Option[Links], //Read-only
 		_returnUri:Option[Url],
 		_updated:Option[DateTime], //Read-only
-		_recurringId:Option[Long], //Read-only
+		_recurringId:Option[Int], //Read-only
 		_firstName:Option[String],
 		_lastName:Option[String],
 		_organization:Option[String],
@@ -85,7 +85,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_lines:List[Line]
 	) {
 
-		def occurences = _occurences
+		def occurrences = _occurrences
 		def frequency = _frequency
 		def stopped = _stopped
 		def sendEmail = _sendEmail
@@ -94,7 +94,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 
 	override def equals( that:Any):Boolean = that match {
 			case dat:RecurringInvoice => super.equals( dat.asInstanceOf[Invoice]) &&
-					dat.occurences == occurences &&
+					dat.occurrences == occurrences &&
 					dat.frequency == frequency &&
 					dat.stopped == stopped &&
 					dat.sendEmail == sendEmail &&
@@ -103,7 +103,44 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 			case _ => false
 	}
 
-	override def toString = "RecurringInvoice(  %s, occurences: %B, frequency: %s, stopped: %B, sendEmail: %B, sendSnailMail: %B, %s".format(super.toString, occurences, frequency, stopped, sendEmail, sendSnailMail, autobill.toString)
+	override def toString = "RecurringInvoice(  %s, occurrences: %d, frequency: %s, stopped: %B, sendEmail: %B, sendSnailMail: %B, autobill: %s".format(super.toString, occurrences, frequency, stopped, sendEmail, sendSnailMail, autobill.toString)
+
+	def recurringId_=( id: Int): RecurringInvoice = {
+		recurringId match {
+			case Some(x) => this
+			case None => new RecurringInvoice( 
+					this.invoiceId,
+					this.clientId,
+					this.number,
+					this.amount,
+					this.amountOutstanding,
+					this.status,
+					this.date,
+					this.poNumber,
+					this.discount,
+					this.notes,
+					this.terms,
+					this.currencyCode,
+					this.language,
+					this.links,
+					this.returnUri,
+					this.updated,
+					Some(id),
+					this.firstName,
+					this.lastName,
+					this.organization,
+					this.address,
+					this.vatName,
+					this.vatNumber,
+					this.lines,
+					this.occurrences,
+					this.frequency,
+					this.stopped,
+					this.sendEmail,
+					this.sendSnailMail,
+					this.autobill)
+		}
+	}
 
 	override def invoiceId_=( id:Int) : RecurringInvoice = {
 		invoiceId match {
@@ -133,7 +170,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 					this.vatName,
 					this.vatNumber,
 					this.lines,
-					this.occurences,
+					this.occurrences,
 					this.frequency,
 					this.stopped,
 					this.sendEmail,
@@ -144,10 +181,10 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 
 	override def toXml : NodeSeq = 
 		<recurring>
-			{invoiceId.map( id => <invoice_id>{ id }</invoice_id>).getOrElse(Empty)}
+			{/*invoiceId.map( id => <invoice_id>{ id }</invoice_id>).getOrElse(Empty)*/}
 			<client_id>{clientId}</client_id>
-			{number.map( n => <number>{n}</number>).getOrElse(Empty)}
-			{status.map( s => <status>{s}</status>).getOrElse(Empty)}
+			{/*number.map( n => <number>{n}</number>).getOrElse(Empty)*/}
+			{/*status.map( s => <status>{s}</status>).getOrElse(Empty)*/}
 			{date.map( d => <date>{printYmd(d)}</date>).getOrElse(Empty)}
 			{poNumber.map( n => <po_number>{n}</po_number>).getOrElse(Empty)}
 			{discount.map( n => <discount>{n}</discount>).getOrElse(Empty)}
@@ -157,18 +194,19 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 			{terms.map( n => <terms>{n}</terms>).getOrElse(Empty)}
 			{returnUri.map( n => <return_uri>{n}</return_uri>).getOrElse(Empty)}
 			{updated.map( n => <updated>{printDateTime( n)}</updated>).getOrElse(Empty)}
+			{recurringId.map( n => <recurring_id>{n}</recurring_id>).getOrElse(Empty)}
 			{firstName.map( n => <first_name>{n}</first_name>).getOrElse(Empty)}
 			{lastName.map( n => <last_name>{n}</last_name>).getOrElse(Empty)}
 			{organization.map( n => <organization>{n}</organization>).getOrElse(Empty)}
 			{address.map( n => n.toXml).getOrElse(Empty)}
 			{vatName.map( n => <vat_name>{n}</vat_name>).getOrElse(Empty)}
 			{vatNumber.map( n => <vat_number>{n}</vat_number>).getOrElse(Empty)}
-			<occurences>{occurences}</occurences>
+			<occurrences>{occurrences}</occurrences>
 			<frequency>{frequency}</frequency>
 			<stopped>{if (stopped) 1 else 0}</stopped>
 			<send_email>{if (sendEmail) 1 else 0}</send_email>
 			<send_snail_mail>{if (sendSnailMail) 1 else 0}</send_snail_mail>
-			{autobill.toXml}
+			{autobill.map( n => n.toXml).getOrElse(Empty)}
 			<lines>
 				{lines.map( _.toXml)}
 			</lines>
@@ -181,12 +219,12 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 
 
-def parseCreateResponse(xml:NodeSeq) = {
-		debug("RecurringInvoice.parseCreateResponse xml: {}", xml)
+	def parseCreateResponse(xml:NodeSeq) = {
+		debug("Recurringrecurring.parseCreateResponse xml: {}", xml)
 		optionalString(xml, "invoice_id")
 	}
 
-	def parse( xml:NodeSeq) : Invoice = {
+	def parse( xml:NodeSeq): RecurringInvoice = {
 		debug("RecurringInvoice:parse xml {}", xml)
 		new RecurringInvoice(
 			optionalInt(xml , "invoice_id"),
@@ -205,7 +243,7 @@ def parseCreateResponse(xml:NodeSeq) = {
 			Links.optionalParse( xml),  //links:Option[Links]
 			optionalUrl(xml, "return_uri"),
 			optionalDateTime(xml,"updated"), //updated:Option[DateTime],
-			optionalLong(xml,"recurringId"), //recurringId:Option[Long],
+			optionalInt(xml,"recurring_id"), //recurringId:Option[Long],
 			optionalString(xml, "first_name"),
 			optionalString(xml, "last_name"),
 			optionalString(xml, "organization"),
@@ -220,23 +258,137 @@ def parseCreateResponse(xml:NodeSeq) = {
 			optionalString(xml,"vat_name"),
 			optionalLong(xml,"vat_number"),
 			Line.parseList( xml \\ "line"),
-			(xml\"occurences" text).toInt,
+			(xml\"occurrences" text).toInt,
 			Frequency.valueOf(xml \ "frequency" text).getOrElse(Monthly),
 			boolean( xml, "stopped"),
 			boolean( xml, "send_email"),
 			boolean( xml, "send_snail_mail"),
-			Autobill.parse( xml \ "autobill" )
+			Autobill.optionalParse( xml \ "autobill" )
 		)
 
 	}
 
-	def parseList( node:NodeSeq) : List[Invoice] = {
-		debug("Invoice.parseList {}", node)
-		( node \\ "invoice").map( parse(_)).toList
+	def parseList( node:NodeSeq) : List[RecurringInvoice] = {
+		debug("recurring.parseList {}", node)
+		( node \\ "recurring").map( parse(_)).toList
 	}
 
+	def create( invoice: RecurringInvoice, account:Account) : RecurringInvoice = {
+		debug("RecurringInvoice.create invoice: {}, account: {}",invoice, account)
+		val request = <request method="recurring.create">{invoice.toXml}</request>
+		val response = post(account.domainName, account.authenticationToken, request )
+		debug("RecurringInvoice.create response: {}", response)
+		response match {
+			case n:Ok => {
+				convertResponseToXml(n.response) match {
+					case resp if (resp \ "@status" text) == "ok" => {
+						invoice.invoiceId_=((resp \ "invoice_id" text).toInt).recurringId = (resp \ "recurring_id" text).toInt
+					}
+					case resp if( resp \ "error" text) =="This invoice number is already in use. Please choose another." => 
+						throw new ExistingInvoiceNumberException
+					case resp if( resp \ "error" text) =="Client does not exist." => 
+						throw new NoClientExistsException
+					case resp if( resp \ "error" text) =="Auto-billing is only available in the base currency." => 
+						throw new AutobillingOnlyAvailableInBaseCurrency
+					case resp if( resp \ "@status" text) == "fail" => 
+						throw new FreshbooksApiException( resp \ "error" text)
+				}
+			}
+			case n => throw new RestException(n)
+		}
+	}
+
+	def update( invoice: RecurringInvoice, account:Account) : RecurringInvoice = {
+		debug("RecurringInvoice.update invoice: {}, account {}", invoice, account)
+		val request = <request method="recurring.update">{invoice.toXml}</request>
+		val response = post(account.domainName, account.authenticationToken, request)
+		debug("RecurringInvoice.update response: {}", response)
+		response match {
+			case n:Ok => invoice
+			case n => throw new RestException(n)
+		}
+	}
+
+	def get( recurringId: Int, account:Account): RecurringInvoice = {
+		debug("RecurringInvoice.get recurringId: {}, account {}", recurringId, account)
+		val request = <request method="recurring.get"><recurring_id>{recurringId}</recurring_id></request>
+		val status = post( account.domainName, account.authenticationToken, request)
+		debug("RecurringInvoice.get response: {}", status)
+		status match {
+			case n:Ok => parse( convertResponseToXml(n.response) \ "recurring")
+			case n => throw new RestException(n)
+		}
+	}
+
+	def list( clientId: Option[Int], 
+			autobill:Option[Autobill],
+			page: Option[Int],
+			perPage: Option[Int],
+			folder: Option[Folder], account:Account): RecurringInvoiceList = {
+
+		val request= <request method="recurring.list">
+			{clientId.map( n => <client_id>{n}</client_id>).getOrElse(Empty)}
+			{autobill.map( n => n.toXml)}
+			{page.map( n => <page>{n}</page>).getOrElse(Empty)}
+			{perPage.map( n => <per_page>{n}</per_page>).getOrElse(Empty)}
+			{folder.map( n => <folder>{n}</folder>).getOrElse(Empty)}
+		</request>
+
+		val response = post( account.domainName, account.authenticationToken, request)
+
+		debug("RecurringInvoice.get list: {}", response)
+		response match {
+			case n:Ok => RecurringInvoiceList.parse( convertResponseToXml(n.response))
+			case n => throw new RestException(n)
+		}
+	}
+
+	def delete( recurringId: Int, account: Account) = {
+		val request = <request method="recurring.delete"><recurring_id>{recurringId}</recurring_id></request>
+
+		val returnStatus = post( account.domainName, account.authenticationToken, request)
+
+		debug("RecurringInvoice.delete response: {}", returnStatus)
+
+		returnStatus match {
+			case n:Ok => 
+			case n => throw new RestException(n)
+		}
+	}
 }
 
+class RecurringInvoiceList( _page: Int, _perPage: Int, _pages: Int, _total: Int, _invoices: List[RecurringInvoice]) {
+
+	def page = _page
+	def perPage = _perPage
+	def pages = _pages
+	def total = _total
+	def invoices = _invoices
+
+	override def equals( that:Any):Boolean = that match {
+			case dat:RecurringInvoiceList => dat.page == page && 
+					dat.perPage == perPage && 
+					dat.pages == pages && 
+					dat.total == total && 
+					dat.invoices == invoices  
+			case _ => false
+			}
+
+	override def toString = "RecurringInvoiceList( page: %d, perPage: %d, pages: %d, total: %d, invoices: %s".format(page, perPage, pages, total, invoices)
+}
+
+object RecurringInvoiceList {
+
+	def parse( xml: NodeSeq) = {
+		new RecurringInvoiceList(
+			(xml \ "recurrings" \ "@page" text).toInt,
+			(xml \ "recurrings" \ "@per_page" text).toInt,
+			(xml \ "recurrings" \ "@pages" text).toInt,
+			(xml \ "recurrings" \ "@total" text).toInt,
+			RecurringInvoice.parseList(xml \\ "recurrings")
+		)
+	}
+}
 
 class Autobill( _gatewayName: String, _card: CreditCard) {
 
@@ -268,6 +420,13 @@ object Autobill extends Log{
 		)
 	}
 
+	def optionalParse( xml: NodeSeq): Option[Autobill] = {
+		debug("Autobill.optionalParse( xml: %s".format(xml))
+		xml match {
+			case <autobill>{_*}</autobill> => Some(Autobill.parse(xml))
+			case _ => None
+		}
+	}
 }
 
 

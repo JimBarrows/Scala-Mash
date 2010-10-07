@@ -23,21 +23,20 @@ object AutobillSpec extends Specification {
 		"be able to parse XML " in {
 			Autobill.parse( xml) must be_==( card)
 		}
-/*
 		"be able to parse XML and return Some(autobill) when it's present " in {
 			Autobill.optionalParse( xml) must beSome[Autobill]
 		}
 
 		"be able to parse XML and return None when it's not present " in {
-			Autobill.optionalParse( <card><number>1234 1234 1234</number></card>) must beNone
+			Autobill.optionalParse( <nothing><foo></foo></nothing>) must beNone
 		}
-		*/
 	}
 
 	val xml =  
 		<autobill> 
 			<gateway_name>Authorize.net</gateway_name>  
-			<card> <number>4111 1111 1111 1111</number>  
+			<card> 
+				<number>4111 1111 1111 1111</number>  
 				<name>John Smith</name> 
 				<expiration> 
 					<month>3</month> 

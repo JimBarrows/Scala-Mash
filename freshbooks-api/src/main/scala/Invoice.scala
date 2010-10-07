@@ -58,7 +58,7 @@ class Invoice(
 		_links:Option[Links], //Read-only
 		_returnUri:Option[Url],
 		_updated:Option[DateTime], //Read-only
-		_recurringId:Option[Long], //Read-only
+		_recurringId:Option[Int], //Read-only
 		_firstName:Option[String],
 		_lastName:Option[String],
 		_organization:Option[String],
@@ -116,13 +116,36 @@ class Invoice(
 					dat.organization == organization &&
 					dat.address == address &&
 					dat.vatName == vatName &&
+					dat.vatNumber == vatNumber &&
 					dat.lines == lines 
 			case _ => false
 		}
 
-	override def toString = "Invoice(invoiceId: %s, clientId: %d, number: %s, amount: %s, amountOutstanding: %s)".format(invoiceId, 
+	override def toString = "Invoice(invoiceId: %s, clientId: %d, number: %s, amount: %s, amountOutstanding: %s, status: %s, date: %s, poNumber: %s, discount: %s, notes: %s, terms: %s, currencyCode: %s, language: %s, links: %s, returnUri: %s, update: %s, recurringId: %s, firstName: %s, lastName %s, organization: %s, address: %s, vatName: %s, vatNumber: %s, lines: %s)".format(invoiceId, 
 			clientId,
-			number,amount, amountOutstanding)
+			number,
+			amount, 
+			amountOutstanding,
+			status,
+			date.map(d => printYmd(d)).getOrElse("None"), 
+			poNumber,
+			discount,
+			notes,
+			terms,
+			currencyCode,
+			language,
+			links,
+			returnUri,
+			updated.map(d => printDateTime(d)).getOrElse("None"),
+			recurringId,
+			firstName,
+			lastName,
+			organization,
+			address,
+			vatName,
+			vatNumber,
+			lines
+			)
 
 	def invoiceId_=  (id :Int) : Invoice = {
 		invoiceId match {
@@ -210,7 +233,7 @@ object Invoice extends FreshbooksResource[Invoice] {
 			Links.optionalParse( xml),  //links:Option[Links]
 			optionalUrl(xml, "return_uri"),
 			optionalDateTime(xml,"updated"), //updated:Option[DateTime],
-			optionalLong(xml,"recurringId"), //recurringId:Option[Long],
+			optionalInt(xml,"recurring_id"), //recurringId:Option[Long],
 			optionalString(xml, "first_name"),
 			optionalString(xml, "last_name"),
 			optionalString(xml, "organization"),
@@ -349,7 +372,7 @@ object Line {
 
 	def parse( xml :NodeSeq) ={
 		Line(
-			optionalLong(xml,"id"),
+			optionalLong(xml,"line_id"),
 			optionalBigDecimal(xml,"amount"),
 			optionalString(xml, "name"),
 			optionalString(xml, "description"),
@@ -426,10 +449,3 @@ object InvoiceList {
 		)
 	}
 }
-
-class FreshbooksApiException(msg:String) extends Exception(msg) {
-}
-
-class ExistingInvoiceNumberException extends FreshbooksApiException( "This invoice number is already in use. Please choose another.")  
-
-class NoClientExistsException extends FreshbooksApiException( "Client does not exist.")
