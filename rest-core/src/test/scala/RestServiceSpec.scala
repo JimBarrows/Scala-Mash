@@ -22,7 +22,7 @@ import bizondemand.utils.models.internet.{Url,Http, DomainName}
 
 
 
-class RestServiceSpecs extends Specification with Mockito {			
+class RestServiceSpec extends Specification with Mockito {			
 	
 	"The RestServices" should {
 		"return a 200 and it's entity from a succesful post" in {

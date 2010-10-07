@@ -61,7 +61,11 @@ object HttpStatusCode extends Log {
 			case 503 => ServiceUnavailable()
 			case 504 => GatewayTimeout()
 			case 505 => HttpVersionNotSupported()			
-			case n if ( n > 505 && n< 600) => OtherServerError(n, response.getStatusLine.getReasonPhrase)
+			case 506 => VariantAlsoNegotiates()			
+			case 507 => InsufficientStorage()			
+			case 509 => BandwidthLimitExceeded()			
+			case 510 => NotExtended()			
+			case n if ((n==508) || ( n > 510 && n< 600)) => OtherServerError(n, response.getStatusLine.getReasonPhrase)
 			case n => new HttpStatusCode( n, response.getStatusLine.getReasonPhrase)
 		}
 	}
@@ -185,5 +189,14 @@ case class ServiceUnavailable() extends ServerError(503,"Service Unavailable"){}
 case class GatewayTimeout() extends ServerError(504, "Gateway Timeout"){}
 
 case class HttpVersionNotSupported() extends ServerError(505, "HTTP Version Not Supported"){}
+
+case class VariantAlsoNegotiates() extends ServerError(506, "Variant Also Negotiates (RFC 2295)"){}
+
+case class InsufficientStorage() extends ServerError(507, "Insufficient Storage (WebDAV) (RFC 4918)"){}
+
+case class BandwidthLimitExceeded() extends ServerError(509, "Bandwidth Limit Exceeded (Apache bw/limited extension)"){}
+
+case class NotExtended() extends ServerError(510, "Not Extended (RFC 2774)"){}
+
 
 case class OtherServerError(code:Int, description:String) extends ServerError(code, description){}

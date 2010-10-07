@@ -42,5 +42,6 @@ object HelpersSpec extends Specification {
 			boolean( <goof><boolean>false</boolean></goof>, "boolean") must be( false)
 			boolean( <goof><boolean>true</boolean></goof>, "boolean") must be( true)
 		}
+
 	}	
 }
