@@ -31,12 +31,12 @@ case class TaskCategory ( id :Option[Long],
 						updatedAt : Option[DateTime],
 						elementsCount : Option[Long]) {
 	def toXml : NodeSeq = <task-category>
-		<id type="integer">{id.getOrElse(Empty).toString}</id>
+		{id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)}
 		<name>{name}</name>
-		<account-id>{accountId.getOrElse(Empty)}</account-id>
-		<created-at>{createdAt.map(printWithTimeZone(_)).getOrElse(Empty)}</created-at>
-		<updated-at>{updatedAt.map(printWithTimeZone(_)).getOrElse(Empty)}</updated-at>
-		<elements-count type="integer">{elementsCount.getOrElse(0)}</elements-count>
+		{accountId.map( v => <account-id>{v}</account-id>).getOrElse(Empty)}
+		{createdAt.map( v=> <created-at>{printWithTimeZone(v)}</created-at>).getOrElse(Empty)}
+		{updatedAt.map( v => <updated-at>{printWithTimeZone(v)}</updated-at>).getOrElse(Empty)}
+		{elementsCount.map( v => <elements-count type="integer">{v}</elements-count>).getOrElse(Empty)}
 	</task-category>
 }
 
@@ -50,12 +50,12 @@ case class DealCategory ( id :Option[Long],
 						updatedAt : Option[DateTime],
 						elementsCount : Option[Long]) {
 	def toXml : NodeSeq = <deal-category>
-		<id type="integer">{id.getOrElse(Empty).toString}</id>
+		{id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)}
 		<name>{name}</name>
-		<account-id>{accountId.getOrElse(Empty)}</account-id>
-		<created-at>{createdAt.map(printWithTimeZone(_)).getOrElse(Empty)}</created-at>
-		<updated-at>{updatedAt.map(printWithTimeZone(_)).getOrElse(Empty)}</updated-at>
-		<elements-count type="integer">{elementsCount.getOrElse(0)}</elements-count>
+		{accountId.map( v => <account-id>{v}</account-id>).getOrElse(Empty)}
+		{createdAt.map( v=> <created-at>{printWithTimeZone(v)}</created-at>).getOrElse(Empty)}
+		{updatedAt.map( v => <updated-at>{printWithTimeZone(v)}</updated-at>).getOrElse(Empty)}
+		{elementsCount.map( v => <elements-count type="integer">{v}</elements-count>).getOrElse(Empty)}
 	</deal-category>
 }
 		
