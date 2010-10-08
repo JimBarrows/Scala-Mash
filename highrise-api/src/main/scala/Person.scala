@@ -1,6 +1,5 @@
 package scala_mash.highrise_api.models
 
-import scala_mash.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
 import xml.NodeSeq.Empty
@@ -33,7 +32,7 @@ case class Person(override val id: Option[Long],
 		<first-name>{firstName}</first-name> 
 		<last-name>{lastName}</last-name> 
 		<title>{title}</title> 
-		<company-id type="integer">{companyId.getOrElse("")}</company-id> 
+		{companyId.map( v => <company-id type="integer">{v}</company-id>).getOrElse(Empty)}  
    	{parentFieldsAsXml}
 	</party>
 
@@ -41,7 +40,7 @@ case class Person(override val id: Option[Long],
 		<first-name>{firstName}</first-name> 
 		<last-name>{lastName}</last-name> 
 		<title>{title}</title> 
-		<company-id type="integer">{companyId.getOrElse("")}</company-id> 
+		{companyId.map( v => <company-id type="integer">{v}</company-id>).getOrElse(Empty)}  
    	{parentFieldsAsXml}
  	</person>
 

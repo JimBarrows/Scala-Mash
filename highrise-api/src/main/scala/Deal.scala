@@ -7,7 +7,6 @@ import  xml.NodeSeq._
 import org.joda.time.{DateTime, LocalDate}
 
 import scala_mash.highrise_api._
-import scala_mash.highrise_api.Utils._
 
 import scala_mash.rest.util.Helpers.{optionalDateTimeWithTimeZone, printWithTimeZone, printYmd, optionalLong,optionalString, optionalYmd}
 
@@ -44,25 +43,25 @@ case class Deal( accountId : Option[Long],
 
 
 	def toXml:NodeSeq =	<deal>
-  		<account-id type="integer">{accountId.getOrElse(Empty)}</account-id>
-  		<author-id type="integer">{authorId.getOrElse(Empty)}</author-id>
-  		<background>{background.getOrElse(Empty)}</background>
-  		<category-id type="integer">{categoryId.getOrElse(Empty)}</category-id>
-  		<created-at type="datetime">{createdAt.map(printWithTimeZone(_)).getOrElse(Empty)}</created-at>
-  		<currency>{currency.getOrElse(Empty)}</currency>
-  		<duration type="integer">{duration.getOrElse(Empty)}</duration>
-  		<group-id type="integer">{groupId.getOrElse(Empty)}</group-id>
-  		<id type="integer">{id.getOrElse(Empty)}</id>
+  		{accountId.map(  v => <account-id type="integer">{v}</account-id>).getOrElse(Empty)}
+  		{authorId.map(   v => <author-id type="integer">{v}</author-id>).getOrElse(Empty)}
+  		{background.map( v => <background>{v}</background>).getOrElse(Empty)} 
+  		{categoryId.map( v => <category-id type="integer">{v}</category-id>).getOrElse(Empty)} 
+  		{createdAt.map(  v => <created-at type="datetime">{printWithTimeZone(v)}</created-at>).getOrElse(Empty)} 
+  		{currency.map(   v => <currency>{v}</currency>).getOrElse(Empty)} 
+  		{duration.map(   v => <duration type="integer">{v}</duration>).getOrElse(Empty)} 
+  		{groupId.map(    v => <group-id type="integer">{v}</group-id>).getOrElse(Empty)} 
+  		{id.map(         v => <id type="integer">{v}</id>).getOrElse(Empty)} 
   		<name>{name}</name>
-  		<owner-id type="integer">{ownerId.getOrElse(Empty)}</owner-id>
-  		<party-id type="integer">{partyId.getOrElse(Empty)}</party-id>
-  		<price type="integer">{price.getOrElse(Empty)}</price>
-  		<price-type>{priceType.getOrElse(Empty)}</price-type>
-  		<responsible-party-id type="integer">{responsiblePartyId.getOrElse(Empty)}</responsible-party-id>
-  		<status>{status.getOrElse(Empty)}</status>
-  		<status-changed-on type="date">{statusChangedOn.map(printYmd(_)).getOrElse(Empty)}</status-changed-on>
-  		<updated-at type="datetime">{updatedAt.map(printWithTimeZone(_)).getOrElse(Empty)}</updated-at>
-  		<visible-to>{visibleTo.getOrElse(Empty)}</visible-to>
+  		{ownerId.map(    v => <owner-id type="integer">{v}</owner-id>).getOrElse(Empty)} 
+  		{partyId.map(    v => <party-id type="integer">{v}</party-id>).getOrElse(Empty)} 
+  		{price.map(      v => <price type="integer">{v}</price>).getOrElse(Empty)} 
+  		{priceType.map(  v => <price-type>{v}</price-type>).getOrElse(Empty)} 
+  		{responsiblePartyId.map( v => <responsible-party-id type="integer">{v}</responsible-party-id>).getOrElse(Empty)}
+  		{status.map(     v => <status>{v}</status>).getOrElse(Empty)} 
+  		{statusChangedOn.map( v => <status-changed-on type="date">{printYmd(v)}</status-changed-on>).getOrElse(Empty)}
+  		{updatedAt.map(  v => <updated-at type="datetime">{printWithTimeZone(v)}</updated-at>).getOrElse(Empty)} 
+  		{visibleTo.map(  v => <visible-to>{v}</visible-to>).getOrElse(Empty)} 
   		{
   			dealCategory.map( cat => {
   				<category>

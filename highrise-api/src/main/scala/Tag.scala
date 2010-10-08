@@ -4,7 +4,6 @@ import xml.NodeSeq
 import scala_mash.highrise_api.{Account, HighriseServices}
 
 import scala_mash.highrise_api._
-import scala_mash.highrise_api.Utils._
 
 import scala_mash.rest.{Ok, Created, RestException}
 import scala_mash.rest.util.Helpers.{optionalLong}
@@ -28,7 +27,7 @@ import SubjectType._
 case class Tag( id : Option[Long], name:String) {
 	
 	def toXml = <tag>
-		<id type="integer">{id.getOrElse(0)}</id>
+		{id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)} 
 		<name>{name}</name>
 	</tag>
 

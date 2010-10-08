@@ -1,6 +1,5 @@
 package scala_mash.highrise_api.models
 
-import scala_mash.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
 import xml.NodeSeq.Empty

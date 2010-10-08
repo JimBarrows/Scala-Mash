@@ -1,6 +1,5 @@
 package scala_mash.highrise_api.models
 
-import scala_mash.highrise_api.Utils._
 import org.joda.time.DateTime
 import xml.NodeSeq
 import xml.NodeSeq.Empty
@@ -108,11 +107,11 @@ object PhoneLocationValues extends Enumeration {
 import PhoneLocationValues._
 
 case class InstantMessenger(id: Option[Long],
-    		                address: String,
+    		          		      address: String,
                             protocol: InstantMessengerProtocolValues,
                             location: InstantMessengerLocationValues) {
 	def toXml: NodeSeq = <instant-messenger>
-    	<id type="integer">{id.getOrElse("")}</id>
+    	{id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)} 
     	<address>{address}</address>
     	<protocol>{protocol}</protocol>
     	<location>{location}</location>
@@ -135,7 +134,7 @@ case class WebAddress(id: Option[Long],
                       url: String,
                       location: InstantMessengerLocationValues) {
 	def toXml = <web-address>
-		<id type="integer">{id.getOrElse("")}</id>
+    {id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)} 
 		<url>{url}</url>
 		<location>{location}</location>
 	</web-address>
@@ -160,7 +159,7 @@ case class Address(id: Option[Long],
                    zip: String,
                    location: AddressLocationValues) {
   def toXml = <address>
-    <id type="integer">{id.getOrElse("")}</id>
+    {id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)} 
     <city>{city}</city>
     <country>{country}</country>
     <state>{state}</state>
@@ -190,7 +189,7 @@ object Address {
 case class EmailAddress(id: Option[Long], address: String, location: AddressLocationValues) {
 	assert(!address.isEmpty)
 	def toXml = <email-address>
-    	<id type="integer">{id.getOrElse("")}</id>
+    	{id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)} 
     	<address>{address}</address>
     	<location>{location}</location>
   	</email-address>
@@ -208,7 +207,7 @@ object EmailAddress {
 
 case class PhoneNumber(id: Option[Long], number: String, location: PhoneLocationValues) {
  	def toXml = <phone-number>
-		<id type="integer">{id.getOrElse("")}</id>
+    	{id.map( v => <id type="integer">{v}</id>).getOrElse(Empty)} 
     	<number>{number}</number>
     	<location>{location}</location>
   	</phone-number>

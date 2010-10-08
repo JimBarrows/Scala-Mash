@@ -7,7 +7,6 @@ import  xml.NodeSeq._
 import org.joda.time.DateTime
 
 import scala_mash.highrise_api._
-import scala_mash.highrise_api.Utils._
 
 import scala_mash.rest.{Ok, Created, RestException}
 import scala_mash.rest.util.Helpers.{optionalLong, optionalDateTimeWithTimeZone, printWithTimeZone}
