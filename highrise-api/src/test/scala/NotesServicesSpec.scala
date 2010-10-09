@@ -12,11 +12,31 @@ import enumerations.VisibleToValues._
 import enumerations.NoteSubjectType
 import enumerations.CollectionType
 
-object NotesSpec extends Specification {
+object NoteServicesSpec extends Specification {
 
 	"The Notes services" should {
-		"create a note on a person" in {
+
+		setSequential()
+
+		doBefore { 
+			person = Person.create( person, account)
 		}
+
+		doAfter {
+			Person.destroy(person, account)
+		}
+
+		"create a note on a person" in {
+			val id: Long = person.id.getOrElse(0).asInstanceOf[Long]
+			val note = Note( "Hello world", id, NoteSubjectType.Party)
+
+			val createdNote = Note.create( note, account)
+
+			createdNote.id must beSome[Long]
+
+			createdNote.body must_==( note.body)
+		}
+		/*
 		"create a note on a company" in {
 		}
 		"create a note on a deal" in {
@@ -37,5 +57,26 @@ object NotesSpec extends Specification {
 		}
 		"delete a note" in {
 		}
+		*/
 	}
+
+	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
+		
+
+	val expectedContactData = ContactData(None, None, None, None, None)
+
+	var person = 	Person(None,
+			"Joe", //first name
+			"Tester", //last name
+			"JoeTester Title", //title
+			Some("Background"), //backgroun
+			None, //companyId
+			None, //createAt
+			None, //updatedAt
+			Some(Everyone), //visibleTo
+			None, //ownerId
+			None, //groupId
+			None, //authorId
+			expectedContactData
+	)
 }

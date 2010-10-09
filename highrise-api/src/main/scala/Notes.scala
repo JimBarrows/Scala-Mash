@@ -8,6 +8,7 @@ import org.joda.time.DateTime
 
 import bizondemand.utils.logging.Log
 
+import scala_mash.rest._
 import scala_mash.rest.util.Helpers._
 
 import scala_mash.highrise_api._
@@ -20,21 +21,22 @@ import VisibleToValues._
 import bizondemand.utils.models.internet.Url
 
 case class Note ( 
-		id: Option[Int]
+		id: Option[Long]
 		, body: String
-		, authorId: Option[Int]
-		, subjectId: Option[Int]
+		, authorId: Option[Long]
+		, subjectId: Option[Long]
 		, subjectType: Option[NoteSubjectType]
 		, subjectName: Option[String]
-		, collectionId: Option[Int]
+		, collectionId: Option[Long]
 		, collectionType: Option[CollectionType]
 		, visibleTo: VisibleToValues
-		, ownerId: Option[Int]  //userId -- when visible-to is "owner"
-		, groupId: Option[Int]  //groupId -- when visible-to is "NamedGroup"
+		, ownerId: Option[Long]  //userId -- when visible-to is "owner"
+		, groupId: Option[Long]  //groupId -- when visible-to is "NamedGroup"
 		, createdAt: Option[DateTime]
 		, updatedAt: Option[DateTime]
 		, attachments: List[Attachment]
 		) {
+
 
 	def toXml = 
 		<note>
@@ -63,21 +65,49 @@ case class Note (
 
 
 object Note extends HighriseServices[Note]{
-	
+
+	def apply( body: String, subjectId: Long, subjectType: NoteSubjectType): Note = Note( 
+			  None							//id: Option[Long]
+			, body		//body: String
+			, None							//authorId: Option[Long]
+			, Some(subjectId)							//subjectId: Option[Long]
+			, Some(subjectType)							// subjectType: Option[NoteSubjectType]
+			, None							//subjectName: Option[String]
+			, None							//collectionId: Option[Long]
+			, None							//collectionType: Option[CollectionType]
+			, Everyone					//visibleTo: VisibleToValues
+			, None							//ownerId: Option[Long]  //userId -- when visible-to is "owner"
+			, None							//groupId: Option[Long]  //groupId -- when visible-to is "NamedGroup"
+			, None							//createdAt: Option[DateTime]
+			, None							//updatedAt: Option[DateTime]
+			, Nil							//attachments: List[Attachment]
+	)
+	def create( note: Note, account:Account): Note = {
+		debug("Note.create( note: {}, account: {}", note, account)
+
+		val statusCode = post( url +< (account.siteName) +/ "notes.xml", Some(account.apiKey), Some("x"), note.toXml) 
+		debug("Note.create statusCode: {}", statusCode)
+		statusCode match {
+			case n:Created => getByUrl(Url("%s.xml".format(n.location.toString)), account, parse _)
+			case n => defaultStatusHandler(n)
+		}
+
+	}
+
 	def parse( xml: NodeSeq): Note = {
 		debug("Note.parse: xml: {}", xml)
 		Note(
-			optionalInt( xml, "id")
+			optionalLong( xml, "id")
 			,xml \ "body" text
-			,optionalInt( xml, "author-id")
-			,optionalInt( xml, "subject-id")
+			,optionalLong( xml, "author-id")
+			,optionalLong( xml, "subject-id")
 			,NoteSubjectType.valueOf(xml \ "subject-type" text)
 			,optionalString(xml, "subject-name")
-			,optionalInt( xml, "collection-id")
+			,optionalLong( xml, "collection-id")
 			,CollectionType.valueOf(xml \ "collection-type" text)
 			,VisibleToValues.valueOf( xml \ "visible-to" text).getOrElse(Everyone)
-			,optionalInt( xml, "owner-id")
-			,optionalInt( xml, "group-id")
+			,optionalLong( xml, "owner-id")
+			,optionalLong( xml, "group-id")
 			,optionalDateTimeWithTimeZone(xml, "created-at")
 			,optionalDateTimeWithTimeZone(xml, "updated-at")
 			,Attachment.parseList( xml \ "attachments")
@@ -88,10 +118,10 @@ object Note extends HighriseServices[Note]{
 
 
 case class Attachment (
-		  id: Option[Int]
+		  id: Option[Long]
 		,url: Url
 		,name: String
-		,size: Int) {
+		,size: Long) {
 
 	def toXml =
 		<attachment>
@@ -107,10 +137,10 @@ object Attachment extends Log{
 	def parse( xml: NodeSeq): Attachment = {
 		debug("Attachment.parse( xml: {})", xml)
 		Attachment(
-			optionalInt( xml, "id")
+			optionalLong( xml, "id")
 			,Url( xml \ "url" text)
 			,xml \ "name" text
-			,(xml \ "size" text).toInt
+			,(xml \ "size" text).toLong
 		)
 	}
 

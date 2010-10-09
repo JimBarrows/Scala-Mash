@@ -126,4 +126,15 @@ object Person extends HighriseServices[Person] {
 			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
+
+	def destroy( person: Person, account: Account) = {
+		debug("Person.update: {}, {}", person, account)
+		delete(url +< (account.siteName) +/  ("people") +/ ( person.id.getOrElse(0) + ".xml"), 
+			Some(account.apiKey), 
+			Some("x")
+		) match {
+			case n:Ok => 
+			case n => defaultStatusHandler(n)
+		}
+	}
 }

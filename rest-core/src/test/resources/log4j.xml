@@ -9,6 +9,13 @@
         </layout>
     </appender>
 
+	<appender name="file" class="org.apache.log4j.FileAppender">
+		<param name="File" value="target/default.log"/>
+			<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
+
 	<logger name="scala_mash">
         <level value="warn"/>
     </logger>
@@ -31,6 +38,7 @@
     <root>
         <priority value="warn"/>
         <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
     </root>
 
 </log4j:configuration>
