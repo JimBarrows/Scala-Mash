@@ -15,15 +15,23 @@ object AttachmentSpec extends Specification {
 		"create xml" in {
 			basicAttachment.toXml must ==/( basicAttachmentXml)
 		}
+
+		"parse xml" in {
+			val parsedAttachment = Attachment.parse(basicAttachmentXml) 
+			parsedAttachment must_==( basicAttachment)
+		}
+
+		"parse xml list" in {
+			Attachment.parseList(basicAttachmentListXml) must_==( basicAttachmentList)
+		}
 	}
 
 	val basicAttachment = Attachment( 
 			Some(1), 
-			Url("http", DomainName("example"::"highrisehq"::"com"::Nil)) +/ "files" +/ "a", 
+			Url("http://example.highrisehq.com/files/a"),
 			"picture.png",
 			72633)
-/*
-				*/
+
 	val basicAttachmentXml =
 			<attachment>
 				<id type="integer">1</id>
@@ -31,6 +39,24 @@ object AttachmentSpec extends Specification {
 				<size type="integer">72633</size>
 				<url>http://example.highrisehq.com/files/a</url>
 			</attachment>
+
+	val basicAttachmentList = basicAttachment :: basicAttachment :: Nil
+
+	val basicAttachmentListXml = 
+			<attachments>
+				<attachment>
+					<id type="integer">1</id>
+					<name>picture.png</name>
+					<size type="integer">72633</size>
+					<url>http://example.highrisehq.com/files/a</url>
+				</attachment>
+				<attachment>
+					<id type="integer">1</id>
+					<name>picture.png</name>
+					<size type="integer">72633</size>
+					<url>http://example.highrisehq.com/files/a</url>
+				</attachment>
+			</attachments>
 
 }
 

@@ -12,15 +12,23 @@ import enumerations.VisibleToValues._
 import enumerations.NoteSubjectType
 import enumerations.CollectionType
 
-object NotesSpec extends Specification {
+object NoteSpec extends Specification {
 
-	"The Notes class" should {
+	"The Note class" should {
 		"create xml with attachments" in {
 			basicNoteWithAttachments.toXml must equalIgnoreSpace(  basicNoteXmlWithAttachments)
 		}
 
 		"create xml with out attachments" in {
 			basicNoteWithOutAttachments.toXml must equalIgnoreSpace(  basicNoteXmlWithOutAttachments)
+		}
+
+		"parse xml without attachments" in {
+			Note.parse( basicNoteXmlWithOutAttachments) must_==( basicNoteWithOutAttachments)
+		}
+
+		"parse xml with attachments" in {
+			Note.parse( basicNoteXmlWithAttachments) must be_==( basicNoteWithAttachments)
 		}
 	}
 
@@ -53,7 +61,7 @@ object NotesSpec extends Specification {
 			</attachments>
 		</note>
 	
-	val basicNoteWithAttachments = Notes(
+	val basicNoteWithAttachments = Note(
 		Some(1),							//id: Option[Int]
 		"Hello world!", 		//body: String
 		Some(3), 							//authorId: Option[Int]
@@ -88,7 +96,7 @@ object NotesSpec extends Specification {
 			<group-id type="integer">1</group-id>
 		</note>
 	
-	val basicNoteWithOutAttachments = Notes(
+	val basicNoteWithOutAttachments = Note(
 		Some(1),							//id: Option[Int]
 		"Hello world!", 		//body: String
 		Some(3), 							//authorId: Option[Int]

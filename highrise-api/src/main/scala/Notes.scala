@@ -6,15 +6,20 @@ import  xml.NodeSeq._
 
 import org.joda.time.DateTime
 
+import bizondemand.utils.logging.Log
+
+import scala_mash.rest.util.Helpers._
+
 import scala_mash.highrise_api._
 import models._
-import enumerations.NoteSubjectType._
-import enumerations.CollectionType._
-import enumerations.VisibleToValues._
+import enumerations._
+import NoteSubjectType._
+import CollectionType._
+import VisibleToValues._
 
 import bizondemand.utils.models.internet.Url
 
-case class Notes ( 
+case class Note ( 
 		id: Option[Int]
 		, body: String
 		, authorId: Option[Int]
@@ -57,12 +62,36 @@ case class Notes (
 }
 
 
+object Note extends HighriseServices[Note]{
+	
+	def parse( xml: NodeSeq): Note = {
+		debug("Note.parse: xml: {}", xml)
+		Note(
+			optionalInt( xml, "id")
+			,xml \ "body" text
+			,optionalInt( xml, "author-id")
+			,optionalInt( xml, "subject-id")
+			,NoteSubjectType.valueOf(xml \ "subject-type" text)
+			,optionalString(xml, "subject-name")
+			,optionalInt( xml, "collection-id")
+			,CollectionType.valueOf(xml \ "collection-type" text)
+			,VisibleToValues.valueOf( xml \ "visible-to" text).getOrElse(Everyone)
+			,optionalInt( xml, "owner-id")
+			,optionalInt( xml, "group-id")
+			,optionalDateTimeWithTimeZone(xml, "created-at")
+			,optionalDateTimeWithTimeZone(xml, "updated-at")
+			,Attachment.parseList( xml \ "attachments")
+		)
+	}
+}
 
-case class Attachment(
-		id: Option[Int]
-		, url: Url
-		, name: String
-		, size: Int) {
+
+
+case class Attachment (
+		  id: Option[Int]
+		,url: Url
+		,name: String
+		,size: Int) {
 
 	def toXml =
 		<attachment>
@@ -71,5 +100,23 @@ case class Attachment(
 			<size type="integer">{size}</size>
 			<url>{url}</url>
 		</attachment>
+}
+
+object Attachment extends Log{
+
+	def parse( xml: NodeSeq): Attachment = {
+		debug("Attachment.parse( xml: {})", xml)
+		Attachment(
+			optionalInt( xml, "id")
+			,Url( xml \ "url" text)
+			,xml \ "name" text
+			,(xml \ "size" text).toInt
+		)
+	}
+
+	def parseList( xml: NodeSeq): List[Attachment] = {
+		debug("Attachment.parseList( xml: {})", xml)
+		(xml \ "attachment" \\ "attachment").map(parse(_)).toList
+	}
 }
 		
