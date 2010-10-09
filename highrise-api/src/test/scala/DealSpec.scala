@@ -9,7 +9,7 @@ import scala.{List, Nil}
 import scala_mash.highrise_api._
 import models._
 import enumerations.VisibleToValues._
-import .enumerations.DealStatus._
+import enumerations.DealStatus._
 
 import scala_mash.rest.util.Helpers._
 

@@ -8,7 +8,6 @@ import scala.{List, Nil}
 
 import scala_mash.highrise_api.models._
 import CategoryTypes._
-import scala_mash.highrise_api.Utils._
 
 import scala_mash.rest.util.Helpers._
 

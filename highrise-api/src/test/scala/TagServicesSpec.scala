@@ -8,7 +8,6 @@ import scala.{List, Nil}
 
 import scala_mash.highrise_api.models._
 import scala_mash.highrise_api.Account
-import scala_mash.highrise_api.Utils._
 
 import scala_mash.highrise_api.models._
 import SubjectType.{Person => PersonSubject}

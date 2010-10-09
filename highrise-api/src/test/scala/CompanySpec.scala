@@ -2,7 +2,6 @@ package specs
 import scala_mash.highrise_api.models.{PhoneNumber, EmailAddress, ContactData, Company}
 import org.specs.Specification
 import org.specs.runner.JUnit4
-import scala_mash.highrise_api.Utils._
 
 import scala_mash.highrise_api.models.enumerations._
 import VisibleToValues._
