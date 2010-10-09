@@ -1,6 +1,7 @@
 package scala_mash.highrise_api.models
 
 import xml.NodeSeq
+import xml.NodeSeq._
 import scala_mash.highrise_api.{Account, HighriseServices}
 
 import scala_mash.highrise_api._

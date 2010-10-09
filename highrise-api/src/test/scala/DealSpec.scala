@@ -6,10 +6,10 @@ import org.joda.time._
 
 import scala.{List, Nil}
 
-import scala_mash.highrise_api.models._
-import scala_mash.highrise_api.Utils._
-import scala_mash.highrise_api.models.enumerations.VisibleToValues._
-import scala_mash.highrise_api.models.enumerations.DealStatus._
+import scala_mash.highrise_api._
+import models._
+import enumerations.VisibleToValues._
+import .enumerations.DealStatus._
 
 import scala_mash.rest.util.Helpers._
 
