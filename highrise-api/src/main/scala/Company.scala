@@ -114,4 +114,16 @@ object Company extends HighriseServices[Company] {
 			case n :HttpStatusCode=> defaultStatusHandler(n)
 		} 
 	}
+
+	def destroy( person: Company, account: Account) = {
+		debug("Company.update: {}, {}", person, account)
+		delete(url +< (account.siteName) +/  ("companies") +/ ( person.id.getOrElse(0) + ".xml"), 
+			Some(account.apiKey), 
+			Some("x")
+		) match {
+			case n:Ok => 
+			case n => defaultStatusHandler(n)
+		}
+	}
+
 }

@@ -147,9 +147,9 @@ object Deal extends HighriseServices[Deal] {
 		} 
 	}	
 	
-	def destroy(id:Long, account:Account) = {
-		debug("Deal.destroy id: {}, account: {}", id, account)
-		delete( url +< (account.siteName) +/ "deals" +/ (id.toString + ".xml"), 
+	def destroy(deal:Deal, account:Account) = {
+		debug("Deal.destroy deal: {}, account: {}", deal, account)
+		delete( url +< (account.siteName) +/ "deals" +/ (deal.id.getOrElse(0).toString + ".xml"), 
 			Some(account.apiKey), 
 			Some("x")
 		)match {

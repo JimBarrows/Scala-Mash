@@ -22,14 +22,18 @@ object NoteServicesSpec extends Specification {
 		setSequential()
 
 		doBefore { 
-			person = Person.create( person, account)
-			company = Company.create( company, account)
+//			person = Person.create( person, account)
+//			company = Company.create( company, account)
+			deal = Deal.create( deal, account)
 		}
 
 		doAfter {
-			Person.destroy(person, account)
-			Company.destroy(company, account)
+//			Person.destroy(person, account)
+//			Company.destroy(company, account)
+			Deal.destroy( deal, account)
 		}
+
+/*
 		"create a note on a person" in {
 			val id: Long = person.id.getOrElse(0).asInstanceOf[Long]
 			val note = Note( "Hello world", id, NoteSubjectType.Party)
@@ -51,10 +55,22 @@ object NoteServicesSpec extends Specification {
 
 			createdNote.body must_==( note.body)
 		}
+		*/
+
+		"create a note on a deal" in {
+
+			val id: Long = deal.id.getOrElse(0).asInstanceOf[Long]
+
+			val note = Note( "Hello world", id, NoteSubjectType.Deal)
+
+			val createdNote = Note.create( note, account)
+
+			createdNote.id must beSome[Long]
+
+			createdNote.body must_==( note.body)
+		}
 
 		/*
-		"create a note on a deal" in {
-		}
 		"create a note on a case" in {
 		}
 		"get a note" in {
@@ -112,4 +128,29 @@ object NoteServicesSpec extends Specification {
 			None
 			)
     )
+
+	var deal = Deal( None, //accountId : Option[Long], 
+			None, //authorId: Option[Long], 
+			None, //background: Option[String],
+			None, //categoryId : Option[Long],
+			None, //createdAt : Option[DateTime],
+			None, //currency : Option[String],
+			None, //duration : Option[Long],
+			None, //groupId : Option[Long],
+			None, //id : Option[Long],
+			"Create Test Deal", //name : String,
+			None, //ownerId : Option[Long],
+			None, //partyId : Option[Long],
+			None, //price :Option[Long],
+			None, //priceType:Option[String],
+			None, //responsiblePartyId:Option[Long],
+			None, //status:Option[DealStatus], 
+			None, //statusChangedOn: Option[LocalDate],
+			None, //updatedAt:Option[DateTime],
+			None, //visibleTo:Option[VisibleToValues],
+			None, //dealCategory:Option[DealCategory]
+			None
+			,None
+		)	
+
 }
