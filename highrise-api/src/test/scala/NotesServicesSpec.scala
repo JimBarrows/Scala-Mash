@@ -12,6 +12,9 @@ import enumerations.VisibleToValues._
 import enumerations.NoteSubjectType
 import enumerations.CollectionType
 
+import scala_mash.rest.util.Helpers._
+
+
 object NoteServicesSpec extends Specification {
 
 	"The Notes services" should {
@@ -20,12 +23,13 @@ object NoteServicesSpec extends Specification {
 
 		doBefore { 
 			person = Person.create( person, account)
+			company = Company.create( company, account)
 		}
 
 		doAfter {
 			Person.destroy(person, account)
+			Company.destroy(company, account)
 		}
-
 		"create a note on a person" in {
 			val id: Long = person.id.getOrElse(0).asInstanceOf[Long]
 			val note = Note( "Hello world", id, NoteSubjectType.Party)
@@ -36,9 +40,19 @@ object NoteServicesSpec extends Specification {
 
 			createdNote.body must_==( note.body)
 		}
-		/*
+
 		"create a note on a company" in {
+			val id: Long = company.id.getOrElse(0).asInstanceOf[Long]
+			val note = Note( "Hello world", id, NoteSubjectType.Party)
+
+			val createdNote = Note.create( note, account)
+
+			createdNote.id must beSome[Long]
+
+			createdNote.body must_==( note.body)
 		}
+
+		/*
 		"create a note on a deal" in {
 		}
 		"create a note on a case" in {
@@ -79,4 +93,23 @@ object NoteServicesSpec extends Specification {
 			None, //authorId
 			expectedContactData
 	)
+
+	var company = Company(
+			None, //id
+			"John",  //name
+			Some("A popular guy for random data"),  //background
+			None,
+			None,
+			Some(Everyone), //visible to
+			None,  //owner
+			None,  //group
+			Some(2),  //author
+			ContactData(
+					Some(EmailAddress(Some(1), "john.doe@example.com", scala_mash.highrise_api.models.AddressLocationValues.Work) :: Nil),
+					Some(PhoneNumber(Some(2), "555-555-5555", scala_mash.highrise_api.models.PhoneLocationValues.Work) :: PhoneNumber(Some(3), "555-666-6666", scala_mash.highrise_api.models.PhoneLocationValues.Home) :: Nil),
+			None,
+			None,
+			None
+			)
+    )
 }

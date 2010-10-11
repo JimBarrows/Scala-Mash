@@ -60,7 +60,7 @@ object Company extends HighriseServices[Company] {
 
 	def create(company: Company, account: Account): Company = {
 		debug("Company.create: {}, {}", company, account)
-		post(url +< (account.siteName) +/ "people.xml", 
+		post(url +< (account.siteName) +/ "companies.xml", 
 			Some(account.apiKey), 
 			Some("x"), 
 			company.toXml
@@ -72,7 +72,7 @@ object Company extends HighriseServices[Company] {
 
  	def show(id: Long, account: Account): Company = {
 		debug("Company.show: {}, {}", id, account)
- 		get(url +< (account.siteName) +/ ("people") +/ ( id.toString + ".xml"), 
+ 		get(url +< (account.siteName) +/ ("companies") +/ ( id.toString + ".xml"), 
  			Some(account.apiKey), 
  			Some("x")
  		) match {
@@ -83,7 +83,7 @@ object Company extends HighriseServices[Company] {
 
  	def listAll(account: Account): List[Company] = {
 		debug("Company.listAll: {}", account)
- 		get(url +< (account.siteName) +/ "people.xml", 
+ 		get(url +< (account.siteName) +/ "companies.xml", 
  			Some(account.apiKey), 
  			Some("x")
  		) match {
@@ -94,7 +94,7 @@ object Company extends HighriseServices[Company] {
 
 	def findPeopleByEmail(email: String, account: Account) : List[Company] = {
 		debug("Company.findPeopleByEmail: {}, {}", email, account)
-		get(url +< (account.siteName) +/ ("people") +/( "search.xml") +& Parameter("criteria[email]", email), 
+		get(url +< (account.siteName) +/ ("companies") +/( "search.xml") +& Parameter("criteria[email]", email), 
 			Some(account.apiKey), 
 			Some("x")
 		)match {
@@ -105,7 +105,7 @@ object Company extends HighriseServices[Company] {
 
 	def update(company: Company, account: Account) = {
 		debug("Company.update: {}, {}", company, account)
-		put(url +< (account.siteName) +/ "people" +/ (company.id.getOrElse(0).toString() + ".xml"), 
+		put(url +< (account.siteName) +/ "companies" +/ (company.id.getOrElse(0).toString() + ".xml"), 
 			Some(account.apiKey), 
 			Some("x"),
 			company.toXml

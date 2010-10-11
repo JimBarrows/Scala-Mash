@@ -82,6 +82,7 @@ object Note extends HighriseServices[Note]{
 			, None							//updatedAt: Option[DateTime]
 			, Nil							//attachments: List[Attachment]
 	)
+
 	def create( note: Note, account:Account): Note = {
 		debug("Note.create( note: {}, account: {}", note, account)
 
