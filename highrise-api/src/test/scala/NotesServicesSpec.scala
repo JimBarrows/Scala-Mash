@@ -58,6 +58,13 @@ object NoteServicesSpec extends Specification {
 			})
 		}
 
+		"list all notes on a person" in {
+			personNote.map( note => {
+				val gottenNote = Note.listAllNotesFor( person, None, account).head
+				gottenNote must be_==( note)
+			})
+		}
+
 		"create a note on a company" in {
 			val id: Long = company.id.getOrElse(0).asInstanceOf[Long]
 			val note = Note( "Hello world", id, NoteSubjectType.Party)
@@ -73,6 +80,13 @@ object NoteServicesSpec extends Specification {
 		"get a note on a company" in {
 			companyNote.map( note => {
 				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must be_==( note)
+			})
+		}
+
+		"list all notes on a company" in {
+			companyNote.map( note => {
+				val gottenNote = Note.listAllNotesFor( company, None, account).head
 				gottenNote must be_==( note)
 			})
 		}
@@ -98,6 +112,13 @@ object NoteServicesSpec extends Specification {
 			})
 		}
 
+		"list all notes on a deal" in {
+			dealNote.map( note => {
+				val gottenNote = Note.listAllNotesFor( deal, None, account).head
+				gottenNote must be_==( note)
+			})
+		}
+
 		"create a note on a case" in {
 			kaseNote = None
 		}
@@ -109,15 +130,14 @@ object NoteServicesSpec extends Specification {
 			})
 		}
 
+		"list all notes on a case" in {
+/*			kaseNote.map( note => {
+				val gottenNote = Note.listAllNotesFor( kase, None, account).head
+				gottenNote must be_==( note)
+			})
+			*/
+		}
 		/*
-		"get a note on a company" in {
-		}
-
-		"get a note on a deal" in {
-		}
-
-		"get a note on a kase" in {
-		}
 
 		"update a note" in {
 		}
@@ -197,4 +217,5 @@ object NoteServicesSpec extends Specification {
 			,None
 		)	
 
+	
 }

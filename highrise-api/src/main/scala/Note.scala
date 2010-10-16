@@ -18,7 +18,7 @@ import NoteSubjectType._
 import CollectionType._
 import VisibleToValues._
 
-import bizondemand.utils.models.internet.Url
+import bizondemand.utils.models.internet.{Url, Parameter}
 
 case class Note ( 
 		id: Option[Long]
@@ -108,6 +108,77 @@ object Note extends HighriseServices[Note]{
 			case n => defaultStatusHandler(n)
 		}
 
+	}
+
+	def listAllNotesFor( person: Person, pageSize:Option[Long], account: Account):List[Note] = {
+		debug("Note.listAllNotesFor( person: {}, account: {}", person, account)
+
+		person.id.map( id => {
+
+			val listUrl = pageSize.map( size => {
+					url +< (account.siteName) +/ "people" +/ id.toString +/ "notes.xml" +&(Parameter("n", size))
+				}
+			).getOrElse( url +< (account.siteName) +/ "people" +/ id.toString +/ "notes.xml")
+
+			val statusCode = get( listUrl,
+					Some(account.apiKey), 
+					Some("x")) 
+			debug("Note.listAllNotesFor statusCode: {}", statusCode)
+
+			statusCode match {
+				case n:Ok => parseList( convertResponseToXml(n.response))
+				case n => defaultStatusHandler(n)
+			}
+		}).getOrElse( Nil)
+	}
+
+	def listAllNotesFor( company: Company, pageSize:Option[Long], account: Account):List[Note] = {
+		debug("Note.listAllNotesFor( company: {}, account: {}", company, account)
+
+		company.id.map( id => {
+
+			val listUrl = pageSize.map( size => {
+					url +< (account.siteName) +/ "companies" +/ id.toString +/ "notes.xml" +&(Parameter("n", size))
+				}
+			).getOrElse( url +< (account.siteName) +/ "companies" +/ id.toString +/ "notes.xml")
+
+			val statusCode = get( listUrl,
+					Some(account.apiKey), 
+					Some("x")) 
+			debug("Note.listAllNotesFor statusCode: {}", statusCode)
+
+			statusCode match {
+				case n:Ok => parseList( convertResponseToXml(n.response))
+				case n => defaultStatusHandler(n)
+			}
+		}).getOrElse( Nil)
+	}
+
+
+	def listAllNotesFor( deal: Deal, pageSize:Option[Long], account: Account):List[Note] = {
+		debug("Note.listAllNotesFor( deal: {}, account: {}", deal, account)
+
+		deal.id.map( id => {
+
+			val listUrl = pageSize.map( size => {
+					url +< (account.siteName) +/ "deals" +/ id.toString +/ "notes.xml" +&(Parameter("n", size))
+				}
+			).getOrElse( url +< (account.siteName) +/ "deals" +/ id.toString +/ "notes.xml")
+
+			val statusCode = get( listUrl,
+					Some(account.apiKey), 
+					Some("x")) 
+			debug("Note.listAllNotesFor statusCode: {}", statusCode)
+
+			statusCode match {
+				case n:Ok => parseList( convertResponseToXml(n.response))
+				case n => defaultStatusHandler(n)
+			}
+		}).getOrElse( Nil)
+	}
+
+	def parseList( xml: NodeSeq): List[Note] = {
+		( xml \\ "note").map( parse( _)).toList
 	}
 
 	def parse( xml: NodeSeq): Note = {
