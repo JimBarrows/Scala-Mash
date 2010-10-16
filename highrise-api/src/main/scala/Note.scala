@@ -95,7 +95,7 @@ object Note extends HighriseServices[Note]{
 
 	}
 
-	def show( id: Long, account:Account): Note = {
+	def show( id: Long, account:Account): Option[Note] = {
 		debug("Note.show( id: {}, account: {}", id, account)
 
 		val statusCode = get( url +< (account.siteName) +/ "notes" +/ "%d.xml".format(id), 
@@ -104,7 +104,8 @@ object Note extends HighriseServices[Note]{
 		debug("Note.show statusCode: {}", statusCode)
 
 		statusCode match {
-			case n:Ok => parse( convertResponseToXml(n.response))
+			case n:Ok => Some(parse( convertResponseToXml(n.response)))
+			case n:NotFound => None
 			case n => defaultStatusHandler(n)
 		}
 
@@ -175,6 +176,41 @@ object Note extends HighriseServices[Note]{
 				case n => defaultStatusHandler(n)
 			}
 		}).getOrElse( Nil)
+	}
+
+	def update( note: Note, account:Account): Note = {
+		debug("Note.update( note: {}, account: {}", note, account)
+
+		note.id.map( id => {
+			val statusCode = put( url +< (account.siteName) +/ "notes" +/ "%d.xml".format(id), 
+					Some(account.apiKey), 
+					Some("x"),
+					note.toXml) 
+			debug("Note.show statusCode: {}", statusCode)
+
+			statusCode match {
+				case n:Ok => show( id, account).getOrElse( note)
+				case n => defaultStatusHandler(n)
+			}
+		}).getOrElse( throw NoIdException( note))
+
+	}
+
+	def destroy( note: Note, account:Account) = {
+		debug("Note.delete( note: {}, account: {}", note, account)
+
+		note.id.map( id => {
+			val statusCode = delete( url +< (account.siteName) +/ "notes" +/ "%d.xml".format(id), 
+					Some(account.apiKey), 
+					Some("x")) 
+			debug("Note.show statusCode: {}", statusCode)
+
+			statusCode match {
+				case n:Ok => 
+				case n => defaultStatusHandler(n)
+			}
+		}).getOrElse( throw NoIdException( note))
+
 	}
 
 	def parseList( xml: NodeSeq): List[Note] = {

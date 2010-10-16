@@ -54,7 +54,7 @@ object NoteServicesSpec extends Specification {
 		"get a note on a person" in {
 			personNote.map( note => {
 				val gottenNote = Note.show( note.id.getOrElse(0), account)
-				gottenNote must be_==( note)
+				gottenNote must beSome[ Note]
 			})
 		}
 
@@ -62,6 +62,21 @@ object NoteServicesSpec extends Specification {
 			personNote.map( note => {
 				val gottenNote = Note.listAllNotesFor( person, None, account).head
 				gottenNote must be_==( note)
+			})
+		}
+
+		"update a note on a person" in {
+			personNote.map( note => {
+				val gottenNote = Note.update( note, account)
+				gottenNote must be_==( note)
+			})
+		}
+
+		"delete a note on a person" in {
+			personNote.map( note => {
+				Note.destroy( note, account)
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must beNone
 			})
 		}
 
@@ -80,7 +95,7 @@ object NoteServicesSpec extends Specification {
 		"get a note on a company" in {
 			companyNote.map( note => {
 				val gottenNote = Note.show( note.id.getOrElse(0), account)
-				gottenNote must be_==( note)
+				gottenNote must beSome[ Note]
 			})
 		}
 
@@ -88,6 +103,21 @@ object NoteServicesSpec extends Specification {
 			companyNote.map( note => {
 				val gottenNote = Note.listAllNotesFor( company, None, account).head
 				gottenNote must be_==( note)
+			})
+		}
+
+		"update a note on a company" in {
+			companyNote.map( note => {
+				val gottenNote = Note.update( note, account)
+				gottenNote must be_==( note)
+			})
+		}
+
+		"delete a note on a company" in {
+			companyNote.map( note => {
+				Note.destroy( note, account)
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must beNone
 			})
 		}
 
@@ -108,7 +138,7 @@ object NoteServicesSpec extends Specification {
 		"get a note on a deal" in {
 			dealNote.map( note => {
 				val gottenNote = Note.show( note.id.getOrElse(0), account)
-				gottenNote must be_==( note)
+				gottenNote must beSome[ Note]
 			})
 		}
 
@@ -119,6 +149,21 @@ object NoteServicesSpec extends Specification {
 			})
 		}
 
+		"update a note on a deal" in {
+			dealNote.map( note => {
+				val gottenNote = Note.update( note, account)
+				gottenNote must be_==( note)
+			})
+		}
+
+		"delete a note on a deal" in {
+			dealNote.map( note => {
+				Note.destroy( note, account)
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must beNone
+			})
+		}
+
 		"create a note on a case" in {
 			kaseNote = None
 		}
@@ -126,7 +171,7 @@ object NoteServicesSpec extends Specification {
 		"get a note on a case" in {
 			kaseNote.map( note => {
 				val gottenNote = Note.show( note.id.getOrElse(0), account)
-				gottenNote must be_==( note)
+				gottenNote must beSome[ Note]
 			})
 		}
 
@@ -137,21 +182,23 @@ object NoteServicesSpec extends Specification {
 			})
 			*/
 		}
-		/*
 
-		"update a note" in {
+		"update a note on a case" in {
+/*			caseNote.map( note => {
+				val gottenNote = Note.update( note, account)
+				gottenNote must be_==( note)
+			})
+			*/
 		}
-		"list all for people" in {
+
+		"delete a note on a case" in {
+/*			caseNote.map( note => {
+				Note.destroy( note, account)
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must beNone
+			})
+			*/
 		}
-		"list all for companies" in {
-		}
-		"list all for cases" in {
-		}
-		"list all for deals" in {
-		}
-		"delete a note" in {
-		}
-		*/
 	}
 
 	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
