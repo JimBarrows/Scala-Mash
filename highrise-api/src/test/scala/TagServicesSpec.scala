@@ -24,26 +24,47 @@ object TagServicesSpec extends Specification {
 	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
 
 	"Tag services" should {
-		
-		"Add a tag, Read, and remove a Tag from a person" in {
-			 val createdPerson = Person.create(person, account)
-			 val newTag = Tag(None, "TestTagServices")
-			 val createdTag = Tag.addTag(
-			 	createdPerson, //person:Person, 
-			 	newTag, //tag:Tag, 
-			 	account //account:Account
-			 )
-			 
-			 createdTag.name must be_== (newTag.name)
-			 
+			
+		"add a tag to a person" in {
 		}
-		
-		"be able to list all tags" in {
-			//Tag.listAll(account) must be_== ( Tag(Some(800982), "Test Contact") :: Nil)
+
+		"add a tag to a company" in {
+		}
+
+		"add a tag to a deal" in {
+		}
+
+		"add a tag to a case" in {
+		}
+
+		"list all tags available" in {
 		}		
 
-		"be able to list all tags for a person" in {
-			//Tag.listTagsForAPerson( person, account) must be_== ( Tag(Some(800982), "Test Contact") :: Nil)
+		"list all tags for a person" in {
+		}
+
+		"list all tags for a company" in {
+		}
+
+		"list all tags for a case" in {
+		}
+
+		"list all tags for a deal" in {
+		}
+
+		"list all parties associated with a tag" in {
+		}
+
+		"remove a tag on a person" in {
+		}
+
+		"remove a tag on a company" in {
+		}
+
+		"remove a tag on a deal" in {
+		}
+
+		"remove a tag on a case" in {
 		}
 	}
 	
