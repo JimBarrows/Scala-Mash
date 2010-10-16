@@ -19,21 +19,26 @@ object NoteServicesSpec extends Specification {
 
 	"The Notes services" should {
 
+		shareVariables()
 		setSequential()
 
-		doBefore { 
-//			person = Person.create( person, account)
-//			company = Company.create( company, account)
+		var personNote :Option[Note] = None
+		var companyNote :Option[Note] = None
+		var dealNote :Option[Note] = None
+		var kaseNote :Option[Note] = None
+
+		doFirst { 
+			person = Person.create( person, account)
+			company = Company.create( company, account)
 			deal = Deal.create( deal, account)
 		}
 
-		doAfter {
-//			Person.destroy(person, account)
-//			Company.destroy(company, account)
+		doLast {
+			Person.destroy(person, account)
+			Company.destroy(company, account)
 			Deal.destroy( deal, account)
 		}
 
-/*
 		"create a note on a person" in {
 			val id: Long = person.id.getOrElse(0).asInstanceOf[Long]
 			val note = Note( "Hello world", id, NoteSubjectType.Party)
@@ -43,6 +48,14 @@ object NoteServicesSpec extends Specification {
 			createdNote.id must beSome[Long]
 
 			createdNote.body must_==( note.body)
+			personNote=Some(createdNote)
+		}
+
+		"get a note on a person" in {
+			personNote.map( note => {
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must be_==( note)
+			})
 		}
 
 		"create a note on a company" in {
@@ -54,8 +67,15 @@ object NoteServicesSpec extends Specification {
 			createdNote.id must beSome[Long]
 
 			createdNote.body must_==( note.body)
+			companyNote=Some(createdNote)
 		}
-		*/
+
+		"get a note on a company" in {
+			companyNote.map( note => {
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must be_==( note)
+			})
+		}
 
 		"create a note on a deal" in {
 
@@ -68,13 +88,37 @@ object NoteServicesSpec extends Specification {
 			createdNote.id must beSome[Long]
 
 			createdNote.body must_==( note.body)
+			dealNote=Some(createdNote)
+		}
+
+		"get a note on a deal" in {
+			dealNote.map( note => {
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must be_==( note)
+			})
+		}
+
+		"create a note on a case" in {
+			kaseNote = None
+		}
+
+		"get a note on a case" in {
+			kaseNote.map( note => {
+				val gottenNote = Note.show( note.id.getOrElse(0), account)
+				gottenNote must be_==( note)
+			})
 		}
 
 		/*
-		"create a note on a case" in {
+		"get a note on a company" in {
 		}
-		"get a note" in {
+
+		"get a note on a deal" in {
 		}
+
+		"get a note on a kase" in {
+		}
+
 		"update a note" in {
 		}
 		"list all for people" in {

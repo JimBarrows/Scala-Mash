@@ -95,6 +95,21 @@ object Note extends HighriseServices[Note]{
 
 	}
 
+	def show( id: Long, account:Account): Note = {
+		debug("Note.show( id: {}, account: {}", id, account)
+
+		val statusCode = get( url +< (account.siteName) +/ "notes" +/ "%d.xml".format(id), 
+				Some(account.apiKey), 
+				Some("x")) 
+		debug("Note.show statusCode: {}", statusCode)
+
+		statusCode match {
+			case n:Ok => parse( convertResponseToXml(n.response))
+			case n => defaultStatusHandler(n)
+		}
+
+	}
+
 	def parse( xml: NodeSeq): Note = {
 		debug("Note.parse: xml: {}", xml)
 		Note(
