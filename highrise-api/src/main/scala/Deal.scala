@@ -140,7 +140,7 @@ object Deal extends HighriseServices[Deal] {
 				Some("x"), 
 				deal.toXml
 			)
-		println("Deal.create statusCode: " + statusCode)
+		debug("Deal.create statusCode: " + statusCode)
 		statusCode match {
 			case n:Created => parse(convertResponseToXml(n.response))
 			case n => defaultStatusHandler(n)

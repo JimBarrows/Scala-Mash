@@ -27,7 +27,9 @@ case class Tag( id : Option[Long], name:String) {
 
 
 object Tag extends HighriseServices[Tag] {
-	
+
+	def apply( name: String) = new Tag( None, name)
+
 	def parse(node : NodeSeq) = {
 		debug("Parsing: {}", node)
 		Tag( Some((node \ "id" text).toLong), node \"name" text)		
@@ -75,7 +77,7 @@ object Tag extends HighriseServices[Tag] {
 	def listTagsFor( deal: Deal, account: Account): List[Tag] = {
 		debug("listTagsFor( deal: {}, account: {}", deal, account)
 		deal.id.map( id => {
-			get( url +< account.siteName +/ "deal" +/ id.toString +/ "tags.xml", 
+			get( url +< account.siteName +/ "deals" +/ id.toString +/ "tags.xml", 
 				Some(account.apiKey), 
 				Some("x")
 			) match {
@@ -84,7 +86,7 @@ object Tag extends HighriseServices[Tag] {
 			}		
 		}).getOrElse( Nil)
 	}
-	
+
 	def addTagTo(person:Person, tag:Tag, account:Account):Tag ={
 		debug("Tag.addTag(person: {}  tag: {}  account: {}", person, tag, account)
 		person.id.map( id => {
