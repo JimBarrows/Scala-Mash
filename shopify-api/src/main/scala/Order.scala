@@ -1,7 +1,8 @@
 package scala_mash.shopify_api.model
 
 import org.joda.time.DateTime
-import xml.{Node, NodeSeq}
+import xml.{Node, NodeSeq }
+import xml.NodeSeq._
 
 import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import scala_mash.rest.Ok
@@ -105,26 +106,26 @@ case class LineItem(val fulfillmentService: String,
                     val name: String) {
     def toXml() = <line-item>
     	<fulfillment-service>{fulfillmentService}</fulfillment-service>
-    	<fulfillment-status>{fulfillmentStatus}</fulfillment-status>
+    	{ fulfillmentStatus.map( v => <fulfillment-status>{v}</fulfillment-status>).getOrElse(Empty)}
     	<grams>{grams}</grams>
     	<id>{id}</id>
     	<price>{price}</price>
-    	<product>{productId}</product>
+    	{ productId.map( v => <product>{v}</product>).getOrElse( Empty)}
     	<quantity>{quantity}</quantity>
     	<requires-shipping>{requiresShipping}</requires-shipping>
     	<sku>{sku}</sku>
     	<title>{title}</title>
-    	<variant-id>{variantId}</variant-id>
-    	<vendor>{vendor}</vendor>
+    	{ variantId.map( v => <variant-id>{v}</variant-id>).getOrElse( Empty)}
+    	{ vendor.map( v => <vendor>{v}</vendor>).getOrElse( Empty)}
     	<name>{name}</name>
     </line-item>
 }
 
 object LineItem extends Log{
  	def parse(node: NodeSeq) = {
- 		debug("LineItem.parse( {} )", node.toString)
-    	LineItem(
-    		node \ "fulfillment-service" text,
+		debug("LineItem.parse( {} )", node.toString)
+		LineItem(
+				node \ "fulfillment-service" text,
     		optionalString(node, "fulfillment-status"),
     		(node \ "grams" text).toInt,
     		(node \ "id" text).toInt,
@@ -138,7 +139,7 @@ object LineItem extends Log{
     		optionalString(node, "variant-title"),
     		optionalString(node, "vendor"),
     		node \ "name" text
-    	)
+    )
 	}	
 	def parseList(node : NodeSeq) : List[LineItem] = {
 		debug("LineItem.parseList( {} )", node.toString)

@@ -1,4 +1,4 @@
-package test
+package specs
 
 import org.specs.Specification
 import org.specs.runner.JUnit4
@@ -14,8 +14,6 @@ import scala_mash.rest.util.Helpers._
  * @version 1.0
  *
  */
-
-class TestShopService extends JUnit4(ShopServiceSpec)
 object ShopServiceSpec extends Specification {
   "The shop class" should {
     "be able to retrieve a shop's info from the shop service" in {

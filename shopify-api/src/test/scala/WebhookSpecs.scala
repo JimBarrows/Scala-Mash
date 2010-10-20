@@ -1,4 +1,4 @@
-package test
+package specs
 
 import org.specs.Specification
 
@@ -9,7 +9,7 @@ import scala_mash.shopify_api.model.Webhook
 
 import scala_mash.rest.util.Helpers.{parseDateTimeWithTimeZone}
 
-object WebhookSpecs extends Specification {
+object WebhookSpec extends Specification {
 	
 	"The Webhook class and object" should {
 		

@@ -1,4 +1,4 @@
-package test
+package specs
 
 import org.specs.Specification
 import java.util.Date

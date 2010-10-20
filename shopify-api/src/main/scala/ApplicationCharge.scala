@@ -6,7 +6,9 @@ import xml.{NodeSeq, Node}
 
 import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import bizondemand.utils.models.internet.Url
-import scala_mash.rest.{Ok,Created,RestException}
+import scala_mash.rest._
+import util.Helpers._
+
 /**
  *
  * @author jimbarrows
@@ -14,7 +16,6 @@ import scala_mash.rest.{Ok,Created,RestException}
  * @version 1.0
  *
  */
-
 case class ApplicationCharge( name: String,
 							price: BigDecimal,
 							returnUrl: Url,
@@ -24,7 +25,11 @@ case class ApplicationCharge( name: String,
 							test: Boolean,
 							updatedAt: Option[DateTime],
 							confirmationUrl: Option[Url]) {
-	def toXml = <application-charge><price type="float">{price.toString}</price><name>{name}</name><return-url>{returnUrl}</return-url></application-charge>;
+	def toXml = <application-charge>
+			<price type="float">{price.toString}</price>
+			<name>{name}</name>
+			<return-url>{returnUrl}</return-url>
+		</application-charge>
 
 	def activate = ApplicationCharge( name, price,returnUrl, createdAt, id, Some("Active"), test, updatedAt, confirmationUrl)
 }
@@ -33,31 +38,38 @@ case class ApplicationCharge( name: String,
 
 object ApplicationCharge extends ShopifyResource[ApplicationCharge] {
 
-	val dateFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH:mm:ssZZ").toFormatter.withOffsetParsed
-
 	val url = shopifyUrl +/ ("admin") +/ ("application_charges.xml")
 
-	/**Creates a single charge to the application user.  Upon return the confirmationUrl will be set, and the application
-		<em>must</em> redirect to it.  Then shopify will redirect them to the returnUrl you provide, at that time you have to confirm that the charge is
-		correct etc.  See http://api.shopify.com/billing.html for details.
-	*/
- 	def charge(shop: ShopCredentials, name:String, price:BigDecimal, returnUrl:Url, test:Boolean): ApplicationCharge = {
+	/**Creates a single charge to the application user.  Upon return the confirmationUrl will be set, and the 
+		* application <em>must</em> redirect to it.  Then shopify will redirect them to the returnUrl you provide, at 
+		* that time you have to confirm that the charge is correct etc.  See http://api.shopify.com/billing.html for 
+		* details.
+	  */
+ 	def charge(shop: ShopCredentials, 
+ 			name: String, 
+ 			price: BigDecimal, 
+ 			returnUrl: Url, 
+ 			test: Boolean): ApplicationCharge = {
+
  		debug("ApplicationCharge.charge( {}, {},{},{},{})", shop, name, price,returnUrl, test)
+
 		val applicationCharge = ApplicationCharge(  name, 
-													price, 
-													returnUrl, 
-													None, 
-													None, 
-													None, 
-													test, 
-													None,
-													None)
+				price, 
+				returnUrl, 
+				None, 
+				None, 
+				None, 
+				test, 
+				None,
+				None)
 		val status = post(url +< shop.name, 
-			Some(ShopifyPartnerInfo.apiKey),
-			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken)),
-			applicationCharge.toXml
-		)
+				Some(ShopifyPartnerInfo.apiKey),
+				Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken)),
+				applicationCharge.toXml
+			)
+
 		debug("ApplicationCharge.charge - returned: {}", status)
+
 		status match {
 			case n:Created=> parse( convertResponseToXml(n.response))
 			case n => throw new RestException(n)
@@ -68,8 +80,6 @@ object ApplicationCharge extends ShopifyResource[ApplicationCharge] {
 		//	find(chargeId).activate;
 	}
 
-
-	
 	def findAll(shop:ShopCredentials) = {
 		get( url +< shop.name, 
 			Some(ShopifyPartnerInfo.apiKey), 
@@ -85,14 +95,14 @@ object ApplicationCharge extends ShopifyResource[ApplicationCharge] {
 	def parse(node: NodeSeq): ApplicationCharge = {
 		debug("ApplicationCharge.parse( {})", node )
 		ApplicationCharge(
-			node \ "name" text,
-			BigDecimal((node \ "price" text)),
-			Url(node \ "return-url" text),
-    		Some(dateFormatter.parseDateTime(node \ "created-at" text)),
-    		if ((node \ "id" text).isEmpty) None else Some((node \ "id" text).toInt),
-    		if ((node \ "status" text).isEmpty) None else Some(node \ "status" text),
-    		(if ((node \ "test" text).trim.isEmpty) false else (node \ "test" text).toBoolean),
-    		if ((node \ "updated-at" text).isEmpty) None else Some(dateFormatter.parseDateTime(node \ "updated-at" text)),
+				node \ "name" text,
+				BigDecimal((node \ "price" text)),
+				Url(node \ "return-url" text),
+    		Some(parseDateTimeWithTimeZone(node \ "created-at" text)),
+    		optionalInt( node, "id"), 
+    		optionalString(node, "status"),
+    		boolean(node, "test"),
+    		optionalDateTimeWithTimeZone( node, "updated-at"),
     		Some(Url(node \ "confirmation-url" text))
     	)
 	}

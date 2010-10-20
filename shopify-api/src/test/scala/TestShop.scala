@@ -1,4 +1,4 @@
-package test
+package specs
 
 import org.specs.runner.JUnit4
 import org.specs.Specification
@@ -14,8 +14,6 @@ import scala_mash.rest.util.Helpers._
  * @version 1.0
  *
  */
-
-class TestShop extends JUnit4(ShopSpec)
 object ShopSpec extends Specification {
 
   val shopname = "mante-friesen-and-kuvalis9996"

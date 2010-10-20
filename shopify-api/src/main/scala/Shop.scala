@@ -7,7 +7,7 @@ import bizondemand.utils.models.internet.{DomainName,Url}
 import scala_mash.rest.Ok
 import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import scala_mash.shopify_api.Utils._
-import scala_mash.rest.util.Helpers.{parseDateTimeWithTimeZone,optionalYmd, optionalBoolean}
+import scala_mash.rest.util.Helpers.{parseDateTimeWithTimeZone,optionalYmd, optionalBoolean, optionalLong, optionalString}
 
 /**
  *
@@ -48,7 +48,7 @@ object Shop extends ShopifyResource[Shop] with Log{
  	val url: Url = shopifyUrl +/ "admin" +/ "shop.xml"
 
  	def parseShop(node: NodeSeq): Shop = {
-		Shop(if( (node \ "active-subscription-id" text).isEmpty) None else Some((node \ "active-subscription-id" text).toLong),
+		Shop(optionalLong( node, "active-subscription-id"),
 			node \ "address1" text,
 			node \ "city" text,
 			node \ "country" text,
@@ -60,7 +60,7 @@ object Shop extends ShopifyResource[Shop] with Log{
 			node \ "phone" text,
 			node \ "province" text,
 			(node \ "public" text).toBoolean,
-			if ((node \ "source" text).isEmpty) None else Some(node \ "source" text),
+			optionalString( node, "source"),
 			node \ "zip" text,
 			node \ "currency" text,
 			node \ "timezone" text,
