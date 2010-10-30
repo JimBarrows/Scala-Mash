@@ -29,15 +29,15 @@ object Frequency extends Enumeration {
 import Frequency._
 
 
-class RecurringInvoice(	_invoiceId:Option[Int],
-		_clientId:Int,
+class RecurringInvoice(	_invoiceId:Option[Long],
+		_clientId:Long,
 		_number:Option[String],
 		_amount:Option[BigDecimal], //Read-only
 		_amountOutstanding:Option[BigDecimal], //Read-only
 		_status:Option[InvoiceStatus],
 		_date:Option[LocalDate],
 		_poNumber:Option[String],
-		_discount:Option[Int],
+		_discount:Option[Long],
 		_notes:Option[String],
 		_terms:Option[String],
 		_currencyCode:Option[String],
@@ -45,7 +45,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_links:Option[Links], //Read-only
 		_returnUri:Option[Url],
 		_updated:Option[DateTime], //Read-only
-		_recurringId:Option[Int], //Read-only
+		_recurringId:Option[Long], //Read-only
 		_firstName:Option[String],
 		_lastName:Option[String],
 		_organization:Option[String],
@@ -53,21 +53,21 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_vatName:Option[String],
 		_vatNumber:Option[Long], 
 		_lines:List[Line],
-		_occurrences: Int,
+		_occurrences: Long,
 		_frequency: Frequency,
 		_stopped: Boolean,
 		_sendEmail: Boolean,
 		_sendSnailMail: Boolean,
 		_autobill: Option[Autobill]
-	) extends Invoice (	_invoiceId:Option[Int],
-		_clientId:Int,
+	) extends Invoice (	_invoiceId:Option[Long],
+		_clientId:Long,
 		_number:Option[String],
 		_amount:Option[BigDecimal], //Read-only
 		_amountOutstanding:Option[BigDecimal], //Read-only
 		_status:Option[InvoiceStatus],
 		_date:Option[LocalDate],
 		_poNumber:Option[String],
-		_discount:Option[Int],
+		_discount:Option[Long],
 		_notes:Option[String],
 		_terms:Option[String],
 		_currencyCode:Option[String],
@@ -75,7 +75,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		_links:Option[Links], //Read-only
 		_returnUri:Option[Url],
 		_updated:Option[DateTime], //Read-only
-		_recurringId:Option[Int], //Read-only
+		_recurringId:Option[Long], //Read-only
 		_firstName:Option[String],
 		_lastName:Option[String],
 		_organization:Option[String],
@@ -105,7 +105,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 
 	override def toString = "RecurringInvoice(  %s, occurrences: %d, frequency: %s, stopped: %B, sendEmail: %B, sendSnailMail: %B, autobill: %s".format(super.toString, occurrences, frequency, stopped, sendEmail, sendSnailMail, autobill.toString)
 
-	def recurringId_=( id: Int): RecurringInvoice = {
+	def recurringId_=( id: Long): RecurringInvoice = {
 		recurringId match {
 			case Some(x) => this
 			case None => new RecurringInvoice( 
@@ -142,7 +142,7 @@ class RecurringInvoice(	_invoiceId:Option[Int],
 		}
 	}
 
-	override def invoiceId_=( id:Int) : RecurringInvoice = {
+	override def invoiceId_=( id:Long) : RecurringInvoice = {
 		invoiceId match {
 			case Some(x) => this
 			case None => new RecurringInvoice( 
@@ -227,15 +227,15 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 	def parse( xml:NodeSeq): RecurringInvoice = {
 		debug("RecurringInvoice:parse xml {}", xml)
 		new RecurringInvoice(
-			optionalInt(xml , "invoice_id"),
-			(xml \ "client_id" text).toInt,
+			optionalLong(xml , "invoice_id"),
+			(xml \ "client_id" text).toLong,
 			optionalString( xml, "number"),
 			optionalBigDecimal(xml, "amount"),
 			optionalBigDecimal(xml, "amount_outstanding"),
 			InvoiceStatus.valueOf(xml \ "status" text),
 			optionalYmd(xml,"date"),
 			optionalString(xml, "po_number"),
-			optionalInt(xml, "discount"),
+			optionalLong(xml, "discount"),
 			optionalString(xml, "notes"),
 			optionalString(xml, "terms"),
 			optionalString(xml, "currency_code"),
@@ -243,7 +243,7 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 			Links.optionalParse( xml),  //links:Option[Links]
 			optionalUrl(xml, "return_uri"),
 			optionalDateTime(xml,"updated"), //updated:Option[DateTime],
-			optionalInt(xml,"recurring_id"), //recurringId:Option[Long],
+			optionalLong(xml,"recurring_id"), //recurringId:Option[Long],
 			optionalString(xml, "first_name"),
 			optionalString(xml, "last_name"),
 			optionalString(xml, "organization"),
@@ -258,7 +258,7 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 			optionalString(xml,"vat_name"),
 			optionalLong(xml,"vat_number"),
 			Line.parseList( xml \\ "line"),
-			(xml\"occurrences" text).toInt,
+			(xml\"occurrences" text).toLong,
 			Frequency.valueOf(xml \ "frequency" text).getOrElse(Monthly),
 			boolean( xml, "stopped"),
 			boolean( xml, "send_email"),
@@ -282,7 +282,7 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 			case n:Ok => {
 				convertResponseToXml(n.response) match {
 					case resp if (resp \ "@status" text) == "ok" => {
-						invoice.invoiceId_=((resp \ "invoice_id" text).toInt).recurringId = (resp \ "recurring_id" text).toInt
+						invoice.invoiceId_=((resp \ "invoice_id" text).toLong).recurringId = (resp \ "recurring_id" text).toLong
 					}
 					case resp if( resp \ "error" text) =="This invoice number is already in use. Please choose another." => 
 						throw new ExistingInvoiceNumberException
@@ -309,7 +309,7 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 		}
 	}
 
-	def get( recurringId: Int, account:Account): RecurringInvoice = {
+	def get( recurringId: Long, account:Account): RecurringInvoice = {
 		debug("RecurringInvoice.get recurringId: {}, account {}", recurringId, account)
 		val request = <request method="recurring.get"><recurring_id>{recurringId}</recurring_id></request>
 		val status = post( account.domainName, account.authenticationToken, request)
@@ -320,10 +320,10 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 		}
 	}
 
-	def list( clientId: Option[Int], 
+	def list( clientId: Option[Long], 
 			autobill:Option[Autobill],
-			page: Option[Int],
-			perPage: Option[Int],
+			page: Option[Long],
+			perPage: Option[Long],
 			folder: Option[Folder], account:Account): RecurringInvoiceList = {
 
 		val request= <request method="recurring.list">
@@ -343,7 +343,7 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 		}
 	}
 
-	def delete( recurringId: Int, account: Account) = {
+	def delete( recurringId: Long, account: Account) = {
 		val request = <request method="recurring.delete"><recurring_id>{recurringId}</recurring_id></request>
 
 		val returnStatus = post( account.domainName, account.authenticationToken, request)
@@ -357,7 +357,7 @@ object RecurringInvoice extends FreshbooksResource[RecurringInvoice] {
 	}
 }
 
-class RecurringInvoiceList( _page: Int, _perPage: Int, _pages: Int, _total: Int, _invoices: List[RecurringInvoice]) {
+class RecurringInvoiceList( _page: Long, _perPage: Long, _pages: Long, _total: Long, _invoices: List[RecurringInvoice]) {
 
 	def page = _page
 	def perPage = _perPage
@@ -381,10 +381,10 @@ object RecurringInvoiceList {
 
 	def parse( xml: NodeSeq) = {
 		new RecurringInvoiceList(
-			(xml \ "recurrings" \ "@page" text).toInt,
-			(xml \ "recurrings" \ "@per_page" text).toInt,
-			(xml \ "recurrings" \ "@pages" text).toInt,
-			(xml \ "recurrings" \ "@total" text).toInt,
+			(xml \ "recurrings" \ "@page" text).toLong,
+			(xml \ "recurrings" \ "@per_page" text).toLong,
+			(xml \ "recurrings" \ "@pages" text).toLong,
+			(xml \ "recurrings" \ "@total" text).toLong,
 			RecurringInvoice.parseList(xml \\ "recurrings")
 		)
 	}
@@ -430,7 +430,7 @@ object Autobill extends Log{
 }
 
 
-class CreditCard( _number:String, _name: String, _month: Int, _year: Int) {
+class CreditCard( _number:String, _name: String, _month: Long, _year: Long) {
 
 	def number = _number
 	def name = _name
@@ -462,7 +462,7 @@ object CreditCard {
 	def parse( xml: NodeSeq) = new CreditCard(
 		xml \ "number" text,
 		xml \ "name" text,
-		(xml \ "expiration" \ "month" text).toInt,
-		(xml \"expiration" \ "year" text).toInt
+		(xml \ "expiration" \ "month" text).toLong,
+		(xml \"expiration" \ "year" text).toLong
 	)
 }

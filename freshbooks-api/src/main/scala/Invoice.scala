@@ -42,15 +42,15 @@ import LineType._
 import Folder._
 
 class Invoice(
-		_invoiceId:Option[Int],
-		_clientId:Int,
+		_invoiceId:Option[Long],
+		_clientId:Long,
 		_number:Option[String],
 		_amount:Option[BigDecimal], //Read-only
 		_amountOutstanding:Option[BigDecimal], //Read-only
 		_status:Option[InvoiceStatus],
 		_date:Option[LocalDate],
 		_poNumber:Option[String],
-		_discount:Option[Int],
+		_discount:Option[Long],
 		_notes:Option[String],
 		_terms:Option[String],
 		_currencyCode:Option[String],
@@ -58,7 +58,7 @@ class Invoice(
 		_links:Option[Links], //Read-only
 		_returnUri:Option[Url],
 		_updated:Option[DateTime], //Read-only
-		_recurringId:Option[Int], //Read-only
+		_recurringId:Option[Long], //Read-only
 		_firstName:Option[String],
 		_lastName:Option[String],
 		_organization:Option[String],
@@ -147,7 +147,7 @@ class Invoice(
 			lines
 			)
 
-	def invoiceId_=  (id :Int) : Invoice = {
+	def invoiceId_=  (id :Long) : Invoice = {
 		invoiceId match {
 			case Some(x) => this
 			case None => new Invoice( 
@@ -217,15 +217,15 @@ object Invoice extends FreshbooksResource[Invoice] {
 	def parse( xml:NodeSeq) : Invoice = {
 		debug("Invoice:parse xml {}", xml)
 		new Invoice(
-			optionalInt(xml , "invoice_id"),
-			(xml \ "client_id" text).toInt,
+			optionalLong(xml , "invoice_id"),
+			(xml \ "client_id" text).toLong,
 			optionalString( xml, "number"),
 			optionalBigDecimal(xml, "amount"),
 			optionalBigDecimal(xml, "amount_outstanding"),
 			InvoiceStatus.valueOf(xml \ "status" text),
 			optionalYmd(xml,"date"),
 			optionalString(xml, "po_number"),
-			optionalInt(xml, "discount"),
+			optionalLong(xml, "discount"),
 			optionalString(xml, "notes"),
 			optionalString(xml, "terms"),
 			optionalString(xml, "currency_code"),
@@ -233,7 +233,7 @@ object Invoice extends FreshbooksResource[Invoice] {
 			Links.optionalParse( xml),  //links:Option[Links]
 			optionalUrl(xml, "return_uri"),
 			optionalDateTime(xml,"updated"), //updated:Option[DateTime],
-			optionalInt(xml,"recurring_id"), //recurringId:Option[Long],
+			optionalLong(xml,"recurring_id"), //recurringId:Option[Long],
 			optionalString(xml, "first_name"),
 			optionalString(xml, "last_name"),
 			optionalString(xml, "organization"),
@@ -265,7 +265,7 @@ object Invoice extends FreshbooksResource[Invoice] {
 		response match {
 			case n:Ok => {
 				convertResponseToXml(n.response) match {
-					case resp if (resp \ "@status" text) == "ok" => invoice.invoiceId = (resp \ "invoice_id" text).toInt
+					case resp if (resp \ "@status" text) == "ok" => invoice.invoiceId = (resp \ "invoice_id" text).toLong
 					case resp if( resp \ "error" text) =="This invoice number is already in use. Please choose another." => 
 						throw new ExistingInvoiceNumberException
 					case resp if( resp \ "error" text) =="Client does not exist." => 
@@ -288,7 +288,7 @@ object Invoice extends FreshbooksResource[Invoice] {
 		}
 	}
 
-	def get( invoiceId: Int, account:Account) :Invoice = {
+	def get( invoiceId: Long, account:Account) :Invoice = {
 		debug("Invoice.get invoiceId: {}, account {}", invoiceId, account)
 		val request = <request method="invoice.get"><invoice_id>{invoiceId}</invoice_id></request>
 		val status = post( account.domainName, account.authenticationToken, request)
@@ -298,15 +298,15 @@ object Invoice extends FreshbooksResource[Invoice] {
 		}
 	}
 
-	def list( clientId: Option[Int], 
-			recurringId: Option[Int], 
+	def list( clientId: Option[Long], 
+			recurringId: Option[Long], 
 			status: Option[InvoiceStatus], 
 			dateFrom: Option[LocalDate], 
 			dateTo: Option[LocalDate], 
 			updatedFrom: Option[LocalDate], 
 			updatedTo: Option[LocalDate], 
-			page: Option[Int],
-			perPage: Option[Int],
+			page: Option[Long],
+			perPage: Option[Long],
 			folder: Option[Folder], account:Account): InvoiceList = {
 
 		val request= <request method="invoice.list">
@@ -330,7 +330,7 @@ object Invoice extends FreshbooksResource[Invoice] {
 		}
 	}
 
-	def delete( invoiceId: Int, account: Account) = {
+	def delete( invoiceId: Long, account: Account) = {
 		val request = <request method="invoice.delete"><invoice_id>{invoiceId}</invoice_id></request>
 
 		val returnStatus = post( account.domainName, account.authenticationToken, request)
@@ -348,11 +348,11 @@ case class Line(
 	name:Option[String],
 	description:Option[String],
 	unitCost:BigDecimal,
-	quantity:Int,
+	quantity:Long,
 	tax1Name:Option[String],
 	tax2Name:Option[String],
-	tax1Percent:Option[Int],
-	tax2Percent:Option[Int],
+	tax1Percent:Option[Long],
+	tax2Percent:Option[Long],
 	lineType:LineType){
 
 	def toXml : NodeSeq = <line>
@@ -377,11 +377,11 @@ object Line {
 			optionalString(xml, "name"),
 			optionalString(xml, "description"),
 			BigDecimal( xml \ "unit_cost" text),
-			(xml \ "quantity" text).toInt,
+			(xml \ "quantity" text).toLong,
 			optionalString(xml, "tax1_name"),
 			optionalString(xml, "tax2_name"),
-			optionalInt(xml, "tax1_percent"),
-			optionalInt(xml, "tax2_percent"),
+			optionalLong(xml, "tax1_percent"),
+			optionalLong(xml, "tax2_percent"),
 			LineType.valueOf( xml \ "type" text).getOrElse(Item)
 		)
 	}
@@ -419,7 +419,7 @@ object Links {
 	}
 }
 
-class InvoiceList( _page: Int, _perPage: Int, _pages: Int, _total: Int, _invoices: List[Invoice]) {
+class InvoiceList( _page: Long, _perPage: Long, _pages: Long, _total: Long, _invoices: List[Invoice]) {
 
 	def page = _page
 	def perPage = _perPage
@@ -441,10 +441,10 @@ object InvoiceList {
 
 	def parse( xml: NodeSeq) = {
 		new InvoiceList(
-			(xml \ "invoices" \ "@page" text).toInt,
-			(xml \ "invoices" \ "@per_page" text).toInt,
-			(xml \ "invoices" \ "@pages" text).toInt,
-			(xml \ "invoices" \ "@total" text).toInt,
+			(xml \ "invoices" \ "@page" text).toLong,
+			(xml \ "invoices" \ "@per_page" text).toLong,
+			(xml \ "invoices" \ "@pages" text).toLong,
+			(xml \ "invoices" \ "@total" text).toLong,
 			Invoice.parseList(xml \"invoices")
 		)
 	}

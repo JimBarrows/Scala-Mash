@@ -48,6 +48,7 @@ trait RestService extends Log{
 	def put(url: Url, username: Option[String], password: Option[String], thingToPut: NodeSeq): HttpStatusCode= {
     	debug("RestService: Url: {} username: {} password: {} thingToPut: {}", url, username, password, thingToPut.toString)
     	val putMethod = new HttpPut(url.toString)
+    	putMethod.setEntity(makeEntity(thingToPut))
     	makeRequest(putMethod, username, password)
 	}
 
