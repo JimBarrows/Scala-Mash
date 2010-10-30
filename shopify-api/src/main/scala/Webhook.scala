@@ -3,6 +3,7 @@ package scala_mash.shopify_api.model
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormatterBuilder}
 import xml.{NodeSeq, Node}
+import NodeSeq._
 
 import scala_mash.shopify_api.{ShopifyPartnerInfo, ShopifyResource}
 import scala_mash.rest.util.Helpers._
@@ -13,17 +14,17 @@ import bizondemand.utils.models.internet.{Url, Parameter}
 
 
 case class Webhook (address:Url, 
-					createdAt:DateTime, 
-					id:Int, 
+					createdAt:Option[DateTime], 
+					id:Option[Int], 
 					topic:String, 
-					updatedAt:DateTime) {
+					updatedAt:Option[DateTime]) {
 	
 	def toXml = <webhook>
 		<address>{address}</address>
-		<created-at>{printWithTimeZone(createdAt)}</created-at>
-		<id>{id}</id>
+		{createdAt.map( x => <created-at>{printWithTimeZone(x)}</created-at>).getOrElse(Empty)}
+		{id.map( x => <id>{x}</id>).getOrElse(Empty)}
 		<topic>{topic}</topic>
-		<updated-at>{printWithTimeZone(updatedAt)}</updated-at>
+		{updatedAt.map( x => <updated-at>{printWithTimeZone(x)}</updated-at>).getOrElse(Empty)}
 	</webhook>
 	
 }
@@ -43,8 +44,6 @@ object Webhook extends ShopifyResource[Webhook] {
 			address:Option[Url]) : List[Webhook]= {
 				
 		debug("Webhook.listAll({},{},{},{},{},{},{},{})", limit,page,createdAtMin, createdAtMax, updatedAtMin, updatedAtMax, topic, address)
-		
-		val p = Parameter("foo","foo")
 		
 		val parameterList:List[Parameter] = 
 			limit.map( Parameter("limit", _)).toList ::: 
@@ -78,11 +77,17 @@ object Webhook extends ShopifyResource[Webhook] {
 			address.map( n => {Parameter("address", n.toString)}).toList :::
 			Nil
 			
-		get( url +< shop.name +/ "count.xml" ++& parameterList,
+		get( url +< shop.name +/ "webhooks" +/ "count.xml" ++& parameterList,
 			Some(ShopifyPartnerInfo.apiKey), 
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
 		) match {
-			case n:Ok => (convertResponseToXml(n.response) \ "count" text).toInt
+			case n:Ok => {
+				val node = convertResponseToXml(n.response) 
+				debug("Webhook.count(topic, address): node = {}", node)
+				val text = (node \\ "count" text)
+				debug("Webhook.count(topic, address): text = {}", text)
+				text.toInt
+			}
 			case n => throw new RestException(n)
 		}
 	}
@@ -122,13 +127,10 @@ object Webhook extends ShopifyResource[Webhook] {
 	def modify(shop: ShopCredentials, webhook:Webhook) : Webhook = {
 		debug("Webhook.modify({}, {})", shop, webhook)
 		
-		put( url +< shop.name +/ "webhooks" +/ "%d.xml".format(webhook.id), 
+		put( url +< shop.name +/ "webhooks" +/ "%d.xml".format(webhook.id.getOrElse(0)), 
 			Some(ShopifyPartnerInfo.apiKey), 
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken)),
-			<webhook>
-				<address>{webhook.address.toString}</address>
-				<id>{webhook.id}</id>
-			</webhook>
+			webhook.toXml
 		) match {
 			case n:Ok => parse( convertResponseToXml(n.response))
 			case n=> throw new RestException(n)
@@ -152,15 +154,15 @@ object Webhook extends ShopifyResource[Webhook] {
 		debug("Webhook.parse({})",node)
 		Webhook(
 			Url(node \ "address" text),   								//address:Url, 
-			parseDateTimeWithTimeZone(node \ "created-at" text), 	//createdAt:DateTime, 
-			(node \ "id" text).toInt, 								//id:Int, 
+			optionalDateTimeWithTimeZone(node,  "created-at" ), 	//createdAt:DateTime, 
+			optionalInt(node,  "id"), 								//id:Int, 
 			node \ "topic" text, 									//topic:String, 
-			parseDateTimeWithTimeZone(node \ "updated-at" text)	//updatedAt:DateTime
+			optionalDateTimeWithTimeZone(node, "updated-at" )	//updatedAt:DateTime
 		)
 	}
 	
 	def parseList(node:NodeSeq) : List[Webhook] = {
 		debug("Webhook.parseList({})", node)
-		(node \\ "webhooks").map(parse(_)).toList
+		(node \\ "webhook").map(parse(_)).toList
 	}
 }

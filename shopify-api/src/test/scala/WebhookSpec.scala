@@ -22,10 +22,10 @@ object WebhookSpec extends Specification {
 			</webhook>
 		
 		val webhook = Webhook (Url("http://apple.com"), 								//address:Url, 
-					parseDateTimeWithTimeZone("2010-05-14T21:04:56-04:00"), //createdAt:DateTime, 
-					4759036, 												//id:Int, 
+					Some(parseDateTimeWithTimeZone("2010-05-14T21:04:56-04:00")), //createdAt:DateTime, 
+					Some(4759036), 												//id:Int, 
 					"orders/create", 										//topic:String, 
-					parseDateTimeWithTimeZone("2010-05-14T21:04:56-04:00")	//updatedAt:DateTime
+					Some(parseDateTimeWithTimeZone("2010-05-14T21:04:56-04:00"))	//updatedAt:DateTime
 			)
 			
 		"emit valid XML" in {			

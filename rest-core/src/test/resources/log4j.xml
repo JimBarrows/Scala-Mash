@@ -36,24 +36,28 @@
 		<level value="warn"/>
 	</logger>
 
+	<logger name="scala_mash.shopify_api.model">
+		<level value="debug"/>
+	</logger>
+
 	<logger name="org.apache.http">
-		<level value="warn"/>
+		<level value="debug"/>
 	</logger>
 
 	<logger name="org.apache.http.client">
-		<level value="warn"/>
+		<level value="debug"/>
 	</logger>
 
 	<logger name="org.apache.http.client.wire">
-		<level value="warn"/>
+		<level value="debug"/>
 	</logger>
 
 	<logger name="org.apache.http.client.wire.header">
-		<level value="warn"/>
+		<level value="debug"/>
 	</logger>
 
 	<logger name="org.apache.commons.httpclient">
-		<level value="warn"/>
+		<level value="debug"/>
 	</logger>
 
 
