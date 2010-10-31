@@ -5,6 +5,7 @@ import org.specs.Specification
 import org.joda.time.DateTime
 
 import scala_mash.shopify_api.model.Webhook
+import scala_mash.rest.RestException
 import bizondemand.utils.models.internet.{Url, Parameter}
 
 
@@ -25,6 +26,7 @@ object WebhookServicesSpec extends Specification {
 			created.updatedAt must beSome[DateTime]
 			webhook = created
 		}
+
 		"receive a list of all webhooks" in {
 			val hookList = Webhook.listAll(ShopSpec.shopCredentials
 					, None  //limit
@@ -64,10 +66,14 @@ object WebhookServicesSpec extends Specification {
 
 			val postHook = Webhook.modify(ShopSpec.shopCredentials
 					, changedHook)
-			postHook must be_==( changedHook)
+			postHook.topic must be_==( changedHook.topic)
+			postHook.address must be_==( changedHook.address)
+			webhook = postHook
 		}
 
 		"remove a webhook" in {
+			Webhook.remove( ShopSpec.shopCredentials, webhook)
+			Webhook.get( ShopSpec.shopCredentials, webhook.id.getOrElse(0)) must throwA[RestException]
 		}
 
 	}

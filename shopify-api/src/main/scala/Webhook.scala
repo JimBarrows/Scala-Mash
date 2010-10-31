@@ -138,10 +138,10 @@ object Webhook extends ShopifyResource[Webhook] {
 	}
 	
 	def remove(shop: ShopCredentials,
-			id:Int) :Unit = {
-		debug("Webhook.remove({})", id)
+			webhook:Webhook) :Unit = {
+		debug("Webhook.remove({})", webhook)
 		
-		delete(url +< shop.name +/ "webhooks" +/ "%d.xml".format(id), 
+		delete(url +< shop.name +/ "webhooks" +/ "%d.xml".format(webhook.id.getOrElse(0)), 
 			Some(ShopifyPartnerInfo.apiKey), 
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
 		) match {
