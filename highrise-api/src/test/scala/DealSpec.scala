@@ -76,8 +76,6 @@ object DealSpec extends Specification {
     <category-id type="integer">1660938</category-id>
     <created-at type="datetime">2010-05-09T20:44:38Z</created-at>
     <currency>USD</currency>
-    <duration type="integer"></duration>
-    <group-id type="integer"></group-id>
     <id type="integer">412063</id>
     <name>Pending Fixed Deal</name>
     <owner-id type="integer">214479</owner-id>
@@ -86,7 +84,6 @@ object DealSpec extends Specification {
     <price-type>fixed</price-type>
     <responsible-party-id type="integer">214479</responsible-party-id>
     <status>pending</status>
-    <status-changed-on type="date"></status-changed-on>
     <updated-at type="datetime">2010-05-09T20:45:06Z</updated-at>
     <visible-to>Owner</visible-to>
     <category>
@@ -127,12 +124,10 @@ object DealSpec extends Specification {
   <created-at type="datetime">2010-05-09T20:56:27Z</created-at>
   <currency>USD</currency>
   <duration type="integer">10</duration>
-  <group-id type="integer"></group-id>
   <id type="integer">412069</id>
   <name>Won Per hour</name>
   <owner-id type="integer">214479</owner-id>
   <party-id type="integer">37932948</party-id>
-  <price type="integer" ></price>
   <price-type>hour</price-type>
   <responsible-party-id type="integer">214479</responsible-party-id>
   <status>won</status>
@@ -171,12 +166,10 @@ val lostPerMonth = Deal(Some(109504l),		//acountId
 	val lostPerMonthXml = <deal>
   <account-id type="integer">109504</account-id>
   <author-id type="integer">214479</author-id>
-  <background></background>
   <category-id type="integer">1660938</category-id>
   <created-at type="datetime">2010-05-09T20:58:49Z</created-at>
   <currency>USD</currency>
   <duration type="integer">10</duration>
-  <group-id type="integer"></group-id>
   <id type="integer">412073</id>
   <name>Lost Per Month</name>
   <owner-id type="integer">214479</owner-id>

@@ -25,7 +25,7 @@
 	</logger>    
     
 	<logger name="scala_mash.highrise_api">
-		<level value="debug"/>
+		<level value="warn"/>
 	</logger>
 
 	<logger name="scala_mash.freshbooks_api">
@@ -37,23 +37,23 @@
 	</logger>
 
 	<logger name="org.apache.http">
-		<level value="debug"/>
+		<level value="warn"/>
 	</logger>
 
 	<logger name="org.apache.http.client">
-		<level value="debug"/>
+		<level value="warn"/>
 	</logger>
 
 	<logger name="org.apache.http.client.wire">
-		<level value="debug"/>
+		<level value="warn"/>
 	</logger>
 
 	<logger name="org.apache.http.client.wire.header">
-		<level value="debug"/>
+		<level value="warn"/>
 	</logger>
 
 	<logger name="org.apache.commons.httpclient">
-		<level value="debug"/>
+		<level value="warn"/>
 	</logger>
 
 
