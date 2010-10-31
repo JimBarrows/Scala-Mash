@@ -1,4 +1,5 @@
-package scala_mash.rest
+package scala_mash {
+	package rest {
 
 import org.apache.http.HttpResponse
 import io.Source
@@ -200,3 +201,6 @@ case class NotExtended() extends ServerError(510, "Not Extended (RFC 2774)"){}
 
 
 case class OtherServerError(code:Int, description:String) extends ServerError(code, description){}
+
+	}
+}

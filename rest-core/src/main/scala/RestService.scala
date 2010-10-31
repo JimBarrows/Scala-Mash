@@ -1,8 +1,13 @@
-package scala_mash.rest
+package scala_mash {
+	package rest {
 
 import java.net.URI
 import xml.{XML, NodeSeq}
+
 import scala.xml.parsing._
+
+import scala.collection.jcl.Conversions._
+
 import org.apache.http.HttpRequest
 import org.apache.http.auth.{UsernamePasswordCredentials, AuthScope}
 import org.apache.http.client.HttpClient
@@ -11,9 +16,9 @@ import org.apache.http.HttpResponse
 import org.apache.http.entity.{StringEntity}
 import org.apache.http.conn.scheme.{PlainSocketFactory, Scheme, SchemeRegistry}
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
-import scala.collection.jcl.Conversions._
 import org.apache.http.conn.ssl.SSLSocketFactory
 import org.apache.http.client.methods._
+
 import io.Source
 
 import bizondemand.utils.logging.Log
@@ -118,4 +123,7 @@ object RestService {
 
 	def maxConnectionsPerRoute(num: Int) = clientConnectionManager.setDefaultMaxPerRoute(num);
 	
+}
+
+	}
 }

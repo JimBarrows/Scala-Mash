@@ -1,11 +1,17 @@
-package scala_mash.rest.util
+package scala_mash {
 
-import xml._
-import NodeSeq._
-import org.joda.time.{DateTime, LocalDate}
-import org.joda.time.format.DateTimeFormatterBuilder
-import bizondemand.utils.models.internet.Url
+	import xml._
+	import NodeSeq._
 
+	import org._
+	import joda.time.DateTime
+	import org.joda.time.LocalDate
+	import org.joda.time.format.DateTimeFormatterBuilder
+
+	import bizondemand.utils.models.internet.Url
+
+	package rest {
+		package util  {
 
 
 /**This is for usefull little helper methods and functions for parsing rest.
@@ -82,3 +88,5 @@ object Helpers {
 	def optionalBigDecimal( node:NodeSeq, tag:String) : Option[BigDecimal] =
 		if( ( node \ tag text).isEmpty) None else Some( BigDecimal((node \ tag text)))
 }
+
+}}}
