@@ -2,6 +2,9 @@ package specs
 
 import org.specs.Specification
 import org.specs.runner.JUnit4
+
+import bizondemand.utils.models.internet.{DomainName,Url, Http}
+
 import scala_mash.shopify_api.model._
 import scala_mash.shopify_api.Utils._
 import scala_mash.rest.util.Helpers._
@@ -208,132 +211,139 @@ object PaymentDetailSpec extends Specification {
 
 object OrderSpec extends Specification {
 	"The order class" should {
-    	"be able to parse a response" in {
-      		val xmlToParse = <order>
-        		<buyer-accepts-marketing type="boolean">false</buyer-accepts-marketing>
-		        <closed-at type="datetime" nil="true"></closed-at>
-        		<created-at type="datetime">2008-01-10T11:00:00-05:00</created-at>
-        		<currency>USD</currency>
-        		<email>bob.norman@hostmail.com</email>
-        		<financial-status>authorized</financial-status>
-        		<fulfillment-status nil="true"></fulfillment-status>
-        		<gateway>authorized_net</gateway>
-        		<id type="integer">1524531292</id>
-        		<landing-site>http://www.example.com?source=abc</landing-site>
-        		<name>#1001</name>
-        		<note nil="true"></note>
-        		<number type="integer">1</number>
-        		<referring-site>http://www.otherexample.com</referring-site>
-        		<subtotal-price type="decimal">199.00</subtotal-price>
-        		<taxes-included type="boolean">false</taxes-included>
-        		<token>b1946ac92492d2347c6235b4d2611184</token>
-        		<total-discounts type="decimal">0.00</total-discounts>
-        		<total-line-items-price type="decimal">199.00</total-line-items-price>
-        		<total-price type="decimal">210.94</total-price>
-        		<total-tax type="decimal">11.94</total-tax>
-        		<total-weight type="integer">0</total-weight>
-        		<updated-at type="datetime">2008-01-10T11:00:00-05:00</updated-at>
-        		<browser-ip nil="true"></browser-ip>
-        		<landing-site-ref>abc</landing-site-ref>
-        		<order-number type="integer">1001</order-number>
-        		<billing-address>
-        			<address1>Chestnut Street 92</address1>
-          			<address2></address2>
-          			<city>Louisville</city>
-          			<company nil="true"></company>
-          			<country>United States</country>
-          			<first-name>Bob</first-name>
-          			<last-name>Norman</last-name>
-          			<phone>555-625-1199</phone>
-         			<province>Kentucky</province>
-          			<zip>40202</zip>
-          			<name>Bob Norman</name>
-          			<country-code>US</country-code>
-          			<province-code>KY</province-code>
-        		</billing-address>
-        		<shipping-address>
-          			<address1>Chestnut Street 92</address1>
-          			<address2></address2>
-          			<city>Louisville</city>
-          			<company nil="true"></company>
-          			<country>United States</country>
-          			<first-name>Bob</first-name>
-          			<last-name>Norman</last-name>
-          			<phone>555-625-1199</phone>
-          			<province>Kentucky</province>
-          			<zip>40202</zip>
-          			<name>Bob Norman</name>
-          			<country-code>US</country-code>
-          			<province-code>KY</province-code>
-        		</shipping-address>
-        		<line-items type="array">
-          			<line-item>
-            			<fulfillment-service>manual</fulfillment-service>
-            			<fulfillment-status nil="true"></fulfillment-status>
-            			<grams type="integer">200</grams>
-            			<id type="integer">703073503</id>
-            			<price type="decimal">199.00</price>
-            			<product-id type="integer">1706652214</product-id>
-            			<quantity type="integer">1</quantity>
-            			<requires-shipping type="boolean">true</requires-shipping>
-            			<sku>IPOD2008BLACK</sku>
-            			<title>IPod Nano - 8gb</title>
-            			<variant-id type="integer">457924702</variant-id>
-            			<variant-title>black</variant-title>
-            			<vendor nil="true"></vendor>
-            			<name>IPod Nano - 8gb - black</name>
-          			</line-item>
-        		</line-items>
-        		<shipping-lines type="array">
-          			<shipping-line>
-            			<code>Free Shipping</code>
-            			<price type="decimal">0.00</price>
-            			<title>Free Shipping</title>
-          			</shipping-line>
-        		</shipping-lines>
-        		<tax-lines type="array">
-          			<tax-line>
-            			<price type="decimal">11.94</price>
-	            		<rate type="float">0.06</rate>
-    	        		<title>State Tax</title>
-        	  		</tax-line>
-        		</tax-lines>
-	        	<payment-details>
-    	      		<credit-card-number>XXXX-XXXX-XXXX-4242</credit-card-number>
-        	  		<credit-card-company>Visa</credit-card-company>
-        		</payment-details>
-        		<shipping-line>
-          			<code>Free Shipping</code>
-	          		<price type="decimal">0.00</price>
-    	      		<title>Free Shipping</title>
-        		</shipping-line>
-        		<note-attributes type="array">
-        		</note-attributes>
-     		</order>
-      		val expected = Order(false, //buyerAcceptsMarketing
-        		None, //closedAt
-        		parseDateTimeWithTimeZone("2008-01-10T11:00:00-05:00"), //createdAt
-        		"USD", //currency
-        		"bob.norman@hostmail.com", //email
-        		1524531292, //id
-        		"#1001", //name
-        		1, //number
-        		BigDecimal("199.00"), //subTotalPrice
-        		BigDecimal("0.00"), //totalDiscounts
-        		BigDecimal("199.00"), //totalLineItemsPrice
-        		BigDecimal("210.94"), //totalPrice
-        		BigDecimal("11.94"), //totalTax
-        		0, //totalWeight
-        		parseDateTimeWithTimeZone("2008-01-10T11:00:00-05:00"), //updatedAt
-        		1001, //orderNumber
-        		Address("Chestnut Street 92", "", "Louisville", None, "United States", "Bob", "Norman", "555-625-1199", "Kentucky", "40202", "Bob Norman", "US", "KY"), //billingAddress
-        		Address("Chestnut Street 92", "", "Louisville", None, "United States", "Bob", "Norman", "555-625-1199", "Kentucky", "40202", "Bob Norman", "US", "KY"), //shippingAddress
-        		LineItem("manual", None, 200, 703073503, BigDecimal("199.00"), Some(1706652214), 1, true, "IPOD2008BLACK", "IPod Nano - 8gb", Some(457924702), Some("black"), None, "IPod Nano - 8gb - black") :: Nil, //lineItems
-        		ShippingLine("Free Shipping", BigDecimal("0.00"), "Free Shipping") :: Nil, //shippingLines
-        		PaymentDetail("XXXX-XXXX-XXXX-4242", "Visa") //paymentDetail
-        	)
+
+		"return a url, without the shopname, to itself" in {
+			println("expected: " +expected.url)
+			expected.url must be_==(Url("http://myshopify.com/admin/orders/1524531292.xml"))
+		}
+
+		"be able to parse a response" in {
       		val response = Order.parse(xmlToParse)
       		response must be_==(expected)
     	}
   	}
+  	
+		val expected = Order(false, //buyerAcceptsMarketing
+				None, //closedAt
+				parseDateTimeWithTimeZone("2008-01-10T11:00:00-05:00"), //createdAt
+				"USD", //currency
+				"bob.norman@hostmail.com", //email
+				1524531292, //id
+				"#1001", //name
+				1, //number
+				BigDecimal("199.00"), //subTotalPrice
+				BigDecimal("0.00"), //totalDiscounts
+				BigDecimal("199.00"), //totalLineItemsPrice
+				BigDecimal("210.94"), //totalPrice
+				BigDecimal("11.94"), //totalTax
+				0, //totalWeight
+				parseDateTimeWithTimeZone("2008-01-10T11:00:00-05:00"), //updatedAt
+				1001, //orderNumber
+				Address("Chestnut Street 92", "", "Louisville", None, "United States", "Bob", "Norman", "555-625-1199", "Kentucky", "40202", "Bob Norman", "US", "KY"), //billingAddress
+				Address("Chestnut Street 92", "", "Louisville", None, "United States", "Bob", "Norman", "555-625-1199", "Kentucky", "40202", "Bob Norman", "US", "KY"), //shippingAddress
+				LineItem("manual", None, 200, 703073503, BigDecimal("199.00"), Some(1706652214), 1, true, "IPOD2008BLACK", "IPod Nano - 8gb", Some(457924702), Some("black"), None, "IPod Nano - 8gb - black") :: Nil, //lineItems
+				ShippingLine("Free Shipping", BigDecimal("0.00"), "Free Shipping") :: Nil, //shippingLines
+				PaymentDetail("XXXX-XXXX-XXXX-4242", "Visa") //paymentDetail
+			)
+		val xmlToParse = <order>
+				<buyer-accepts-marketing type="boolean">false</buyer-accepts-marketing>
+				<closed-at type="datetime" nil="true"></closed-at>
+				<created-at type="datetime">2008-01-10T11:00:00-05:00</created-at>
+				<currency>USD</currency>
+				<email>bob.norman@hostmail.com</email>
+				<financial-status>authorized</financial-status>
+				<fulfillment-status nil="true"></fulfillment-status>
+				<gateway>authorized_net</gateway>
+				<id type="integer">1524531292</id>
+				<landing-site>http://www.example.com?source=abc</landing-site>
+				<name>#1001</name>
+				<note nil="true"></note>
+				<number type="integer">1</number>
+				<referring-site>http://www.otherexample.com</referring-site>
+				<subtotal-price type="decimal">199.00</subtotal-price>
+				<taxes-included type="boolean">false</taxes-included>
+				<token>b1946ac92492d2347c6235b4d2611184</token>
+				<total-discounts type="decimal">0.00</total-discounts>
+				<total-line-items-price type="decimal">199.00</total-line-items-price>
+				<total-price type="decimal">210.94</total-price>
+				<total-tax type="decimal">11.94</total-tax>
+				<total-weight type="integer">0</total-weight>
+				<updated-at type="datetime">2008-01-10T11:00:00-05:00</updated-at>
+				<browser-ip nil="true"></browser-ip>
+				<landing-site-ref>abc</landing-site-ref>
+				<order-number type="integer">1001</order-number>
+				<billing-address>
+					<address1>Chestnut Street 92</address1>
+					<address2></address2>
+					<city>Louisville</city>
+					<company nil="true"></company>
+					<country>United States</country>
+					<first-name>Bob</first-name>
+					<last-name>Norman</last-name>
+					<phone>555-625-1199</phone>
+					<province>Kentucky</province>
+					<zip>40202</zip>
+					<name>Bob Norman</name>
+					<country-code>US</country-code>
+					<province-code>KY</province-code>
+				</billing-address>
+				<shipping-address>
+					<address1>Chestnut Street 92</address1>
+					<address2></address2>
+					<city>Louisville</city>
+					<company nil="true"></company>
+					<country>United States</country>
+					<first-name>Bob</first-name>
+					<last-name>Norman</last-name>
+					<phone>555-625-1199</phone>
+					<province>Kentucky</province>
+					<zip>40202</zip>
+					<name>Bob Norman</name>
+					<country-code>US</country-code>
+					<province-code>KY</province-code>
+				</shipping-address>
+				<line-items type="array">
+					<line-item>
+						<fulfillment-service>manual</fulfillment-service>
+						<fulfillment-status nil="true"></fulfillment-status>
+						<grams type="integer">200</grams>
+						<id type="integer">703073503</id>
+						<price type="decimal">199.00</price>
+						<product-id type="integer">1706652214</product-id>
+						<quantity type="integer">1</quantity>
+						<requires-shipping type="boolean">true</requires-shipping>
+						<sku>IPOD2008BLACK</sku>
+						<title>IPod Nano - 8gb</title>
+						<variant-id type="integer">457924702</variant-id>
+						<variant-title>black</variant-title>
+						<vendor nil="true"></vendor>
+						<name>IPod Nano - 8gb - black</name>
+					</line-item>
+				</line-items>
+				<shipping-lines type="array">
+					<shipping-line>
+						<code>Free Shipping</code>
+						<price type="decimal">0.00</price>
+						<title>Free Shipping</title>
+					</shipping-line>
+				</shipping-lines>
+				<tax-lines type="array">
+					<tax-line>
+						<price type="decimal">11.94</price>
+						<rate type="float">0.06</rate>
+						<title>State Tax</title>
+					</tax-line>
+				</tax-lines>
+				<payment-details>
+					<credit-card-number>XXXX-XXXX-XXXX-4242</credit-card-number>
+					<credit-card-company>Visa</credit-card-company>
+				</payment-details>
+				<shipping-line>
+					<code>Free Shipping</code>
+					<price type="decimal">0.00</price>
+					<title>Free Shipping</title>
+				</shipping-line>
+				<note-attributes type="array">
+				</note-attributes>
+			</order>
 }

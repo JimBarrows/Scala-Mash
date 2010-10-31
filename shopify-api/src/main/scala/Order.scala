@@ -219,6 +219,8 @@ case class Order(val buyerAcceptsMarketing: Boolean,
       val lineItems: List[LineItem],
       val shippingLines: List[ShippingLine],
       val paymentDetail: PaymentDetail) {
+
+      def url = Order.shopifyUrl +/ "admin" +/ "orders" +/ "%d.xml".format(id)
 }
 
 object Order extends ShopifyResource[Order] {
