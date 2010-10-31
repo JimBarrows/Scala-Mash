@@ -67,8 +67,24 @@ object NoteServicesSpec extends Specification {
 
 		"update a note on a person" in {
 			personNote.map( note => {
-				val gottenNote = Note.update( note, account)
-				gottenNote must be_==( note)
+				val changedNote = Note(
+					note.id
+					,"Different body"
+					,note.authorId
+					,note.subjectId
+					,note.subjectType
+					,note.subjectName
+					,note.collectionId
+					,note.collectionType
+					,note.visibleTo
+					,note.ownerId
+					,note.groupId
+					,note.createdAt
+					,note.updatedAt
+					,note.attachments)
+
+				val gottenNote = Note.update( changedNote, account)
+				gottenNote.body must be_==( changedNote.body)
 			})
 		}
 
@@ -164,41 +180,37 @@ object NoteServicesSpec extends Specification {
 			})
 		}
 
-		"create a note on a case" in {
-			kaseNote = None
-		}
-
 		"get a note on a case" in {
-			kaseNote.map( note => {
-				val gottenNote = Note.show( note.id.getOrElse(0), account)
-				gottenNote must beSome[ Note]
-			})
+//			kaseNote.map( note => {
+//				val gottenNote = Note.show( note.id.getOrElse(0), account)
+//				gottenNote must beSome[ Note]
+//			})
 		}
-
+		"create a note on a case" in {
+//			kaseNote = None
+		}
 		"list all notes on a case" in {
-/*			kaseNote.map( note => {
-				val gottenNote = Note.listAllNotesFor( kase, None, account).head
-				gottenNote must be_==( note)
-			})
-			*/
+//			kaseNote.map( note => {
+//				val gottenNote = Note.listAllNotesFor( kase, None, account).head
+//				gottenNote must be_==( note)
+//			})
 		}
 
 		"update a note on a case" in {
-/*			caseNote.map( note => {
-				val gottenNote = Note.update( note, account)
-				gottenNote must be_==( note)
-			})
-			*/
+//			caseNote.map( note => {
+//				val gottenNote = Note.update( note, account)
+//				gottenNote must be_==( note)
+//			})
 		}
 
 		"delete a note on a case" in {
-/*			caseNote.map( note => {
-				Note.destroy( note, account)
-				val gottenNote = Note.show( note.id.getOrElse(0), account)
-				gottenNote must beNone
-			})
-			*/
+//			caseNote.map( note => {
+//				Note.destroy( note, account)
+//				val gottenNote = Note.show( note.id.getOrElse(0), account)
+//				gottenNote must beNone
+//			})
 		}
+
 	}
 
 	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
@@ -223,8 +235,8 @@ object NoteServicesSpec extends Specification {
 
 	var company = Company(
 			None, //id
-			"John",  //name
-			Some("A popular guy for random data"),  //background
+			"Company",  //name
+			Some("A popular company for random data"),  //background
 			None,
 			None,
 			Some(Everyone), //visible to

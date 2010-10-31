@@ -182,10 +182,11 @@ object Note extends HighriseServices[Note]{
 		debug("Note.update( note: {}, account: {}", note, account)
 
 		note.id.map( id => {
+			val noteXml = <note><body>{note.body}</body></note>
 			val statusCode = put( url +< (account.siteName) +/ "notes" +/ "%d.xml".format(id), 
 					Some(account.apiKey), 
 					Some("x"),
-					note.toXml) 
+					noteXml) 
 			debug("Note.show statusCode: {}", statusCode)
 
 			statusCode match {
