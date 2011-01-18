@@ -6,7 +6,7 @@ import xml.{XML, NodeSeq}
 
 import scala.xml.parsing._
 
-import scala.collection.jcl.Conversions._
+//import scala.collection.jcl.Conversions._
 
 import org.apache.http.HttpRequest
 import org.apache.http.auth.{UsernamePasswordCredentials, AuthScope}

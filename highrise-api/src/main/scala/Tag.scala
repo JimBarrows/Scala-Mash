@@ -50,15 +50,13 @@ object Tag extends HighriseServices[Tag] {
 	
 	def listTagsFor( person: Person, account: Account): List[Tag] = {
 		debug("listTagsFor( person: {}, account: {}", person, account)
-		person.id.map( id => {
-			get( url +< account.siteName +/ "people" +/ id.toString +/ "tags.xml", 
+			get( url +< account.siteName +/ "people" +/ person.apiId +/ "tags.xml", 
 				Some(account.apiKey), 
 				Some("x")
 			) match {
 				case n:Ok => parseList( convertResponseToXml(n.response))
 				case n => defaultStatusHandler(n)
 			}		
-		}).getOrElse( Nil)
 	}
 
 	def listTagsFor( company: Company, account: Account): List[Tag] = {
@@ -146,9 +144,8 @@ object Tag extends HighriseServices[Tag] {
 
 	def removeTag(company:Company, tag:Tag, account:Account)  ={ 
 		debug("Tag.removeTag( company {}, tag {}, account: {})", company, tag, account)
-		company.id.map( companyId => {
 			tag.id.map( tagId => {
-				delete( url +< (account.siteName) +/ "companies" +/ companyId.toString +/ "tags" +/ "%d.xml".format(tagId), 
+				delete( url +< (account.siteName) +/ "companies" +/ company.apiId +/ "tags" +/ "%d.xml".format(tagId), 
 					Some(account.apiKey), 
 					Some("x")
 				)match {
@@ -156,7 +153,6 @@ object Tag extends HighriseServices[Tag] {
 					case n => defaultStatusHandler(n)
 				}
 			}).getOrElse( throw NoIdException( tag))
-		}).getOrElse( throw NoIdException( company))
 	}
 
 	def removeTag(deal:Deal, tag:Tag, account:Account)  ={ 

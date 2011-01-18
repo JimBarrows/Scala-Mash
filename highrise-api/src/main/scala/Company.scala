@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import xml.NodeSeq
 import xml.NodeSeq.Empty
 
+import scala_mash.highrise_api._
 import bizondemand.utils.models.internet.Parameter
 import scala_mash.rest.{Ok, Created, RestException, HttpStatusCode}
 import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt, optionalDateTimeWithTimeZone, printWithTimeZone}
@@ -12,16 +13,16 @@ import scala_mash.highrise_api.models.enumerations.VisibleToValues
 import VisibleToValues._
 
 
-case class Company(override val id: Option[Long],
+case class Company(val id: Option[Long],
                 name: String,
-                override val background: Option[String],
-                override val createdAt: Option[DateTime],
-                override val updatedAt: Option[DateTime],
-                override val visibleTo: Option[VisibleToValues],
-                override val ownerId: Option[Int],
-                override val groupId: Option[Int],
-                override val authorId: Option[Int],
-                override val contactData: ContactData) extends Party(id, background,createdAt,updatedAt,visibleTo,ownerId,groupId,authorId,contactData) {
+                val background: Option[String],
+                val createdAt: Option[DateTime],
+                val updatedAt: Option[DateTime],
+                val visibleTo: Option[VisibleToValues],
+                val ownerId: Option[Int],
+                val groupId: Option[Int],
+                val authorId: Option[Int],
+                val contactData: ContactData) extends Party(id, background,createdAt,updatedAt,visibleTo,ownerId,groupId,authorId,contactData) {
 
 	val apiId = (id.getOrElse(0) + "-" + name.replaceAll("[ \t]","-").toLowerCase)
 
@@ -46,7 +47,7 @@ object Company extends HighriseServices[Company] {
         	optionalString(node, "background") ,
          	optionalDateTimeWithTimeZone( node, "created-at" ),
         	optionalDateTimeWithTimeZone( node, "updated-at" ),
-					VisibleToValues.valueOf(node \ "visible-to" text),
+					VisibleToValues.parse( node, "visible-to"),
         	optionalInt(node, "owner-id"),
         	optionalInt(node, "group-id"),
         	optionalInt(node, "author-id"),

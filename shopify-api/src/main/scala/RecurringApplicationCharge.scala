@@ -6,6 +6,7 @@ import org.joda.time.{LocalDate, DateTime}
 import java.net.MalformedURLException
 
 import bizondemand.utils.models.internet.Url
+import scala_mash.shopify_api._
 import scala_mash.rest.{Created,Ok,RestException}
 import scala_mash.rest.util.Helpers.{ optionalYmd, optionalDateTimeWithTimeZone, optionalLong, optionalString, parseDateTimeWithTimeZone}
 

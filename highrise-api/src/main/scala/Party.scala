@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import xml.NodeSeq
 import xml.NodeSeq.Empty
 
+import scala_mash.highrise_api._
 import bizondemand.utils.models.internet.Parameter
 import scala_mash.rest.{Ok, Created, RestException, HttpStatusCode}
 import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt, optionalDateTimeWithTimeZone, printWithTimeZone}
@@ -11,7 +12,7 @@ import scala_mash.rest.util.Helpers.{optionalLong, optionalString, optionalInt, 
 import scala_mash.highrise_api.models.enumerations.VisibleToValues
 import VisibleToValues._
 
-case class Party(id: Option[Long],
+class Party(id: Option[Long],
                 background: Option[String],
                 createdAt: Option[DateTime],
                 updatedAt: Option[DateTime],
@@ -45,10 +46,10 @@ object Party extends HighriseServices[Party] {
 	def parse(node: NodeSeq) :  Party = {
 		debug("Party.parse({})", node.toString)
 		node match {
-			case party @ <party>{ _ *}</party> if party \ "@type" == "Person"=> Person.parse( node)
-			case party @ <party>{ _ *}</party> if party \ "type" == "Person" => Person.parse( node)
-			case party @ <party>{ _ *}</party> if party \ "@type" == "Company"=> Company.parse( node)
-			case party @ <party>{_*}</party> if ((party \ "type" text) == "Company") => Company.parse( node)
+			case party @ <party>{ _ *}</party> if (party \ "@type" text) == "Person"  => Person.parse( node)
+			case party @ <party>{ _ *}</party> if (party \ "type" text) == "Person"   => Person.parse( node)
+			case party @ <party>{ _ *}</party> if (party \ "@type" text) == "Company" => Company.parse( node)
+			case party @ <party>{ _ *}</party> if (party \ "type" text) == "Company"  => Company.parse( node)
 			case unknown => throw new UnknownParty( unknown)
 		}
 	}
@@ -68,6 +69,10 @@ object AddressLocationValues extends Enumeration {
 	val Work = Value("Work")
  	val Home = Value("Home")
  	val Other = Value("Other")
+
+ 	def parse( node:NodeSeq, tag:String) = 
+		if( ( node \ tag text).isEmpty ) None else Some( AddressLocationValues.withName( node \ tag text))
+
 }
 import AddressLocationValues._
 
@@ -84,6 +89,10 @@ object InstantMessengerProtocolValues extends Enumeration {
 	val GaduGadu = Value("Gadu-Gadu")
 	val GoogleTalk = Value("GoogleTalk")
 	val Other = Value("other")
+
+ 	def parse( node:NodeSeq, tag:String) = 
+		if( ( node \ tag text).isEmpty ) None else Some( InstantMessengerProtocolValues.withName( node \ tag text))
+
 }
 import InstantMessengerProtocolValues._
 
@@ -92,6 +101,10 @@ object InstantMessengerLocationValues extends Enumeration {
 	val Work = Value("Work")
 	val Personal = Value("Personal")
 	val Other = Value("Other")
+
+ 	def parse( node:NodeSeq, tag:String) = 
+		if( ( node \ tag text).isEmpty ) None else Some( InstantMessengerLocationValues.withName( node \ tag text))
+
 }
 import InstantMessengerLocationValues._
 
@@ -103,6 +116,10 @@ object PhoneLocationValues extends Enumeration {
 	val Pager = Value("Pager")
 	val Home = Value("Home")
 	val Other = Value("Other")
+
+ 	def parse( node:NodeSeq, tag:String) = 
+		if( ( node \ tag text).isEmpty ) None else Some( PhoneLocationValues.withName( node \ tag text))
+
 }
 import PhoneLocationValues._
 
@@ -124,8 +141,8 @@ object InstantMessenger {
     	InstantMessenger(
             Some((node \ "id" text).toLong),
             node \ "address" text,
-            InstantMessengerProtocolValues.valueOf(node \ "protocol" text).getOrElse(InstantMessengerProtocolValues.Other),
-            InstantMessengerLocationValues.valueOf(node \ "location" text).getOrElse(InstantMessengerLocationValues.Other)
+            InstantMessengerProtocolValues.parse(node, "protocol").getOrElse(InstantMessengerProtocolValues.Other),
+            InstantMessengerLocationValues.parse(node, "location").getOrElse(InstantMessengerLocationValues.Other)
         )
 	}
 }
@@ -145,7 +162,7 @@ object WebAddress {
     	WebAddress(
           optionalLong( node, "id"),
           node \ "url" text,
-          InstantMessengerLocationValues.valueOf(node \ "location" text).getOrElse(InstantMessengerLocationValues.Other)
+          InstantMessengerLocationValues.parse(node, "location").getOrElse(InstantMessengerLocationValues.Other)
     	)
 	}
 }
@@ -180,7 +197,7 @@ object Address {
            node \ "state" text,
            node \ "street" text,
            node \ "zip" text,
-           AddressLocationValues.valueOf(node \ "location" text).getOrElse(AddressLocationValues.Other)
+           AddressLocationValues.parse(node, "location").getOrElse(AddressLocationValues.Other)
           )
  	}
 }
@@ -200,7 +217,7 @@ object EmailAddress {
     	EmailAddress(
             Some((node \ "id" text).toLong),
             node \ "address" text,
-            AddressLocationValues.valueOf(node \ "location" text).getOrElse(AddressLocationValues.Other)
+            AddressLocationValues.parse(node, "location").getOrElse(AddressLocationValues.Other)
             )
   	}
 }
@@ -218,7 +235,7 @@ object PhoneNumber {
     	PhoneNumber(
         	Some((node \ "id" text).toLong),
             node \ "number" text,
-            PhoneLocationValues.valueOf(node \ "location" text).getOrElse(PhoneLocationValues.Other)
+            PhoneLocationValues.parse(node, "location").getOrElse(PhoneLocationValues.Other)
         )
 	}
 }

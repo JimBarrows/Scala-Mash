@@ -38,13 +38,7 @@ object TagServicesSpec extends Specification {
 			deal = Deal.create( deal, account)
 		}
 
-		doLast {
-			Person.destroy(person, account)
-			Company.destroy(company, account)
-			Deal.destroy( deal, account)
-		}
 
-		
 		"add a tag to a person" in {
 			val created = Tag.addTagTo( person, Tag(None, "Person Test Tag"), account)
 			created.id must beSome[Long]
@@ -117,6 +111,7 @@ object TagServicesSpec extends Specification {
 		"list all parties associated with a tag" in {
 		}
 
+
 		"remove a tag on a person" in {
 			personTag.map( tag => {
 					Tag.removeTag( person, tag, account)
@@ -143,6 +138,10 @@ object TagServicesSpec extends Specification {
 
 		"remove a tag on a case" in {
 		}
+		
+			Person.destroy(person, account)
+			Company.destroy(company, account)
+			Deal.destroy( deal, account)
 	}
 	
 	var person = createPerson( "John", "Test", "Test Guy", "Semi random test data")

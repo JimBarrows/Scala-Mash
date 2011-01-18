@@ -261,7 +261,7 @@ object Order extends ShopifyResource[Order] {
 			Some(ShopifyPartnerInfo.apiKey), 
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
 		) match {
-			case n:Ok => parseList(convertResponseToXml(n.response)).sort(_.orderNumber < _.orderNumber) 
+			case n:Ok => parseList(convertResponseToXml(n.response)).sortWith(_.orderNumber < _.orderNumber) 
 			case n => defaultStatusHandler(n)
 		}
 	}
@@ -270,7 +270,7 @@ object Order extends ShopifyResource[Order] {
 	*
 	*/
 	def findAllOrdersCreatedOrUpdatedSince(shop: ShopCredentials, since: DateTime): List[Order] = {
-		(findAllOrdersCreatedSince(shop, since) ::: findAllOrdersUpdatedSince(shop, since)).sort(_.orderNumber < _.orderNumber)
+		(findAllOrdersCreatedSince(shop, since) ::: findAllOrdersUpdatedSince(shop, since)).sortWith(_.orderNumber < _.orderNumber)
 	}
 
 	def findAllOrdersCreatedSince(shop: ShopCredentials, since: DateTime): List[Order] = {
@@ -278,7 +278,7 @@ object Order extends ShopifyResource[Order] {
     		Some(ShopifyPartnerInfo.apiKey),
     		Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
     	) match {
-    		case n:Ok => parseList(convertResponseToXml(n.response)).sort(_.orderNumber < _.orderNumber)
+    		case n:Ok => parseList(convertResponseToXml(n.response)).sortWith(_.orderNumber < _.orderNumber)
 				case n => defaultStatusHandler(n)
 		}
 	}
@@ -289,7 +289,7 @@ object Order extends ShopifyResource[Order] {
 			Some(ShopifyPartnerInfo.apiKey),
 			Some(ShopifyPartnerInfo.createPasswordForStore(shop.authenticationToken))
 		) match {
-			case n:Ok => parseList(convertResponseToXml(n.response)).sort(_.orderNumber < _.orderNumber)
+			case n:Ok => parseList(convertResponseToXml(n.response)).sortWith(_.orderNumber < _.orderNumber)
 			case n => defaultStatusHandler(n)
 		}
 	}

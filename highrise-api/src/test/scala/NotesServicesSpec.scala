@@ -25,7 +25,6 @@ object NoteServicesSpec extends Specification {
 		var personNote :Option[Note] = None
 		var companyNote :Option[Note] = None
 		var dealNote :Option[Note] = None
-		var kaseNote :Option[Note] = None
 
 		doFirst { 
 			person = Person.create( person, account)
@@ -33,11 +32,6 @@ object NoteServicesSpec extends Specification {
 			deal = Deal.create( deal, account)
 		}
 
-		doLast {
-			Person.destroy(person, account)
-			Company.destroy(company, account)
-			Deal.destroy( deal, account)
-		}
 
 		"create a note on a person" in {
 			val id: Long = person.id.getOrElse(0).asInstanceOf[Long]
@@ -211,7 +205,11 @@ object NoteServicesSpec extends Specification {
 //			})
 		}
 
+			Person.destroy(person, account)
+			Company.destroy(company, account)
+			Deal.destroy( deal, account)
 	}
+
 
 	val account = Account("TestAccountForMe", "1ad2fc1adf9e7fc1f342d0e431069af0")
 		

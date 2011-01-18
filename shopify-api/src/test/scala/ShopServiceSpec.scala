@@ -21,7 +21,7 @@ object ShopServiceSpec extends Specification {
         "185 Rideau Street",
         "Boston",
         "US",
-        parseDateTimeWithTimeZone("2010-01-31T10:11:46-05:00"),
+        parseDateTimeWithTimeZone("2010-01-31T15:11:46Z"),
         "mante-friesen-and-kuvalis9996.myshopify.com",
         "Jim.Barrows@bizondemand.biz",
         435932l,

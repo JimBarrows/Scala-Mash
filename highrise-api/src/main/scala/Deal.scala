@@ -115,12 +115,12 @@ object Deal extends HighriseServices[Deal] {
 			optionalLong( node, "price"),
 			optionalString(node, "price-type"),
 			optionalLong(node, "responsible-party-id"),
-			DealStatus.valueOf(node \ "status" text),
+			DealStatus.parse(node, "status"),
 			optionalYmd( node, "status-changed-on"),
 			optionalDateTimeWithTimeZone(node, "updated-at"),
-			VisibleToValues.valueOf( node \ "visible-to" text),
+			VisibleToValues.parse( node, "visible-to"),
 			(if( ( node \ "category" text).isEmpty )None else Some(DealCategory.parse( node \ "category"))),
-			(if( ( node \ "party" text).isEmpty )None else Some(Party.parseList( node \ "party").first)),
+			(if( ( node \ "party" text).isEmpty )None else Some(Party.parseList( node \ "party").head)),
 			optionalParties(node)
 		)
 	}

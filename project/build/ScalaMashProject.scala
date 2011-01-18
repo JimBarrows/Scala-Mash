@@ -21,10 +21,10 @@ class ScalaMashProject(info: ProjectInfo) extends ParentProject(info)
 
 			
 	val stdLibraryDependencies = Set(
-		"junit" % "junit" % "4.5" % "test->default",
-		"org.scala-tools.testing" % "specs" % "1.6.1" % "test->default"	,
+		"junit" % "junit" % "4.7" % "test->default",
+		"org.scala-tools.testing" %% "specs" % "1.6.7" % "test->default"	,
 		"org.slf4j" % "slf4j-log4j12" % "1.4.1",
-		"org.mockito" % "mockito-all" % "1.8.1" % "test->default",
+		"org.mockito" % "mockito-all" % "1.8.4" % "test->default",
 		"joda-time" % "joda-time" % "1.6",		
 		"bizondemand" %% "utils" % "20100716.1"
 	) ++ super.libraryDependencies	

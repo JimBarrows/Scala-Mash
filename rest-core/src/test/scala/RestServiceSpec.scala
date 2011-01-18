@@ -5,7 +5,7 @@ import org.specs.mock.Mockito
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
-import scala_mash.rest.{ RestService, Ok,Found}
+import scala_mash.rest.{ RestService, Ok,Found, MovedPermanently}
 
 import org.apache.http.HttpVersion
 import org.apache.http.message.{BasicStatusLine, BasicHttpResponse}
@@ -18,7 +18,7 @@ import org.apache.http.conn.scheme.{PlainSocketFactory, Scheme, SchemeRegistry}
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.client.methods._
 
-import bizondemand.utils.models.internet.{Url,Http, DomainName}
+import bizondemand.utils.models.internet.{Url,Http, Https, DomainName}
 
 
 
@@ -82,7 +82,7 @@ class RestServiceSpec extends Specification with Mockito {
     		statusCode must notBeNull
 		}
 		
-		"Should handle a 302 by returnng a Found class" in {
+		"Should handle a 301 by returnng a MovedPermanently class" in {
 		 	val url = Url( Http(), DomainName("TestAccountForMe"::"highrisehq"::"com"::Nil), "people.xml"::Nil)
 		 	val xml= <person>
         		<id type="integer"></id>
@@ -105,7 +105,7 @@ class RestServiceSpec extends Specification with Mockito {
     		
     		val statusCode = TestService.post( url, Some("1ad2fc1adf9e7fc1f342d0e431069af0"), Some("x"), xml)
     		
-    		statusCode must be_== (Found( Url("https://TestAccountForMe.highrisehq.com/people.xml")))
+    		statusCode must be_== ( MovedPermanently( Url("https://TestAccountForMe.highrisehq.com/people.xml")))
 		}
 	}
 }
